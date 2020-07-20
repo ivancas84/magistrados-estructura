@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Sistema</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link  href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" routerLink="/">Magistrados</a>
+  
+    <button class="navbar-toggler navbar-toggler-right" type="button" aria-controls="appNavigation" aria-expanded="!isCollapsed" aria-label="Toggle navigation" (click)="toggleMenu()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="appNavigation">
+      <div class="navbar-nav mr-auto">
+        <!--a (click)="toggleMenu()" class="nav-item nav-link" routerLink="" routerLinkActive="active">Inicio</a-->
+  
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownVer" >Ver</a>
+        </div>  
+        
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownNew" >Nuevo</a>
+        </div>  
+      </div>
+    </div>
+  </nav>  
+
+
+  <br>
+
+  <div class="card" >
+    <div class="card-header">Opciones</div>
+    <div class="card-body">
+      <form novalidate>       
+        <fieldset>
+          <div class="form-row">
+            <div class="form-group col-sm-4">
+              <input class="form-control form-control-sm" placeholder="Persona" type="text">
+            </div>
+            <div class="form-group col-sm-4">
+              <select class="form-control form-control-sm">
+                <option>--Órgano--</option>
+                    <option>Ministerio Público</option>
+                    <option>Administración de Justicia</option>
+              </select>    
+            </div>
+            <div class="form-group col-sm-4">
+              <select class="form-control form-control-sm">
+                <option>--Departamento Judicial--</option>
+                <option>01 Corte</option>
+                <option>02 La Plata</option>
+              </select>    
+            </div>
+            
+          </div>
+        
+
+          <div class="form-row">
+            <div class="form-group col-sm-4">
+              <select class="form-control form-control-sm">
+                <option>--Motivo--</option>
+                <option>Alta</option>
+                <option>Baja</option>
+                <option>Pendiente</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-4">
+              <select class="form-control form-control-sm">
+                <option>--Estado--</option>
+                <option>Creada</option>
+                <option>Enviada</option>
+                <option>Aprobada</option>
+                <option>Rechazada</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-4">
+              <select class="form-control form-control-sm">
+                <option>--Modificada--</option>
+                <option>Sí</option>
+                <option selected="selected">No</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+        
+        <div class="mt-2">
+          <button type="submit" class="btn btn-primary btn-sm">Buscar <span class="oi oi-magnifying-glass"></span></button>
+        </div>
+      </form>
+    </div>
+  </div>    
+  
+    <table class="table table-striped table-bordered table-hover">
+      <thead>
+        <tr>
+          <th><button type="button" class="btn btn-link text-dark font-weight-bold">Nombre</button></th>
+          <th><button type="button" class="btn btn-link text-dark font-weight-bold">Departamento Judicial</button></th>
+          <th><button type="button" class="btn btn-link text-dark font-weight-bold">Motivo</button></th>
+          <th><button type="button" class="btn btn-link text-dark font-weight-bold">Estado</button></th>
+          <th>Opciones</th>
+          </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Alvarez, Juan</strong></td>
+          <td>02 La Plata *</td>
+          <td>ALTA</td>
+          <td>CREADO 3/7/20</td>
+          <td>
+              <a class="btn btn-warning btn-sm"><span class="oi oi-pencil" title="Modificar"></span></a>              
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Gimenez, Juliana</strong></td>
+          <td>01 Corte</td>
+          <td>ALTA</td>
+          <td>APROBADO 4/8/19</td>
+          <td>
+              <a class="btn btn-warning btn-sm"><span class="oi oi-pencil" title="Modificar"></span></a>              
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Gómez, Natalia</strong></td>
+          <td>06 Bahía Blanca</td>
+          <td>ALTA</td>
+          <td>RECHAZADO 2/10/18</td>
+          <td>
+              <a class="btn btn-warning btn-sm"><span class="oi oi-pencil" title="Modificar"></span></a>              
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Jimenez, José</strong></td>
+          <td>06 Bahía Blanca *</td>
+          <td>BAJA</td>
+          <td>APROBADO 2/9/20</td>
+          <td>
+              <a class="btn btn-warning btn-sm"><span class="oi oi-pencil" title="Modificar"></span></a>              
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+<div *ngIf="collectionSize$ | async as collectionSize" class="clearfix">
+  <span *ngIf="display$ | async as display" class="float-left">
+    <ul class="pagination pagination-sm"><!----><li class="page-item"><a href="" class="page-link" aria-label="Previous"><span aria-hidden="true">«</span><!----></a></li><!----><li class="page-item"><!----><a href="" class="page-link"> 1 <!----><!----></a><!----></li><li class="page-item"><!----><a href="" class="page-link"> 2 <!----><!----></a><!----></li><li class="page-item active" aria-current="page"><!----><a href="" class="page-link"> 3 <span class="sr-only">(current)</span><!----><!----></a><!----></li><li class="page-item"><!----><a href="" class="page-link"> 4 <!----><!----></a><!----></li><li class="page-item"><!----><a href="" class="page-link"> 5 <!----><!----></a><!----></li><!----><li class="page-item"><a href="" class="page-link" aria-label="Next"><span aria-hidden="true">»</span><!----></a></li><!----><!----></ul>
+  </span>
+  <span class="float-left">
+    <div class="p-1 ml-1 border bg-light">4 registros</div>
+  </span>
+
+</div>  
+
+
+
+
+  </body>
+</html>

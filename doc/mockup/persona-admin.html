@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Sistema</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link  href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" routerLink="/">Magistrados</a>
+  
+    <button class="navbar-toggler navbar-toggler-right" type="button" aria-controls="appNavigation" aria-expanded="!isCollapsed" aria-label="Toggle navigation" (click)="toggleMenu()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="appNavigation">
+      <div class="navbar-nav mr-auto">
+        <!--a (click)="toggleMenu()" class="nav-item nav-link" routerLink="" routerLinkActive="active">Inicio</a-->
+  
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownVer" >Ver</a>
+        </div>  
+        
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownNew" >Nuevo</a>
+        </div>  
+      </div>
+    </div>
+  </nav>  
+
+
+  <br>
+  
+  <form class="container">
+    <div class="form-row">
+      <div class="col-sm-2">
+        <label><h4 class="mb-3">Persona</h4></label>
+      </div>
+      <div>
+        <input type="text" class="form-control" placeholder="Buscar">
+      </div>
+    </div>
+
+    <fieldset>
+      <div class="form-row">
+        <div class="form-group col-sm-5">
+          <label>Nombres</label>
+          <input class="form-control" type="text">
+        </div>
+
+        <div class="form-group col-sm-5">
+          <label>Apellidos</label>
+          <input class="form-control" type="text">
+        </div>
+
+        <div class="form-group col-sm-2">
+          <label>Fecha de Nacimiento</label>
+          <input class="form-control" type="text" placeholder="dd/mm/yyyy">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-sm-3">
+        <label>Legajo</label>
+        <input class="form-control" type="text">
+      </div>
+
+      <div class="form-group col-sm-4">
+        <label>Número Documento</label>
+        <input class="form-control" type="text">
+      </div>
+
+      <div class="form-group col-sm-2">
+        <label>Tipo Documento</label>
+        <select class="form-control">
+          <option [ngValue]="null">--Tipo Documento--</option>
+          <option selected="selected">DNI</option>
+          <option>Masculino</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+      
+      <div class="form-group col-sm-3">
+        <label>Email</label>
+        <input class="form-control" type="text">
+      </div>
+    </div>
+  </fieldset>
+
+    
+
+<fieldset>
+  <div class="form-row">
+    <div class="form-group col-sm-6">
+      <label>Órgano</label>
+      <select class="form-control">
+        <option>--Órgano--</option>
+        <option selected="selected">Administración de Justicia</option>
+        <option>Ministerio Público</option>
+      </select>
+    </div>
+
+    <div class="form-group col-sm-6">
+      <label>Departamento Judicial</label>
+      <select class="form-control">
+        <option>--Departamento Judicial--</option>
+        <option selected="selected">01 Corte</option>
+        <option>02 La Plata</option>
+      </select>
+    </div>
+
+  </div>
+</fieldset>
+
+<h4 class="mb-3">Registro 40</h4>
+<table class="table table-striped table-bordered table-hover">
+  <thead>
+    <tr>
+      <th><button type="button" class="btn btn-link text-dark font-weight-bold">Motivo</button></th>
+      <th><button type="button" class="btn btn-link text-dark font-weight-bold">Estado</button></th>
+      <th><button type="button" class="btn btn-link text-dark font-weight-bold">Creado</button></th>
+      <th><button type="button" class="btn btn-link text-dark font-weight-bold">Enviado</button></th>
+      <th><button type="button" class="btn btn-link text-dark font-weight-bold">Grabado</button></th>
+      <th><button type="button" class="btn btn-link text-dark font-weight-bold">Modificado</button></th>
+      <th><button type="button" class="btn btn-link text-dark font-weight-bold">Observaciones</button></th>
+      <th>Opciones</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr class="table-danger">
+      <td>Baja</td>
+      <td>Aprobada</td>
+      <td>3/7/19</td>
+      <td>4/7/19</td>
+      <td>5/7/19</td>
+      <td></td>
+      <td></td>
+      <td>
+          <a class="btn btn-warning btn-sm"><span class="oi oi-pencil" title="Modificar"></span></a>              
+      </td>
+    </tr>
+      
+    <tr class="table-secondary">
+      <td>Alta</td>
+      <td>Aprobada</td>
+      <td>2/3/15</td>
+      <td>3/3/15</td>
+      <td>1/4/15</td>
+      <td>3/7/19</td>
+      <td></td>
+      <td>
+          <a class="btn btn-warning btn-sm"><span class="oi oi-pencil" title="Modificar"></span></a>              
+      </td>
+    </tr>
+    
+  </tbody>
+
+
+</table>
+
+<h4 class="mb-3">Registro 80</h4>
+<div class="jumbotron">
+  <div class="container">
+    <p class="lead">En construcción</p>
+  </div>
+</div>
+
+    <button type="submit" class="btn btn-primary">Aceptar</button>&nbsp;
+    <button type="button" class="btn btn-secondary"><span class="oi oi-arrow-thick-left" title="Volver"></span></button>
+    <button type="button" class="btn btn-secondary"><span class="oi oi-reload" title="Restablecer"></span></button>
+    <button type="button" class="btn btn-secondary"><span title="Nuevo" class="oi oi-plus"></span></button>
+    <button type="button" class="btn btn-secondary"><span class="oi oi-x" title="Eliminar"></span></button>
+
+  </form>
+  
+  </body>
+</html>

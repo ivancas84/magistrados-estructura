@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Sistema</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link  href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" routerLink="/">Magistrados</a>
+  
+    <button class="navbar-toggler navbar-toggler-right" type="button" aria-controls="appNavigation" aria-expanded="!isCollapsed" aria-label="Toggle navigation" (click)="toggleMenu()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="appNavigation">
+      <div class="navbar-nav mr-auto">
+        <!--a (click)="toggleMenu()" class="nav-item nav-link" routerLink="" routerLinkActive="active">Inicio</a-->
+  
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownVer" >Ver</a>
+        </div>  
+        
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownNew" >Nuevo</a>
+        </div>  
+      </div>
+    </div>
+  </nav>  
+
+
+  <br>
+  
+  <form class="container">
+	<h4 class="mb-3">Alvarez, Juan / 02 La Plata / Administración de Justicia</h4>
+			<div class="container">
+
+		<div class="row pb-3">
+		<div class="col-sm-auto border px-4 p-2 bg-light">
+          <strong>DNI: </strong>31073351
+        </div>
+		<div class="col-sm-auto border px-4 p-2 bg-light">  
+          <strong>Legajo: </strong>77777
+        </div>
+		
+		</div>
+		</div>
+		
+    <h4 class="mb-3">Registro 40</h4></label>
+
+    <fieldset>
+      <div class="form-row">
+        <div class="form-group col-sm-6">
+          <label>Motivo</label>
+          <select class="form-control">
+            <option>--Motivo--</option>
+            <option selected="selected">ALTA</option>
+            <option>BAJA</option>
+            <option>PENDIENTE</option>
+          </select>
+        </div>
+
+        <div class="form-group col-sm-6">
+          <label>Estado</label>
+          <select disabled="disabled" class="form-control">
+            <option >--Motivo--</option>
+            <option selected="selected">Creado</option>
+            <option>Enviado</option>
+            <option>Aprobado</option>
+            <option>Rechazado</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-sm-12">
+          <label>Observaciones</label>
+          <textarea class="form-control"></textarea>
+        </div>  
+      </div>
+      <div class="form-row">
+        <div class="alert alert-info col-sm-3">
+          <label>Creado</label>
+          17/6/2019
+        </div>
+        <div class="alert alert-warning col-sm-3">
+          <label>Enviado</label>
+          17/6/2019
+        </div>
+        <div class="alert alert-success col-sm-3">
+          <label>Grabado</label>
+          17/6/2019
+        </div>
+        <div class="alert alert-dark col-sm-3">
+          <label>Modificado</label>
+          17/6/2019
+        </div>
+      </div>
+</fieldset>
+
+    <button type="submit" class="btn btn-primary">Aceptar</button>&nbsp;
+    <button type="button" class="btn btn-secondary"><span class="oi oi-arrow-thick-left" title="Volver"></span></button>
+    <button type="button" class="btn btn-secondary"><span class="oi oi-reload" title="Restablecer"></span></button>
+    <button type="button" class="btn btn-secondary"><span title="Nuevo" class="oi oi-plus"></span></button>
+    <button type="button" class="btn btn-secondary"><span class="oi oi-x" title="Eliminar"></span></button>
+
+  </form>
+  
+  </body>
+</html>
