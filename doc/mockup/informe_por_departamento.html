@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Sistema</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link  href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" routerLink="/">Magistrados</a>
+  
+    <button class="navbar-toggler navbar-toggler-right" type="button" aria-controls="appNavigation" aria-expanded="!isCollapsed" aria-label="Toggle navigation" (click)="toggleMenu()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="appNavigation">
+      <div class="navbar-nav mr-auto">
+        <!--a (click)="toggleMenu()" class="nav-item nav-link" routerLink="" routerLinkActive="active">Inicio</a-->
+  
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownVer" >Ver</a>
+        </div>  
+        
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownNew" >Nuevo</a>
+        </div>  
+      </div>
+    </div>
+  </nav>  
+
+
+  <br>
+
+  <div class="card" >
+    <div class="card-header">Opciones</div>
+    <div class="card-body">
+      <form novalidate>       
+        <fieldset>
+          <div class="form-row">
+            <div class="form-group col-sm-4">
+              <input class="form-control form-control-sm" placeholder="Persona" type="text">
+            </div>
+            <div class="form-group col-sm-4">
+              <select class="form-control form-control-sm">
+                <option>--Órgano--</option>
+                    <option>Ministerio Público</option>
+                    <option>Administración de Justicia</option>
+              </select>    
+            </div>
+            <div class="form-group col-sm-4">
+              <select class="form-control form-control-sm">
+                <option>--Departamento Judicial--</option>
+                <option>01 Corte</option>
+                <option>02 La Plata</option>
+              </select>    
+            </div>
+            
+          </div>
+        
+
+          <div class="form-row">
+            <div class="form-group col-sm-4">
+              <select class="form-control form-control-sm">
+                <option>--Motivo--</option>
+                <option>Alta</option>
+                <option>Baja</option>
+                <option>Pendiente</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-4">
+              <select class="form-control form-control-sm">
+                <option>--Estado--</option>
+                <option>Creada</option>
+                <option>Enviada</option>
+                <option>Aprobada</option>
+                <option>Rechazada</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-4">
+              <select class="form-control form-control-sm">
+                <option>--Modificada--</option>
+                <option>Sí</option>
+                <option selected="selected">No</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+        
+        <div class="mt-2">
+          <button type="submit" class="btn btn-primary btn-sm">Buscar <span class="oi oi-magnifying-glass"></span></button>
+		  <button type="submit" class="btn btn-success btn-sm">Copiar informe <span class="oi oi-file"></span></button>
+
+        </div>
+      </form>
+    </div>
+  </div>    
+
+  <div class="container">
+	<h2>COLEGIO DE MAGISTRADOS Y FUNCIONARIOS DEL PODER JUDICIAL DE LA PROVINCIA DE BUENOS AIRES</h2>
+	<h3>Departamento Judicial 02 La Plata (Código de Descuento 161)</h3>
+	<table class="border">
+	  <tr>
+	    <th class="border">Apellido y Nombre</th>
+		<th class="border">Legajo</th>
+	  </tr>
+	  <tr>
+	    <td class="border">Castañeda, Iván (*)</td>
+		<td class="border">77777</td>
+	  </tr>
+	  <tr>
+	    <td class="border">Galante, Marcela</td>
+		<td class="border">88888</td>
+	  </tr>
+	  <tr>
+	    <td class="border">Bachellerie, Florencia</td>
+		<td class="border">99999</td>
+	  </tr>
+	  <tr>
+	    <td colspan="2">Total de Casos: 3</td>
+	  </tr>
+	</table>	
+	
+	
+
+  </body>
+</html>

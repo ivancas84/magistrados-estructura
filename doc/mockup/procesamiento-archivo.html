@@ -36,66 +36,20 @@
   <br>
   
   <form class="container">
-	<h4 class="mb-3">Alvarez, Juan / 02 La Plata / Administración de Justicia</h4>
-			<div class="container">
-
-		<div class="row pb-3">
-		<div class="col-sm-auto border px-4 p-2 bg-light">
-          <strong>DNI: </strong>31073351
-        </div>
-		<div class="col-sm-auto border px-4 p-2 bg-light">  
-          <strong>Legajo: </strong>77777
-        </div>
-		
-		</div>
-		</div>
-		
-    <h4 class="mb-3">Registro 40</h4></label>
-
+	<h4 class="mb-3">Procesamiento de archivo del área de Sueldos</h4>
     <fieldset>
       <div class="form-row">
         <div class="form-group col-sm-6">
-          <label>Motivo</label>
+          <label>Órgano</label>
           <select class="form-control">
-            <option>--Motivo--</option>
-            <option selected="selected">ALTA</option>
-            <option>BAJA</option>
-            <option>PENDIENTE</option>
+            <option>--Órgano--</option>
+            <option selected="selected">Administración de Justicia</option>
+            <option>Ministerio Público</option>
           </select>
         </div>
-
-        <div class="form-group col-sm-6">
-          <label>Estado</label>
-          <select disabled="disabled" class="form-control">
-            <option >--Estado--</option>
-            <option>Pendiente</option>
-            <option selected="selected">Aprobado</option>
-            <option>Rechazado</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-sm-12">
-          <label>Observaciones</label>
-          <textarea class="form-control"></textarea>
-        </div>  
-      </div>
-      <div class="form-row">
-        <div class="alert alert-info col-sm-3">
-          <label>Creado</label>
-          17/6/2019
-        </div>
-        <div class="alert alert-warning col-sm-3">
-          <label>Enviado</label>
-          17/6/2019
-        </div>
-        <div class="alert alert-success col-sm-3">
-          <label>Aprobado</label>
-          17/6/2019
-        </div>
-        <div class="alert alert-dark col-sm-3">
-          <label>Modificado</label>
-          17/6/2019
+		<div class="form-group col-sm-6">
+          <label>Archivo</label>
+		  <input type="file" class="form-control" id="customFile">
         </div>
       </div>
 </fieldset>
@@ -107,6 +61,36 @@
     <button type="button" class="btn btn-secondary"><span class="oi oi-x" title="Eliminar"></span></button>
 
   </form>
-  
+  <div class="container">
+	
+  	<h4 class="my-3">Resultado</h4>
+	
+	<div class="row">
+	  <div class="col-sm-6">
+		<div class="card">
+		  <div class="card-header">
+			5 Registros Evaluados
+		  </div>
+		  <ul class="list-group list-group-flush">
+			<li class="list-group-item">2 altas aprobadas.</li>
+			<li class="list-group-item">1 alta rechazada.</li>
+			<li class="list-group-item">1 baja aprobada</li>
+		  </ul>
+		</div>
+      </div>
+	
+	  <div class="col-sm-6">
+		<div class="card">
+		  <div class="card-header">
+			2 Registros Evaluados
+		  </div>
+		  <ul class="list-group list-group-flush">
+			<li class="list-group-item">1 alta aprobada.</li>
+			<li class="list-group-item">1 baja aprobada.</li>
+		  </ul>
+		</div>
+      </div>
+	</div>
+		
   </body>
 </html>
