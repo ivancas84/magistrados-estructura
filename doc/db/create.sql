@@ -14,7 +14,7 @@ COLLATE = utf8_spanish_ci;
 
 CREATE TABLE IF NOT EXISTS `magistrados`.`cargo` (
   `id` VARCHAR(45) NOT NULL,
-  `descripción` VARCHAR(255) NOT NULL,
+  `descripcion` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
@@ -22,7 +22,7 @@ COLLATE = utf8_spanish_ci;
 
 CREATE TABLE IF NOT EXISTS `magistrados`.`organo` (
   `id` VARCHAR(45) NOT NULL,
-  `descripción` VARCHAR(255) NOT NULL,
+  `descripcion` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
