@@ -1,0 +1,3 @@
+id (id): string pk. NOT NULL. MAIN. UNIQUE.
+codigo (cod): string nf. NOT NULL.
+nombre (nom): string nf. NOT NULL.

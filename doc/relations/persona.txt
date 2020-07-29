@@ -1,0 +1,22 @@
+cargo - car
+organo - org
+departamento_judicial - dj
+departamento_judicial - dji
+tipo_documento - td
+
+id (id): string pk. NOT NULL. MAIN. UNIQUE.
+nombres (nom): string nf.
+apellidos (ape): string nf.
+legajo (leg): string nf.
+numero_documento (nd): string nf. NOT NULL.
+telefono_laboral (tl): string nf.
+telefono_particular (tp): string nf.
+fecha_nacimiento (fn): date nf.
+email (ema): string nf.
+creado (cre): timestamp nf. NOT NULL. DEFAULT: current_timestamp().
+eliminado (eli): timestamp nf.
+cargo (car): string mu. NOT NULL.
+organo (org): string mu. NOT NULL.
+departamento_judicial (dj): string mu. NOT NULL.
+departamento_judicial_informado (dji): string mu. NOT NULL.
+tipo_documento (td): string mu. NOT NULL.
