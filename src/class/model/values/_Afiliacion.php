@@ -15,18 +15,19 @@ class _Afiliacion extends EntityValues {
   protected $persona = UNDEFINED;
 
   public function _setDefault(){
-    $this->setId(DEFAULT_VALUE);
-    $this->setMotivo(DEFAULT_VALUE);
-    $this->setEstado(DEFAULT_VALUE);
-    $this->setCreado(DEFAULT_VALUE);
-    $this->setEnviado(DEFAULT_VALUE);
-    $this->setEvaluado(DEFAULT_VALUE);
-    $this->setModificado(DEFAULT_VALUE);
-    $this->setObservaciones(DEFAULT_VALUE);
-    $this->setPersona(DEFAULT_VALUE);
+    if($this->id == UNDEFINED) $this->setId(null);
+    if($this->motivo == UNDEFINED) $this->setMotivo(null);
+    if($this->estado == UNDEFINED) $this->setEstado(null);
+    if($this->creado == UNDEFINED) $this->setCreado(date('c'));
+    if($this->enviado == UNDEFINED) $this->setEnviado(null);
+    if($this->evaluado == UNDEFINED) $this->setEvaluado(null);
+    if($this->modificado == UNDEFINED) $this->setModificado(null);
+    if($this->observaciones == UNDEFINED) $this->setObservaciones(null);
+    if($this->persona == UNDEFINED) $this->setPersona(null);
+    return $this;
   }
 
-  public function _fromArray(array $row = NULL, $p = ""){
+  public function _fromArray(array $row = NULL, string $p = ""){
     if(empty($row)) return;
     if(isset($row[$p."id"])) $this->setId($row[$p."id"]);
     if(isset($row[$p."motivo"])) $this->setMotivo($row[$p."motivo"]);
@@ -37,19 +38,20 @@ class _Afiliacion extends EntityValues {
     if(isset($row[$p."modificado"])) $this->setModificado($row[$p."modificado"]);
     if(isset($row[$p."observaciones"])) $this->setObservaciones($row[$p."observaciones"]);
     if(isset($row[$p."persona"])) $this->setPersona($row[$p."persona"]);
+    return $this;
   }
 
-  public function _toArray(){
+  public function _toArray(string $p = ""){
     $row = [];
-    if($this->id !== UNDEFINED) $row["id"] = $this->id();
-    if($this->motivo !== UNDEFINED) $row["motivo"] = $this->motivo();
-    if($this->estado !== UNDEFINED) $row["estado"] = $this->estado();
-    if($this->creado !== UNDEFINED) $row["creado"] = $this->creado("Y-m-d H:i:s");
-    if($this->enviado !== UNDEFINED) $row["enviado"] = $this->enviado("Y-m-d H:i:s");
-    if($this->evaluado !== UNDEFINED) $row["evaluado"] = $this->evaluado("Y-m-d H:i:s");
-    if($this->modificado !== UNDEFINED) $row["modificado"] = $this->modificado("Y-m-d H:i:s");
-    if($this->observaciones !== UNDEFINED) $row["observaciones"] = $this->observaciones();
-    if($this->persona !== UNDEFINED) $row["persona"] = $this->persona();
+    if($this->id !== UNDEFINED) $row[$p."id"] = $this->id();
+    if($this->motivo !== UNDEFINED) $row[$p."motivo"] = $this->motivo();
+    if($this->estado !== UNDEFINED) $row[$p."estado"] = $this->estado();
+    if($this->creado !== UNDEFINED) $row[$p."creado"] = $this->creado("c");
+    if($this->enviado !== UNDEFINED) $row[$p."enviado"] = $this->enviado("c");
+    if($this->evaluado !== UNDEFINED) $row[$p."evaluado"] = $this->evaluado("c");
+    if($this->modificado !== UNDEFINED) $row[$p."modificado"] = $this->modificado("c");
+    if($this->observaciones !== UNDEFINED) $row[$p."observaciones"] = $this->observaciones();
+    if($this->persona !== UNDEFINED) $row[$p."persona"] = $this->persona();
     return $row;
   }
 
@@ -75,101 +77,56 @@ class _Afiliacion extends EntityValues {
   public function modificado($format = null) { return Format::date($this->modificado, $format); }
   public function observaciones($format = null) { return Format::convertCase($this->observaciones, $format); }
   public function persona($format = null) { return Format::convertCase($this->persona, $format); }
-  public function setId($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkId($p); 
-    if($check) $this->id = $p;
-    return $check;
+
+  public function setId($p) { $this->id = (is_null($p)) ? null : (string)$p; }
+
+  public function setMotivo($p) { $this->motivo = (is_null($p)) ? null : (string)$p; }
+
+  public function setEstado($p) { $this->estado = (is_null($p)) ? null : (string)$p; }
+
+  public function _setCreado(DateTime $p = null) { $this->creado = $p; }
+
+  public function setCreado($p) {
+    if(!is_null($p)) {
+      $p = new SpanishDateTime($p);    
+      if($p) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+    }
+    $this->creado = $p;  
   }
 
-  public function setMotivo($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkMotivo($p); 
-    if($check) $this->motivo = $p;
-    return $check;
+  public function _setEnviado(DateTime $p = null) { $this->enviado = $p; }
+
+  public function setEnviado($p) {
+    if(!is_null($p)) {
+      $p = new SpanishDateTime($p);    
+      if($p) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+    }
+    $this->enviado = $p;  
   }
 
-  public function setEstado($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkEstado($p); 
-    if($check) $this->estado = $p;
-    return $check;
+  public function _setEvaluado(DateTime $p = null) { $this->evaluado = $p; }
+
+  public function setEvaluado($p) {
+    if(!is_null($p)) {
+      $p = new SpanishDateTime($p);    
+      if($p) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+    }
+    $this->evaluado = $p;  
   }
 
-  public function _setCreado(DateTime $p = null) {
-      $check = $this->checkCreado($p); 
-      if($check) $this->creado = $p;  
-      return $check;
+  public function _setModificado(DateTime $p = null) { $this->modificado = $p; }
+
+  public function setModificado($p) {
+    if(!is_null($p)) {
+      $p = new SpanishDateTime($p);    
+      if($p) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+    }
+    $this->modificado = $p;  
   }
 
-  public function setCreado($p, $format = "Y-m-d H:i:s") {
-    $p = ($p == DEFAULT_VALUE) ? date('Y-m-d H:i:s') : trim($p);
-    if(!is_null($p)) $p = SpanishDateTime::createFromFormat($format, $p);    
-    $check = $this->checkCreado($p); 
-    if($check) $this->creado = $p;  
-    return $check;
-  }
+  public function setObservaciones($p) { $this->observaciones = (is_null($p)) ? null : (string)$p; }
 
-  public function _setEnviado(DateTime $p = null) {
-      $check = $this->checkEnviado($p); 
-      if($check) $this->enviado = $p;  
-      return $check;
-  }
-
-  public function setEnviado($p, $format = "Y-m-d H:i:s") {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    if(!is_null($p)) $p = SpanishDateTime::createFromFormat($format, $p);    
-    $check = $this->checkEnviado($p); 
-    if($check) $this->enviado = $p;  
-    return $check;
-  }
-
-  public function _setEvaluado(DateTime $p = null) {
-      $check = $this->checkEvaluado($p); 
-      if($check) $this->evaluado = $p;  
-      return $check;
-  }
-
-  public function setEvaluado($p, $format = "Y-m-d H:i:s") {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    if(!is_null($p)) $p = SpanishDateTime::createFromFormat($format, $p);    
-    $check = $this->checkEvaluado($p); 
-    if($check) $this->evaluado = $p;  
-    return $check;
-  }
-
-  public function _setModificado(DateTime $p = null) {
-      $check = $this->checkModificado($p); 
-      if($check) $this->modificado = $p;  
-      return $check;
-  }
-
-  public function setModificado($p, $format = "Y-m-d H:i:s") {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    if(!is_null($p)) $p = SpanishDateTime::createFromFormat($format, $p);    
-    $check = $this->checkModificado($p); 
-    if($check) $this->modificado = $p;  
-    return $check;
-  }
-
-  public function setObservaciones($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkObservaciones($p); 
-    if($check) $this->observaciones = $p;
-    return $check;
-  }
-
-  public function setPersona($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkPersona($p); 
-    if($check) $this->persona = $p;
-    return $check;
-  }
+  public function setPersona($p) { $this->persona = (is_null($p)) ? null : (string)$p; }
 
   public function checkId($value) { 
       return true; 
@@ -213,6 +170,19 @@ class _Afiliacion extends EntityValues {
   public function checkPersona($value) { 
     $v = Validation::getInstanceValue($value)->string()->required();
     return $this->_setLogsValidation("persona", $v);
+  }
+
+  public function _check(){
+    $this->checkId($this->id);
+    $this->checkMotivo($this->motivo);
+    $this->checkEstado($this->estado);
+    $this->checkCreado($this->creado);
+    $this->checkEnviado($this->enviado);
+    $this->checkEvaluado($this->evaluado);
+    $this->checkModificado($this->modificado);
+    $this->checkObservaciones($this->observaciones);
+    $this->checkPersona($this->persona);
+    return !$this->_getLogs()->isError();
   }
 
 

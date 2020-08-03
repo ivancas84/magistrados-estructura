@@ -22,25 +22,26 @@ class _Persona extends EntityValues {
   protected $tipoDocumento = UNDEFINED;
 
   public function _setDefault(){
-    $this->setId(DEFAULT_VALUE);
-    $this->setNombres(DEFAULT_VALUE);
-    $this->setApellidos(DEFAULT_VALUE);
-    $this->setLegajo(DEFAULT_VALUE);
-    $this->setNumeroDocumento(DEFAULT_VALUE);
-    $this->setTelefonoLaboral(DEFAULT_VALUE);
-    $this->setTelefonoParticular(DEFAULT_VALUE);
-    $this->setFechaNacimiento(DEFAULT_VALUE);
-    $this->setEmail(DEFAULT_VALUE);
-    $this->setCreado(DEFAULT_VALUE);
-    $this->setEliminado(DEFAULT_VALUE);
-    $this->setCargo(DEFAULT_VALUE);
-    $this->setOrgano(DEFAULT_VALUE);
-    $this->setDepartamentoJudicial(DEFAULT_VALUE);
-    $this->setDepartamentoJudicialInformado(DEFAULT_VALUE);
-    $this->setTipoDocumento(DEFAULT_VALUE);
+    if($this->id == UNDEFINED) $this->setId(null);
+    if($this->nombres == UNDEFINED) $this->setNombres(null);
+    if($this->apellidos == UNDEFINED) $this->setApellidos(null);
+    if($this->legajo == UNDEFINED) $this->setLegajo(null);
+    if($this->numeroDocumento == UNDEFINED) $this->setNumeroDocumento(null);
+    if($this->telefonoLaboral == UNDEFINED) $this->setTelefonoLaboral(null);
+    if($this->telefonoParticular == UNDEFINED) $this->setTelefonoParticular(null);
+    if($this->fechaNacimiento == UNDEFINED) $this->setFechaNacimiento(null);
+    if($this->email == UNDEFINED) $this->setEmail(null);
+    if($this->creado == UNDEFINED) $this->setCreado(date('c'));
+    if($this->eliminado == UNDEFINED) $this->setEliminado(null);
+    if($this->cargo == UNDEFINED) $this->setCargo(null);
+    if($this->organo == UNDEFINED) $this->setOrgano(null);
+    if($this->departamentoJudicial == UNDEFINED) $this->setDepartamentoJudicial(null);
+    if($this->departamentoJudicialInformado == UNDEFINED) $this->setDepartamentoJudicialInformado(null);
+    if($this->tipoDocumento == UNDEFINED) $this->setTipoDocumento(null);
+    return $this;
   }
 
-  public function _fromArray(array $row = NULL, $p = ""){
+  public function _fromArray(array $row = NULL, string $p = ""){
     if(empty($row)) return;
     if(isset($row[$p."id"])) $this->setId($row[$p."id"]);
     if(isset($row[$p."nombres"])) $this->setNombres($row[$p."nombres"]);
@@ -58,26 +59,27 @@ class _Persona extends EntityValues {
     if(isset($row[$p."departamento_judicial"])) $this->setDepartamentoJudicial($row[$p."departamento_judicial"]);
     if(isset($row[$p."departamento_judicial_informado"])) $this->setDepartamentoJudicialInformado($row[$p."departamento_judicial_informado"]);
     if(isset($row[$p."tipo_documento"])) $this->setTipoDocumento($row[$p."tipo_documento"]);
+    return $this;
   }
 
-  public function _toArray(){
+  public function _toArray(string $p = ""){
     $row = [];
-    if($this->id !== UNDEFINED) $row["id"] = $this->id();
-    if($this->nombres !== UNDEFINED) $row["nombres"] = $this->nombres();
-    if($this->apellidos !== UNDEFINED) $row["apellidos"] = $this->apellidos();
-    if($this->legajo !== UNDEFINED) $row["legajo"] = $this->legajo();
-    if($this->numeroDocumento !== UNDEFINED) $row["numero_documento"] = $this->numeroDocumento();
-    if($this->telefonoLaboral !== UNDEFINED) $row["telefono_laboral"] = $this->telefonoLaboral();
-    if($this->telefonoParticular !== UNDEFINED) $row["telefono_particular"] = $this->telefonoParticular();
-    if($this->fechaNacimiento !== UNDEFINED) $row["fecha_nacimiento"] = $this->fechaNacimiento("Y-m-d");
-    if($this->email !== UNDEFINED) $row["email"] = $this->email();
-    if($this->creado !== UNDEFINED) $row["creado"] = $this->creado("Y-m-d H:i:s");
-    if($this->eliminado !== UNDEFINED) $row["eliminado"] = $this->eliminado("Y-m-d H:i:s");
-    if($this->cargo !== UNDEFINED) $row["cargo"] = $this->cargo();
-    if($this->organo !== UNDEFINED) $row["organo"] = $this->organo();
-    if($this->departamentoJudicial !== UNDEFINED) $row["departamento_judicial"] = $this->departamentoJudicial();
-    if($this->departamentoJudicialInformado !== UNDEFINED) $row["departamento_judicial_informado"] = $this->departamentoJudicialInformado();
-    if($this->tipoDocumento !== UNDEFINED) $row["tipo_documento"] = $this->tipoDocumento();
+    if($this->id !== UNDEFINED) $row[$p."id"] = $this->id();
+    if($this->nombres !== UNDEFINED) $row[$p."nombres"] = $this->nombres();
+    if($this->apellidos !== UNDEFINED) $row[$p."apellidos"] = $this->apellidos();
+    if($this->legajo !== UNDEFINED) $row[$p."legajo"] = $this->legajo();
+    if($this->numeroDocumento !== UNDEFINED) $row[$p."numero_documento"] = $this->numeroDocumento();
+    if($this->telefonoLaboral !== UNDEFINED) $row[$p."telefono_laboral"] = $this->telefonoLaboral();
+    if($this->telefonoParticular !== UNDEFINED) $row[$p."telefono_particular"] = $this->telefonoParticular();
+    if($this->fechaNacimiento !== UNDEFINED) $row[$p."fecha_nacimiento"] = $this->fechaNacimiento("c");
+    if($this->email !== UNDEFINED) $row[$p."email"] = $this->email();
+    if($this->creado !== UNDEFINED) $row[$p."creado"] = $this->creado("c");
+    if($this->eliminado !== UNDEFINED) $row[$p."eliminado"] = $this->eliminado("c");
+    if($this->cargo !== UNDEFINED) $row[$p."cargo"] = $this->cargo();
+    if($this->organo !== UNDEFINED) $row[$p."organo"] = $this->organo();
+    if($this->departamentoJudicial !== UNDEFINED) $row[$p."departamento_judicial"] = $this->departamentoJudicial();
+    if($this->departamentoJudicialInformado !== UNDEFINED) $row[$p."departamento_judicial_informado"] = $this->departamentoJudicialInformado();
+    if($this->tipoDocumento !== UNDEFINED) $row[$p."tipo_documento"] = $this->tipoDocumento();
     return $row;
   }
 
@@ -117,151 +119,62 @@ class _Persona extends EntityValues {
   public function departamentoJudicial($format = null) { return Format::convertCase($this->departamentoJudicial, $format); }
   public function departamentoJudicialInformado($format = null) { return Format::convertCase($this->departamentoJudicialInformado, $format); }
   public function tipoDocumento($format = null) { return Format::convertCase($this->tipoDocumento, $format); }
-  public function setId($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkId($p); 
-    if($check) $this->id = $p;
-    return $check;
+
+  public function setId($p) { $this->id = (is_null($p)) ? null : (string)$p; }
+
+  public function setNombres($p) { $this->nombres = (is_null($p)) ? null : (string)$p; }
+
+  public function setApellidos($p) { $this->apellidos = (is_null($p)) ? null : (string)$p; }
+
+  public function setLegajo($p) { $this->legajo = (is_null($p)) ? null : (string)$p; }
+
+  public function setNumeroDocumento($p) { $this->numeroDocumento = (is_null($p)) ? null : (string)$p; }
+
+  public function setTelefonoLaboral($p) { $this->telefonoLaboral = (is_null($p)) ? null : (string)$p; }
+
+  public function setTelefonoParticular($p) { $this->telefonoParticular = (is_null($p)) ? null : (string)$p; }
+
+  public function _setFechaNacimiento(DateTime $p = null) { $this->fechaNacimiento = $p; }
+
+  public function setFechaNacimiento($p) {
+    if(!is_null($p)) {
+      $p = new SpanishDateTime($p);    
+      if($p) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+    }
+    $this->fechaNacimiento = $p;  
   }
 
-  public function setNombres($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkNombres($p); 
-    if($check) $this->nombres = $p;
-    return $check;
+  public function setEmail($p) { $this->email = (is_null($p)) ? null : (string)$p; }
+
+  public function _setCreado(DateTime $p = null) { $this->creado = $p; }
+
+  public function setCreado($p) {
+    if(!is_null($p)) {
+      $p = new SpanishDateTime($p);    
+      if($p) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+    }
+    $this->creado = $p;  
   }
 
-  public function setApellidos($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkApellidos($p); 
-    if($check) $this->apellidos = $p;
-    return $check;
+  public function _setEliminado(DateTime $p = null) { $this->eliminado = $p; }
+
+  public function setEliminado($p) {
+    if(!is_null($p)) {
+      $p = new SpanishDateTime($p);    
+      if($p) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+    }
+    $this->eliminado = $p;  
   }
 
-  public function setLegajo($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkLegajo($p); 
-    if($check) $this->legajo = $p;
-    return $check;
-  }
+  public function setCargo($p) { $this->cargo = (is_null($p)) ? null : (string)$p; }
 
-  public function setNumeroDocumento($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkNumeroDocumento($p); 
-    if($check) $this->numeroDocumento = $p;
-    return $check;
-  }
+  public function setOrgano($p) { $this->organo = (is_null($p)) ? null : (string)$p; }
 
-  public function setTelefonoLaboral($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkTelefonoLaboral($p); 
-    if($check) $this->telefonoLaboral = $p;
-    return $check;
-  }
+  public function setDepartamentoJudicial($p) { $this->departamentoJudicial = (is_null($p)) ? null : (string)$p; }
 
-  public function setTelefonoParticular($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkTelefonoParticular($p); 
-    if($check) $this->telefonoParticular = $p;
-    return $check;
-  }
+  public function setDepartamentoJudicialInformado($p) { $this->departamentoJudicialInformado = (is_null($p)) ? null : (string)$p; }
 
-  public function _setFechaNacimiento(DateTime $p = null) {
-      $check = $this->checkFechaNacimiento($p); 
-      if($check) $this->fechaNacimiento = $p;  
-      return $check;      
-  }
-
-  public function setFechaNacimiento($p, $format = UNDEFINED) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    if(!is_null($p)) $p = ($format == UNDEFINED) ? SpanishDateTime::createFromDate($p) : SpanishDateTime::createFromFormat($format, $p);    
-    $check = $this->checkFechaNacimiento($p); 
-    if($check) $this->fechaNacimiento = $p;  
-    return $check;
-  }
-
-  public function setEmail($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkEmail($p); 
-    if($check) $this->email = $p;
-    return $check;
-  }
-
-  public function _setCreado(DateTime $p = null) {
-      $check = $this->checkCreado($p); 
-      if($check) $this->creado = $p;  
-      return $check;
-  }
-
-  public function setCreado($p, $format = "Y-m-d H:i:s") {
-    $p = ($p == DEFAULT_VALUE) ? date('Y-m-d H:i:s') : trim($p);
-    if(!is_null($p)) $p = SpanishDateTime::createFromFormat($format, $p);    
-    $check = $this->checkCreado($p); 
-    if($check) $this->creado = $p;  
-    return $check;
-  }
-
-  public function _setEliminado(DateTime $p = null) {
-      $check = $this->checkEliminado($p); 
-      if($check) $this->eliminado = $p;  
-      return $check;
-  }
-
-  public function setEliminado($p, $format = "Y-m-d H:i:s") {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    if(!is_null($p)) $p = SpanishDateTime::createFromFormat($format, $p);    
-    $check = $this->checkEliminado($p); 
-    if($check) $this->eliminado = $p;  
-    return $check;
-  }
-
-  public function setCargo($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkCargo($p); 
-    if($check) $this->cargo = $p;
-    return $check;
-  }
-
-  public function setOrgano($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkOrgano($p); 
-    if($check) $this->organo = $p;
-    return $check;
-  }
-
-  public function setDepartamentoJudicial($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkDepartamentoJudicial($p); 
-    if($check) $this->departamentoJudicial = $p;
-    return $check;
-  }
-
-  public function setDepartamentoJudicialInformado($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkDepartamentoJudicialInformado($p); 
-    if($check) $this->departamentoJudicialInformado = $p;
-    return $check;
-  }
-
-  public function setTipoDocumento($p) {
-    $p = ($p == DEFAULT_VALUE) ? null : trim($p);
-    $p = (is_null($p)) ? null : (string)$p;
-    $check = $this->checkTipoDocumento($p); 
-    if($check) $this->tipoDocumento = $p;
-    return $check;
-  }
+  public function setTipoDocumento($p) { $this->tipoDocumento = (is_null($p)) ? null : (string)$p; }
 
   public function checkId($value) { 
       return true; 
@@ -340,6 +253,26 @@ class _Persona extends EntityValues {
   public function checkTipoDocumento($value) { 
     $v = Validation::getInstanceValue($value)->string()->required();
     return $this->_setLogsValidation("tipo_documento", $v);
+  }
+
+  public function _check(){
+    $this->checkId($this->id);
+    $this->checkNombres($this->nombres);
+    $this->checkApellidos($this->apellidos);
+    $this->checkLegajo($this->legajo);
+    $this->checkNumeroDocumento($this->numeroDocumento);
+    $this->checkTelefonoLaboral($this->telefonoLaboral);
+    $this->checkTelefonoParticular($this->telefonoParticular);
+    $this->checkFechaNacimiento($this->fechaNacimiento);
+    $this->checkEmail($this->email);
+    $this->checkCreado($this->creado);
+    $this->checkEliminado($this->eliminado);
+    $this->checkCargo($this->cargo);
+    $this->checkOrgano($this->organo);
+    $this->checkDepartamentoJudicial($this->departamentoJudicial);
+    $this->checkDepartamentoJudicialInformado($this->departamentoJudicialInformado);
+    $this->checkTipoDocumento($this->tipoDocumento);
+    return !$this->_getLogs()->isError();
   }
 
 

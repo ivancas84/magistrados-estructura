@@ -77,23 +77,6 @@ class _DepartamentoJudicialSql extends EntitySql{
     }
   }
 
-  public function initializeInsert(array $data){
-    $data['id'] = (!empty($data['id'])) ? $data['id'] : Ma::nextId('departamento_judicial');
-    if(!isset($data['codigo']) || is_null($data['codigo']) || $data['codigo'] == "") throw new Exception('dato obligatorio sin valor: codigo');
-    if(!isset($data['nombre']) || is_null($data['nombre']) || $data['nombre'] == "") throw new Exception('dato obligatorio sin valor: nombre');
-
-    return $data;
-  }
-
-
-  public function initializeUpdate(array $data){
-    if(array_key_exists('id', $data)) { if(is_null($data['id']) || $data['id'] == "") throw new Exception('dato obligatorio sin valor: id'); }
-    if(array_key_exists('codigo', $data)) { if(is_null($data['codigo']) || $data['codigo'] == "") throw new Exception('dato obligatorio sin valor: codigo'); }
-    if(array_key_exists('nombre', $data)) { if(is_null($data['nombre']) || $data['nombre'] == "") throw new Exception('dato obligatorio sin valor: nombre'); }
-
-    return $data;
-  }
-
 
   public function format(array $row){
     $row_ = array();

@@ -197,35 +197,6 @@ class _AfiliacionSql extends EntitySql{
     if($c = EntitySql::getInstanceRequire('tipo_documento','per_td')->_conditionFieldAux($field, $option, $value)) return $c;
   }
 
-  public function initializeInsert(array $data){
-    $data['id'] = (!empty($data['id'])) ? $data['id'] : Ma::nextId('afiliacion');
-    if(!isset($data['motivo']) || is_null($data['motivo']) || $data['motivo'] == "") throw new Exception('dato obligatorio sin valor: motivo');
-    if(!isset($data['estado']) || is_null($data['estado']) || $data['estado'] == "") throw new Exception('dato obligatorio sin valor: estado');
-    if(!isset($data['creado']))  $data['creado'] = date("Y-m-d H:i:s");
-    if(!isset($data['enviado']))  $data['enviado'] = "null";
-    if(!isset($data['evaluado']))  $data['evaluado'] = "null";
-    if(!isset($data['modificado']))  $data['modificado'] = "null";
-    if(!isset($data['observaciones']) || is_null($data['observaciones']) || $data['observaciones'] == "") $data['observaciones'] = "null";
-    if(empty($data['persona'])) throw new Exception('dato obligatorio sin valor: persona');
-
-    return $data;
-  }
-
-
-  public function initializeUpdate(array $data){
-    if(array_key_exists('id', $data)) { if(is_null($data['id']) || $data['id'] == "") throw new Exception('dato obligatorio sin valor: id'); }
-    if(array_key_exists('motivo', $data)) { if(is_null($data['motivo']) || $data['motivo'] == "") throw new Exception('dato obligatorio sin valor: motivo'); }
-    if(array_key_exists('estado', $data)) { if(is_null($data['estado']) || $data['estado'] == "") throw new Exception('dato obligatorio sin valor: estado'); }
-    if(array_key_exists('creado', $data)) { if(empty($data['creado']))  $data['creado'] = date("Y-m-d H:i:s"); }
-    if(array_key_exists('enviado', $data)) { if(empty($data['enviado']))  $data['enviado'] = "null"; }
-    if(array_key_exists('evaluado', $data)) { if(empty($data['evaluado']))  $data['evaluado'] = "null"; }
-    if(array_key_exists('modificado', $data)) { if(empty($data['modificado']))  $data['modificado'] = "null"; }
-    if(array_key_exists('observaciones', $data)) { if(is_null($data['observaciones']) || $data['observaciones'] == "") $data['observaciones'] = "null"; }
-    if(array_key_exists('persona', $data)) { if(!isset($data['persona']) || ($data['persona'] == '')) throw new Exception('dato obligatorio sin valor: persona'); }
-
-    return $data;
-  }
-
 
   public function format(array $row){
     $row_ = array();

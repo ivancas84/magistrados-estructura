@@ -260,49 +260,6 @@ class _PersonaSql extends EntitySql{
     if($c = EntitySql::getInstanceRequire('tipo_documento','td')->_conditionFieldAux($field, $option, $value)) return $c;
   }
 
-  public function initializeInsert(array $data){
-    $data['id'] = (!empty($data['id'])) ? $data['id'] : Ma::nextId('persona');
-    if(!isset($data['nombres']) || is_null($data['nombres']) || $data['nombres'] == "") $data['nombres'] = "null";
-    if(!isset($data['apellidos']) || is_null($data['apellidos']) || $data['apellidos'] == "") $data['apellidos'] = "null";
-    if(!isset($data['legajo']) || is_null($data['legajo']) || $data['legajo'] == "") $data['legajo'] = "null";
-    if(!isset($data['numero_documento']) || is_null($data['numero_documento']) || $data['numero_documento'] == "") throw new Exception('dato obligatorio sin valor: numero_documento');
-    if(!isset($data['telefono_laboral']) || is_null($data['telefono_laboral']) || $data['telefono_laboral'] == "") $data['telefono_laboral'] = "null";
-    if(!isset($data['telefono_particular']) || is_null($data['telefono_particular']) || $data['telefono_particular'] == "") $data['telefono_particular'] = "null";
-    if(!isset($data['fecha_nacimiento']))  $data['fecha_nacimiento'] = "null";
-    if(!isset($data['email']) || is_null($data['email']) || $data['email'] == "") $data['email'] = "null";
-    if(!isset($data['creado']))  $data['creado'] = date("Y-m-d H:i:s");
-    if(!isset($data['eliminado']))  $data['eliminado'] = "null";
-    if(empty($data['cargo'])) throw new Exception('dato obligatorio sin valor: cargo');
-    if(empty($data['organo'])) throw new Exception('dato obligatorio sin valor: organo');
-    if(empty($data['departamento_judicial'])) throw new Exception('dato obligatorio sin valor: departamento_judicial');
-    if(empty($data['departamento_judicial_informado'])) throw new Exception('dato obligatorio sin valor: departamento_judicial_informado');
-    if(empty($data['tipo_documento'])) throw new Exception('dato obligatorio sin valor: tipo_documento');
-
-    return $data;
-  }
-
-
-  public function initializeUpdate(array $data){
-    if(array_key_exists('id', $data)) { if(is_null($data['id']) || $data['id'] == "") throw new Exception('dato obligatorio sin valor: id'); }
-    if(array_key_exists('nombres', $data)) { if(is_null($data['nombres']) || $data['nombres'] == "") $data['nombres'] = "null"; }
-    if(array_key_exists('apellidos', $data)) { if(is_null($data['apellidos']) || $data['apellidos'] == "") $data['apellidos'] = "null"; }
-    if(array_key_exists('legajo', $data)) { if(is_null($data['legajo']) || $data['legajo'] == "") $data['legajo'] = "null"; }
-    if(array_key_exists('numero_documento', $data)) { if(is_null($data['numero_documento']) || $data['numero_documento'] == "") throw new Exception('dato obligatorio sin valor: numero_documento'); }
-    if(array_key_exists('telefono_laboral', $data)) { if(is_null($data['telefono_laboral']) || $data['telefono_laboral'] == "") $data['telefono_laboral'] = "null"; }
-    if(array_key_exists('telefono_particular', $data)) { if(is_null($data['telefono_particular']) || $data['telefono_particular'] == "") $data['telefono_particular'] = "null"; }
-    if(array_key_exists('fecha_nacimiento', $data)) { if(empty($data['fecha_nacimiento']))  $data['fecha_nacimiento'] = "null"; }
-    if(array_key_exists('email', $data)) { if(is_null($data['email']) || $data['email'] == "") $data['email'] = "null"; }
-    if(array_key_exists('creado', $data)) { if(empty($data['creado']))  $data['creado'] = date("Y-m-d H:i:s"); }
-    if(array_key_exists('eliminado', $data)) { if(empty($data['eliminado']))  $data['eliminado'] = "null"; }
-    if(array_key_exists('cargo', $data)) { if(!isset($data['cargo']) || ($data['cargo'] == '')) throw new Exception('dato obligatorio sin valor: cargo'); }
-    if(array_key_exists('organo', $data)) { if(!isset($data['organo']) || ($data['organo'] == '')) throw new Exception('dato obligatorio sin valor: organo'); }
-    if(array_key_exists('departamento_judicial', $data)) { if(!isset($data['departamento_judicial']) || ($data['departamento_judicial'] == '')) throw new Exception('dato obligatorio sin valor: departamento_judicial'); }
-    if(array_key_exists('departamento_judicial_informado', $data)) { if(!isset($data['departamento_judicial_informado']) || ($data['departamento_judicial_informado'] == '')) throw new Exception('dato obligatorio sin valor: departamento_judicial_informado'); }
-    if(array_key_exists('tipo_documento', $data)) { if(!isset($data['tipo_documento']) || ($data['tipo_documento'] == '')) throw new Exception('dato obligatorio sin valor: tipo_documento'); }
-
-    return $data;
-  }
-
 
   public function format(array $row){
     $row_ = array();

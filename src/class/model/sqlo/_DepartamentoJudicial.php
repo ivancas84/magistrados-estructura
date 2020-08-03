@@ -7,14 +7,7 @@ require_once("class/model/Values.php");
 
 class _DepartamentoJudicialSqlo extends EntitySqlo {
 
-  public function __construct(){
-    /**
-     * Se definen todos los recursos de forma independiente, sin parametros en el constructor, para facilitar el polimorfismo de las subclases
-     */
-    $this->db = Dba::dbInstance();
-    $this->entity = Entity::getInstanceRequire('departamento_judicial');
-    $this->sql = EntitySql::getInstanceRequire('departamento_judicial');
-  }
+  public $entityName = "departamento_judicial";
 
   protected function _insert(array $row){ //@override
       $sql = "

@@ -7,14 +7,7 @@ require_once("class/model/Values.php");
 
 class _PersonaSqlo extends EntitySqlo {
 
-  public function __construct(){
-    /**
-     * Se definen todos los recursos de forma independiente, sin parametros en el constructor, para facilitar el polimorfismo de las subclases
-     */
-    $this->db = Dba::dbInstance();
-    $this->entity = Entity::getInstanceRequire('persona');
-    $this->sql = EntitySql::getInstanceRequire('persona');
-  }
+  public $entityName = "persona";
 
   protected function _insert(array $row){ //@override
       $sql = "
