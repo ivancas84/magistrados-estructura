@@ -1,8 +1,8 @@
 <?php
 
-require_once("class/model/field/persona/_Cargo.php");
+require_once("class/model/field/persona/_Email.php");
 
-class FieldPersonaCargo extends _FieldPersonaCargo {
+class FieldPersonaEmail extends _FieldPersonaEmail {
 
   public $subtype = "email";
   
