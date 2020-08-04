@@ -58,7 +58,7 @@ class _DepartamentoJudicial extends EntityValues {
   }
 
   public function checkNombre($value) { 
-    $v = Validation::getInstanceValue($value)->string()->required();
+    $v = Validation::getInstanceValue($value)->string();
     return $this->_setLogsValidation("nombre", $v);
   }
 

@@ -246,7 +246,7 @@ class _Persona extends EntityValues {
   }
 
   public function checkDepartamentoJudicialInformado($value) { 
-    $v = Validation::getInstanceValue($value)->string()->required();
+    $v = Validation::getInstanceValue($value)->string();
     return $this->_setLogsValidation("departamento_judicial_informado", $v);
   }
 

@@ -18,5 +18,5 @@ eliminado (eli): timestamp nf.
 cargo (car): string mu. NOT NULL.
 organo (org): string mu. NOT NULL.
 departamento_judicial (dj): string mu. NOT NULL.
-departamento_judicial_informado (dji): string mu. NOT NULL.
+departamento_judicial_informado (dji): string mu.
 tipo_documento (td): string mu. NOT NULL.
