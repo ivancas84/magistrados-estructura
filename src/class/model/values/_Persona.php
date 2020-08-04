@@ -251,7 +251,7 @@ class _Persona extends EntityValues {
   }
 
   public function checkTipoDocumento($value) { 
-    $v = Validation::getInstanceValue($value)->string()->required();
+    $v = Validation::getInstanceValue($value)->string();
     return $this->_setLogsValidation("tipo_documento", $v);
   }
 
