@@ -191,12 +191,12 @@ class _Persona extends EntityValues {
   }
 
   public function checkLegajo($value) { 
-    $v = Validation::getInstanceValue($value)->string();
+    $v = Validation::getInstanceValue($value)->string()->required();
     return $this->_setLogsValidation("legajo", $v);
   }
 
   public function checkNumeroDocumento($value) { 
-    $v = Validation::getInstanceValue($value)->string()->required();
+    $v = Validation::getInstanceValue($value)->string();
     return $this->_setLogsValidation("numero_documento", $v);
   }
 
