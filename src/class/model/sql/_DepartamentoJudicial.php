@@ -31,9 +31,7 @@ class _DepartamentoJudicialSql extends EntitySql{
       case $p.'max_nombre': return "MAX({$t}.nombre)";
       case $p.'count_nombre': return "COUNT({$t}.nombre)";
 
-      case $p.'_label': return "CONCAT_WS(' ',
-{$t}.id
-)";
+      case $p.'_label': return "CONCAT_WS(' ', {$t}.id)";
       default: return null;
     }
   }

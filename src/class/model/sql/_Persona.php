@@ -99,9 +99,7 @@ class _PersonaSql extends EntitySql{
       case $p.'max_tipo_documento': return "MAX({$t}.tipo_documento)";
       case $p.'count_tipo_documento': return "COUNT({$t}.tipo_documento)";
 
-      case $p.'_label': return "CONCAT_WS(' ',
-{$t}.id
-)";
+      case $p.'_label': return "CONCAT_WS(' ', {$t}.id)";
       default: return null;
     }
   }
