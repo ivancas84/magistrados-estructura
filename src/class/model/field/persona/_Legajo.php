@@ -7,7 +7,7 @@ class _FieldPersonaLegajo extends Field {
   public $type = "varchar";
   public $fieldType = "nf";
   public $unique = false;
-  public $notNull = false;
+  public $notNull = true;
   public $default = false;
   public $length = "45";
   public $main = false;
