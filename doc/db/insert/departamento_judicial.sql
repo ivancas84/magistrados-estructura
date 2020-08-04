@@ -1,0 +1,15 @@
+INSERT INTO departamento_judicial (id, codigo, nombre) VALUES
+('1', '01', 'Corte'),
+('2', '02', 'La Plata'),
+('3', '03', 'Mercedes'),
+('4', '04', 'San Nicolas'),
+('5', '05', 'Dolores'),
+('6', '06', 'Bahía Blanca'),
+('7', '7', 'Azul'),
+('8', '8', 'Mar del Plata'),
+('9', '9', 'Junín'),
+('10', '10', 'San Pedro'),
+('11', '11', 'Trenque Lauquen'),
+('12', '12', 'Morón'),
+('13', '13', 'San Martín'),
+('14', '18', 'Zarate-Campana');
