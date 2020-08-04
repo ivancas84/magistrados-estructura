@@ -26,9 +26,7 @@ class _OrganoSql extends EntitySql{
       case $p.'max_descripcion': return "MAX({$t}.descripcion)";
       case $p.'count_descripcion': return "COUNT({$t}.descripcion)";
 
-      case $p.'_label': return "CONCAT_WS(' ',
-{$t}.id
-)";
+      case $p.'_label': return "CONCAT_WS(' ', {$t}.descripcion)";
       default: return null;
     }
   }
