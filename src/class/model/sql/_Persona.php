@@ -268,10 +268,10 @@ class _PersonaSql extends EntitySql{
     if(isset($row['numero_documento'])) $row_['numero_documento'] = $this->format->string($row['numero_documento']);
     if(isset($row['telefono_laboral'])) $row_['telefono_laboral'] = $this->format->string($row['telefono_laboral']);
     if(isset($row['telefono_particular'])) $row_['telefono_particular'] = $this->format->string($row['telefono_particular']);
-    if(isset($row['fecha_nacimiento'])) $row_['fecha_nacimiento'] = $this->format->date($row['fecha_nacimiento']);
+    if(isset($row['fecha_nacimiento'])) $row_['fecha_nacimiento'] = $this->format->datetime($row['fecha_nacimiento']);
     if(isset($row['email'])) $row_['email'] = $this->format->string($row['email']);
-    if(isset($row['creado'])) $row_['creado'] = $this->format->timestamp($row['creado']);
-    if(isset($row['eliminado'])) $row_['eliminado'] = $this->format->timestamp($row['eliminado']);
+    if(isset($row['creado'])) $row_['creado'] = $this->format->datetime($row['creado']);
+    if(isset($row['eliminado'])) $row_['eliminado'] = $this->format->datetime($row['eliminado']);
     if(isset($row['cargo'])) $row_['cargo'] = $this->format->string($row['cargo']);
     if(isset($row['organo'])) $row_['organo'] = $this->format->string($row['organo']);
     if(isset($row['departamento_judicial'])) $row_['departamento_judicial'] = $this->format->string($row['departamento_judicial']);

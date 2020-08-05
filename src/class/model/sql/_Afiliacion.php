@@ -201,10 +201,10 @@ class _AfiliacionSql extends EntitySql{
    if(isset($row['id']) )  $row_['id'] = $this->format->string($row['id']);
     if(isset($row['motivo'])) $row_['motivo'] = $this->format->string($row['motivo']);
     if(isset($row['estado'])) $row_['estado'] = $this->format->string($row['estado']);
-    if(isset($row['creado'])) $row_['creado'] = $this->format->timestamp($row['creado']);
-    if(isset($row['enviado'])) $row_['enviado'] = $this->format->timestamp($row['enviado']);
-    if(isset($row['evaluado'])) $row_['evaluado'] = $this->format->timestamp($row['evaluado']);
-    if(isset($row['modificado'])) $row_['modificado'] = $this->format->timestamp($row['modificado']);
+    if(isset($row['creado'])) $row_['creado'] = $this->format->datetime($row['creado']);
+    if(isset($row['enviado'])) $row_['enviado'] = $this->format->datetime($row['enviado']);
+    if(isset($row['evaluado'])) $row_['evaluado'] = $this->format->datetime($row['evaluado']);
+    if(isset($row['modificado'])) $row_['modificado'] = $this->format->datetime($row['modificado']);
     if(isset($row['observaciones'])) $row_['observaciones'] = $this->format->string($row['observaciones']);
     if(isset($row['persona'])) $row_['persona'] = $this->format->string($row['persona']);
 
