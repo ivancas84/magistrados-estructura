@@ -68,8 +68,8 @@ class _TipoDocumentoSql extends EntitySql{
 
   public function format(array $row){
     $row_ = array();
-   if(isset($row['id']) )  $row_['id'] = $this->format->escapeString($row['id']);
-    if(isset($row['descripcion'])) $row_['descripcion'] = $this->format->escapeString($row['descripcion']);
+   if(isset($row['id']) )  $row_['id'] = $this->format->string($row['id']);
+    if(isset($row['descripcion'])) $row_['descripcion'] = $this->format->string($row['descripcion']);
 
     return $row_;
   }

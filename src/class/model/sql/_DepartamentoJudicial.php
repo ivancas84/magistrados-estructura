@@ -78,9 +78,9 @@ class _DepartamentoJudicialSql extends EntitySql{
 
   public function format(array $row){
     $row_ = array();
-   if(isset($row['id']) )  $row_['id'] = $this->format->escapeString($row['id']);
-    if(isset($row['codigo'])) $row_['codigo'] = $this->format->escapeString($row['codigo']);
-    if(isset($row['nombre'])) $row_['nombre'] = $this->format->escapeString($row['nombre']);
+   if(isset($row['id']) )  $row_['id'] = $this->format->string($row['id']);
+    if(isset($row['codigo'])) $row_['codigo'] = $this->format->string($row['codigo']);
+    if(isset($row['nombre'])) $row_['nombre'] = $this->format->string($row['nombre']);
 
     return $row_;
   }

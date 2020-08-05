@@ -198,15 +198,15 @@ class _AfiliacionSql extends EntitySql{
 
   public function format(array $row){
     $row_ = array();
-   if(isset($row['id']) )  $row_['id'] = $this->format->escapeString($row['id']);
-    if(isset($row['motivo'])) $row_['motivo'] = $this->format->escapeString($row['motivo']);
-    if(isset($row['estado'])) $row_['estado'] = $this->format->escapeString($row['estado']);
+   if(isset($row['id']) )  $row_['id'] = $this->format->string($row['id']);
+    if(isset($row['motivo'])) $row_['motivo'] = $this->format->string($row['motivo']);
+    if(isset($row['estado'])) $row_['estado'] = $this->format->string($row['estado']);
     if(isset($row['creado'])) $row_['creado'] = $this->format->timestamp($row['creado']);
     if(isset($row['enviado'])) $row_['enviado'] = $this->format->timestamp($row['enviado']);
     if(isset($row['evaluado'])) $row_['evaluado'] = $this->format->timestamp($row['evaluado']);
     if(isset($row['modificado'])) $row_['modificado'] = $this->format->timestamp($row['modificado']);
-    if(isset($row['observaciones'])) $row_['observaciones'] = $this->format->escapeString($row['observaciones']);
-    if(isset($row['persona'])) $row_['persona'] = $this->format->escapeString($row['persona']);
+    if(isset($row['observaciones'])) $row_['observaciones'] = $this->format->string($row['observaciones']);
+    if(isset($row['persona'])) $row_['persona'] = $this->format->string($row['persona']);
 
     return $row_;
   }
