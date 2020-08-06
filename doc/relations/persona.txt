@@ -5,9 +5,9 @@ departamento_judicial - dji
 tipo_documento - td
 
 id (id): string pk. NOT NULL. MAIN. UNIQUE.
-nombres (nom): string nf.
-apellidos (ape): string nf.
-legajo (leg): string nf. NOT NULL. UNIQUE.
+nombres (nom): string nf. MAIN.
+apellidos (ape): string nf. MAIN.
+legajo (leg): string nf. NOT NULL. MAIN. UNIQUE.
 numero_documento (nd): string nf. UNIQUE.
 telefono_laboral (tl): string nf.
 telefono_particular (tp): string nf.
