@@ -198,15 +198,15 @@ class _AfiliacionSql extends EntitySql{
 
   public function format(array $row){
     $row_ = array();
-   if(isset($row['id']) )  $row_['id'] = $this->format->string($row['id']);
-    if(isset($row['motivo'])) $row_['motivo'] = $this->format->string($row['motivo']);
-    if(isset($row['estado'])) $row_['estado'] = $this->format->string($row['estado']);
-    if(isset($row['creado'])) $row_['creado'] = $this->format->datetime($row['creado']);
-    if(isset($row['enviado'])) $row_['enviado'] = $this->format->datetime($row['enviado']);
-    if(isset($row['evaluado'])) $row_['evaluado'] = $this->format->datetime($row['evaluado']);
-    if(isset($row['modificado'])) $row_['modificado'] = $this->format->datetime($row['modificado']);
-    if(isset($row['observaciones'])) $row_['observaciones'] = $this->format->string($row['observaciones']);
-    if(isset($row['persona'])) $row_['persona'] = $this->format->string($row['persona']);
+    if(array_key_exists('id', $row))  $row_['id'] = $this->format->string($row['id']);
+    if(array_key_exists('motivo', $row)) $row_['motivo'] = $this->format->string($row['motivo']);
+    if(array_key_exists('estado', $row)) $row_['estado'] = $this->format->string($row['estado']);
+    if(array_key_exists('creado', $row)) $row_['creado'] = $this->format->timestamp($row['creado']);
+    if(array_key_exists('enviado', $row)) $row_['enviado'] = $this->format->timestamp($row['enviado']);
+    if(array_key_exists('evaluado', $row)) $row_['evaluado'] = $this->format->timestamp($row['evaluado']);
+    if(array_key_exists('modificado', $row)) $row_['modificado'] = $this->format->timestamp($row['modificado']);
+    if(array_key_exists('observaciones', $row)) $row_['observaciones'] = $this->format->string($row['observaciones']);
+    if(array_key_exists('persona', $row)) $row_['persona'] = $this->format->string($row['persona']);
 
     return $row_;
   }

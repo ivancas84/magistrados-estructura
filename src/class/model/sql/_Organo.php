@@ -68,8 +68,8 @@ class _OrganoSql extends EntitySql{
 
   public function format(array $row){
     $row_ = array();
-   if(isset($row['id']) )  $row_['id'] = $this->format->string($row['id']);
-    if(isset($row['descripcion'])) $row_['descripcion'] = $this->format->string($row['descripcion']);
+    if(array_key_exists('id', $row))  $row_['id'] = $this->format->string($row['id']);
+    if(array_key_exists('descripcion', $row)) $row_['descripcion'] = $this->format->string($row['descripcion']);
 
     return $row_;
   }
