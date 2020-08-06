@@ -7,7 +7,7 @@ class _FieldPersonaNumeroDocumento extends Field {
   public $type = "varchar";
   public $fieldType = "nf";
   public $unique = false;
-  public $notNull = true;
+  public $notNull = false;
   public $default = false;
   public $length = "45";
   public $main = false;
