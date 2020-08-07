@@ -88,8 +88,7 @@ class _AfiliacionSql extends EntitySql{
 ' . $this->_mappingField($p.'id') . ' AS ' . $p.'id, ' . $this->_mappingField($p.'motivo') . ' AS ' . $p.'motivo, ' . $this->_mappingField($p.'estado') . ' AS ' . $p.'estado, ' . $this->_mappingField($p.'creado') . ' AS ' . $p.'creado, ' . $this->_mappingField($p.'enviado') . ' AS ' . $p.'enviado, ' . $this->_mappingField($p.'evaluado') . ' AS ' . $p.'evaluado, ' . $this->_mappingField($p.'modificado') . ' AS ' . $p.'modificado, ' . $this->_mappingField($p.'observaciones') . ' AS ' . $p.'observaciones, ' . $this->_mappingField($p.'persona') . ' AS ' . $p.'persona';
   }
 
-  public function _fieldsDb(){
-    //No todos los campos se extraen de la entidad, por eso es necesario mapearlos
+  public function _fieldsExclusive(){
     $p = $this->prf();
     return '
 ' . $this->_mappingField($p.'id') . ', ' . $this->_mappingField($p.'motivo') . ', ' . $this->_mappingField($p.'estado') . ', ' . $this->_mappingField($p.'creado') . ', ' . $this->_mappingField($p.'enviado') . ', ' . $this->_mappingField($p.'evaluado') . ', ' . $this->_mappingField($p.'modificado') . ', ' . $this->_mappingField($p.'observaciones') . ', ' . $this->_mappingField($p.'persona') . '';
@@ -210,22 +209,6 @@ class _AfiliacionSql extends EntitySql{
 
     return $row_;
   }
-  public function _json(array $row = NULL){
-    if(empty($row)) return null;
-    $prefix = $this->prf();
-    $row_ = [];
-    $row_["id"] = (is_null($row[$prefix . "id"])) ? null : (string)$row[$prefix . "id"]; //la pk se trata como string debido a un comportamiento erratico en angular 2 que al tratarlo como integer resta 1 en el valor
-    $row_["motivo"] = (is_null($row[$prefix . "motivo"])) ? null : (string)$row[$prefix . "motivo"];
-    $row_["estado"] = (is_null($row[$prefix . "estado"])) ? null : (string)$row[$prefix . "estado"];
-    $row_["creado"] = (is_null($row[$prefix . "creado"])) ? null : (string)$row[$prefix . "creado"];
-    $row_["enviado"] = (is_null($row[$prefix . "enviado"])) ? null : (string)$row[$prefix . "enviado"];
-    $row_["evaluado"] = (is_null($row[$prefix . "evaluado"])) ? null : (string)$row[$prefix . "evaluado"];
-    $row_["modificado"] = (is_null($row[$prefix . "modificado"])) ? null : (string)$row[$prefix . "modificado"];
-    $row_["observaciones"] = (is_null($row[$prefix . "observaciones"])) ? null : (string)$row[$prefix . "observaciones"];
-    $row_["persona"] = (is_null($row[$prefix . "persona"])) ? null : (string)$row[$prefix . "persona"]; //las fk se transforman a string debido a un comportamiento errantico en angular 2 que al tratarlo como integer resta 1 en el valor
-    return $row_;
-  }
-
 
 
 }

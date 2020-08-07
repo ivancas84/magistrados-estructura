@@ -38,8 +38,7 @@ class _CargoSql extends EntitySql{
 ' . $this->_mappingField($p.'id') . ' AS ' . $p.'id, ' . $this->_mappingField($p.'descripcion') . ' AS ' . $p.'descripcion';
   }
 
-  public function _fieldsDb(){
-    //No todos los campos se extraen de la entidad, por eso es necesario mapearlos
+  public function _fieldsExclusive(){
     $p = $this->prf();
     return '
 ' . $this->_mappingField($p.'id') . ', ' . $this->_mappingField($p.'descripcion') . '';
@@ -73,15 +72,6 @@ class _CargoSql extends EntitySql{
 
     return $row_;
   }
-  public function _json(array $row = NULL){
-    if(empty($row)) return null;
-    $prefix = $this->prf();
-    $row_ = [];
-    $row_["id"] = (is_null($row[$prefix . "id"])) ? null : (string)$row[$prefix . "id"]; //la pk se trata como string debido a un comportamiento erratico en angular 2 que al tratarlo como integer resta 1 en el valor
-    $row_["descripcion"] = (is_null($row[$prefix . "descripcion"])) ? null : (string)$row[$prefix . "descripcion"];
-    return $row_;
-  }
-
 
 
 }
