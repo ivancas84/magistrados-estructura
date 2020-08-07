@@ -83,26 +83,21 @@ UPDATE " . $this->entity->sn_() . " SET
 
   public function json(array $row = null){
     if(empty($row)) return null;
-    $row_ = $this->sql->_json($row);
+    $row_ = EntityValues::getInstanceRequire($this->entity->getName())->_fromArray($row)->_toArray();
     if(!is_null($row['car_id'])){
-      $json = EntitySql::getInstanceRequire('cargo', 'car')->_json($row);
-      $row_["cargo_"] = $json;
+      $row_["cargo_"] = EntityValues::getInstanceRequire('cargo')->_fromArray($row, 'car_')->_toArray();
     }
     if(!is_null($row['org_id'])){
-      $json = EntitySql::getInstanceRequire('organo', 'org')->_json($row);
-      $row_["organo_"] = $json;
+      $row_["organo_"] = EntityValues::getInstanceRequire('organo')->_fromArray($row, 'org_')->_toArray();
     }
     if(!is_null($row['dj_id'])){
-      $json = EntitySql::getInstanceRequire('departamento_judicial', 'dj')->_json($row);
-      $row_["departamento_judicial_"] = $json;
+      $row_["departamento_judicial_"] = EntityValues::getInstanceRequire('departamento_judicial')->_fromArray($row, 'dj_')->_toArray();
     }
     if(!is_null($row['dji_id'])){
-      $json = EntitySql::getInstanceRequire('departamento_judicial', 'dji')->_json($row);
-      $row_["departamento_judicial_informado_"] = $json;
+      $row_["departamento_judicial_informado_"] = EntityValues::getInstanceRequire('departamento_judicial')->_fromArray($row, 'dji_')->_toArray();
     }
     if(!is_null($row['td_id'])){
-      $json = EntitySql::getInstanceRequire('tipo_documento', 'td')->_json($row);
-      $row_["tipo_documento_"] = $json;
+      $row_["tipo_documento_"] = EntityValues::getInstanceRequire('tipo_documento')->_fromArray($row, 'td_')->_toArray();
     }
     return $row_;
   }

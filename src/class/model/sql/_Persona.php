@@ -121,8 +121,7 @@ class _PersonaSql extends EntitySql{
 ' . $this->_mappingField($p.'id') . ' AS ' . $p.'id, ' . $this->_mappingField($p.'nombres') . ' AS ' . $p.'nombres, ' . $this->_mappingField($p.'apellidos') . ' AS ' . $p.'apellidos, ' . $this->_mappingField($p.'legajo') . ' AS ' . $p.'legajo, ' . $this->_mappingField($p.'numero_documento') . ' AS ' . $p.'numero_documento, ' . $this->_mappingField($p.'telefono_laboral') . ' AS ' . $p.'telefono_laboral, ' . $this->_mappingField($p.'telefono_particular') . ' AS ' . $p.'telefono_particular, ' . $this->_mappingField($p.'fecha_nacimiento') . ' AS ' . $p.'fecha_nacimiento, ' . $this->_mappingField($p.'email') . ' AS ' . $p.'email, ' . $this->_mappingField($p.'creado') . ' AS ' . $p.'creado, ' . $this->_mappingField($p.'eliminado') . ' AS ' . $p.'eliminado, ' . $this->_mappingField($p.'cargo') . ' AS ' . $p.'cargo, ' . $this->_mappingField($p.'organo') . ' AS ' . $p.'organo, ' . $this->_mappingField($p.'departamento_judicial') . ' AS ' . $p.'departamento_judicial, ' . $this->_mappingField($p.'departamento_judicial_informado') . ' AS ' . $p.'departamento_judicial_informado, ' . $this->_mappingField($p.'tipo_documento') . ' AS ' . $p.'tipo_documento';
   }
 
-  public function _fieldsDb(){
-    //No todos los campos se extraen de la entidad, por eso es necesario mapearlos
+  public function _fieldsExclusive(){
     $p = $this->prf();
     return '
 ' . $this->_mappingField($p.'id') . ', ' . $this->_mappingField($p.'nombres') . ', ' . $this->_mappingField($p.'apellidos') . ', ' . $this->_mappingField($p.'legajo') . ', ' . $this->_mappingField($p.'numero_documento') . ', ' . $this->_mappingField($p.'telefono_laboral') . ', ' . $this->_mappingField($p.'telefono_particular') . ', ' . $this->_mappingField($p.'fecha_nacimiento') . ', ' . $this->_mappingField($p.'email') . ', ' . $this->_mappingField($p.'creado') . ', ' . $this->_mappingField($p.'eliminado') . ', ' . $this->_mappingField($p.'cargo') . ', ' . $this->_mappingField($p.'organo') . ', ' . $this->_mappingField($p.'departamento_judicial') . ', ' . $this->_mappingField($p.'departamento_judicial_informado') . ', ' . $this->_mappingField($p.'tipo_documento') . '';
@@ -280,29 +279,6 @@ class _PersonaSql extends EntitySql{
 
     return $row_;
   }
-  public function _json(array $row = NULL){
-    if(empty($row)) return null;
-    $prefix = $this->prf();
-    $row_ = [];
-    $row_["id"] = (is_null($row[$prefix . "id"])) ? null : (string)$row[$prefix . "id"]; //la pk se trata como string debido a un comportamiento erratico en angular 2 que al tratarlo como integer resta 1 en el valor
-    $row_["nombres"] = (is_null($row[$prefix . "nombres"])) ? null : (string)$row[$prefix . "nombres"];
-    $row_["apellidos"] = (is_null($row[$prefix . "apellidos"])) ? null : (string)$row[$prefix . "apellidos"];
-    $row_["legajo"] = (is_null($row[$prefix . "legajo"])) ? null : (string)$row[$prefix . "legajo"];
-    $row_["numero_documento"] = (is_null($row[$prefix . "numero_documento"])) ? null : (string)$row[$prefix . "numero_documento"];
-    $row_["telefono_laboral"] = (is_null($row[$prefix . "telefono_laboral"])) ? null : (string)$row[$prefix . "telefono_laboral"];
-    $row_["telefono_particular"] = (is_null($row[$prefix . "telefono_particular"])) ? null : (string)$row[$prefix . "telefono_particular"];
-    $row_["fecha_nacimiento"] = (is_null($row[$prefix . "fecha_nacimiento"])) ? null : (string)$row[$prefix . "fecha_nacimiento"];
-    $row_["email"] = (is_null($row[$prefix . "email"])) ? null : (string)$row[$prefix . "email"];
-    $row_["creado"] = (is_null($row[$prefix . "creado"])) ? null : (string)$row[$prefix . "creado"];
-    $row_["eliminado"] = (is_null($row[$prefix . "eliminado"])) ? null : (string)$row[$prefix . "eliminado"];
-    $row_["cargo"] = (is_null($row[$prefix . "cargo"])) ? null : (string)$row[$prefix . "cargo"]; //las fk se transforman a string debido a un comportamiento errantico en angular 2 que al tratarlo como integer resta 1 en el valor
-    $row_["organo"] = (is_null($row[$prefix . "organo"])) ? null : (string)$row[$prefix . "organo"]; //las fk se transforman a string debido a un comportamiento errantico en angular 2 que al tratarlo como integer resta 1 en el valor
-    $row_["departamento_judicial"] = (is_null($row[$prefix . "departamento_judicial"])) ? null : (string)$row[$prefix . "departamento_judicial"]; //las fk se transforman a string debido a un comportamiento errantico en angular 2 que al tratarlo como integer resta 1 en el valor
-    $row_["departamento_judicial_informado"] = (is_null($row[$prefix . "departamento_judicial_informado"])) ? null : (string)$row[$prefix . "departamento_judicial_informado"]; //las fk se transforman a string debido a un comportamiento errantico en angular 2 que al tratarlo como integer resta 1 en el valor
-    $row_["tipo_documento"] = (is_null($row[$prefix . "tipo_documento"])) ? null : (string)$row[$prefix . "tipo_documento"]; //las fk se transforman a string debido a un comportamiento errantico en angular 2 que al tratarlo como integer resta 1 en el valor
-    return $row_;
-  }
-
 
 
 }
