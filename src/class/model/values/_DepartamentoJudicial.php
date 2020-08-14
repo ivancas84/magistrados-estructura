@@ -43,23 +43,28 @@ class _DepartamentoJudicial extends EntityValues {
   public function nombre($format = null) { return Format::convertCase($this->nombre, $format); }
 
   public function setId($p) { $this->id = (is_null($p)) ? null : (string)$p; }
-
   public function setCodigo($p) { $this->codigo = (is_null($p)) ? null : (string)$p; }
-
   public function setNombre($p) { $this->nombre = (is_null($p)) ? null : (string)$p; }
 
+  public function resetCodigo() { if(!Validation::is_empty($this->codigo)) $this->codigo = preg_replace('/\s\s+/', ' ', trim($this->codigo)); }
+  public function resetNombre() { if(!Validation::is_empty($this->nombre)) $this->nombre = preg_replace('/\s\s+/', ' ', trim($this->nombre)); }
+
   public function checkId($value) { 
+      if(Validation::is_undefined($value)) return null;
       return true; 
   }
 
   public function checkCodigo($value) { 
-    $v = Validation::getInstanceValue($value)->string()->required();
-    return $this->_setLogsValidation("codigo", $v);
+    $this->_logs->resetLogs("codigo");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->required();
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("codigo", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkNombre($value) { 
-    $v = Validation::getInstanceValue($value)->string();
-    return $this->_setLogsValidation("nombre", $v);
+      if(Validation::is_undefined($value)) return null;
+      return true; 
   }
 
   public function _check(){
@@ -67,6 +72,12 @@ class _DepartamentoJudicial extends EntityValues {
     $this->checkCodigo($this->codigo);
     $this->checkNombre($this->nombre);
     return !$this->_getLogs()->isError();
+  }
+
+  public function _reset(){
+    $this->resetCodigo();
+    $this->resetNombre();
+    return $this;
   }
 
 
