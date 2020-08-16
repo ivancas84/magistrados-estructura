@@ -19,9 +19,13 @@ class _AfiliacionSql extends EntitySql{
       case $p.'motivo': return $t.".motivo";
       case $p.'estado': return $t.".estado";
       case $p.'creado': return $t.".creado";
+      case $p.'creado_date': return "CAST({$t}.creado AS DATE)";
       case $p.'enviado': return $t.".enviado";
+      case $p.'enviado_date': return "CAST({$t}.enviado AS DATE)";
       case $p.'evaluado': return $t.".evaluado";
+      case $p.'evaluado_date': return "CAST({$t}.evaluado AS DATE)";
       case $p.'modificado': return $t.".modificado";
+      case $p.'modificado_date': return "CAST({$t}.modificado AS DATE)";
       case $p.'observaciones': return $t.".observaciones";
       case $p.'persona': return $t.".persona";
 
@@ -124,9 +128,13 @@ class _AfiliacionSql extends EntitySql{
       case "{$p}motivo": return $this->format->conditionText($f, $value, $option);
       case "{$p}estado": return $this->format->conditionText($f, $value, $option);
       case "{$p}creado": return $this->format->conditionTimestamp($f, $value, $option);
+      case "{$p}creado_date": return $this->format->conditionDate($f, $value, $option);
       case "{$p}enviado": return $this->format->conditionTimestamp($f, $value, $option);
+      case "{$p}enviado_date": return $this->format->conditionDate($f, $value, $option);
       case "{$p}evaluado": return $this->format->conditionTimestamp($f, $value, $option);
+      case "{$p}evaluado_date": return $this->format->conditionDate($f, $value, $option);
       case "{$p}modificado": return $this->format->conditionTimestamp($f, $value, $option);
+      case "{$p}modificado_date": return $this->format->conditionDate($f, $value, $option);
       case "{$p}observaciones": return $this->format->conditionText($f, $value, $option);
       case "{$p}persona": return $this->format->conditionText($f, $value, $option);
 
