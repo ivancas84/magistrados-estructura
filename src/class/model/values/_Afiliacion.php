@@ -79,11 +79,8 @@ class _Afiliacion extends EntityValues {
   public function persona($format = null) { return Format::convertCase($this->persona, $format); }
 
   public function setId($p) { $this->id = (is_null($p)) ? null : (string)$p; }
-
   public function setMotivo($p) { $this->motivo = (is_null($p)) ? null : (string)$p; }
-
   public function setEstado($p) { $this->estado = (is_null($p)) ? null : (string)$p; }
-
   public function _setCreado(DateTime $p = null) { $this->creado = $p; }
 
   public function setCreado($p) {
@@ -125,51 +122,67 @@ class _Afiliacion extends EntityValues {
   }
 
   public function setObservaciones($p) { $this->observaciones = (is_null($p)) ? null : (string)$p; }
-
   public function setPersona($p) { $this->persona = (is_null($p)) ? null : (string)$p; }
 
+  public function resetMotivo() { if(!Validation::is_empty($this->motivo)) $this->motivo = preg_replace('/\s\s+/', ' ', trim($this->motivo)); }
+  public function resetEstado() { if(!Validation::is_empty($this->estado)) $this->estado = preg_replace('/\s\s+/', ' ', trim($this->estado)); }
+  public function resetObservaciones() { if(!Validation::is_empty($this->observaciones)) $this->observaciones = preg_replace('/\s\s+/', ' ', trim($this->observaciones)); }
+
   public function checkId($value) { 
+      if(Validation::is_undefined($value)) return null;
       return true; 
   }
 
   public function checkMotivo($value) { 
-    $v = Validation::getInstanceValue($value)->string()->required();
-    return $this->_setLogsValidation("motivo", $v);
+    $this->_logs->resetLogs("motivo");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->required();
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("motivo", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkEstado($value) { 
-    $v = Validation::getInstanceValue($value)->string()->required();
-    return $this->_setLogsValidation("estado", $v);
+    $this->_logs->resetLogs("estado");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->required();
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("estado", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkCreado($value) { 
-    $v = Validation::getInstanceValue($value)->date()->required();
-    return $this->_setLogsValidation("creado", $v);
+    $this->_logs->resetLogs("creado");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->required();
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("creado", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkEnviado($value) { 
-    $v = Validation::getInstanceValue($value)->date();
-    return $this->_setLogsValidation("enviado", $v);
+      if(Validation::is_undefined($value)) return null;
+      return true; 
   }
 
   public function checkEvaluado($value) { 
-    $v = Validation::getInstanceValue($value)->date();
-    return $this->_setLogsValidation("evaluado", $v);
+      if(Validation::is_undefined($value)) return null;
+      return true; 
   }
 
   public function checkModificado($value) { 
-    $v = Validation::getInstanceValue($value)->date();
-    return $this->_setLogsValidation("modificado", $v);
+      if(Validation::is_undefined($value)) return null;
+      return true; 
   }
 
   public function checkObservaciones($value) { 
-    $v = Validation::getInstanceValue($value)->string();
-    return $this->_setLogsValidation("observaciones", $v);
+      if(Validation::is_undefined($value)) return null;
+      return true; 
   }
 
   public function checkPersona($value) { 
-    $v = Validation::getInstanceValue($value)->string()->required();
-    return $this->_setLogsValidation("persona", $v);
+    $this->_logs->resetLogs("persona");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->required();
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("persona", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function _check(){
@@ -183,6 +196,13 @@ class _Afiliacion extends EntityValues {
     $this->checkObservaciones($this->observaciones);
     $this->checkPersona($this->persona);
     return !$this->_getLogs()->isError();
+  }
+
+  public function _reset(){
+    $this->resetMotivo();
+    $this->resetEstado();
+    $this->resetObservaciones();
+    return $this;
   }
 
 

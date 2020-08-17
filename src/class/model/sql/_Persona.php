@@ -25,7 +25,9 @@ class _PersonaSql extends EntitySql{
       case $p.'fecha_nacimiento': return $t.".fecha_nacimiento";
       case $p.'email': return $t.".email";
       case $p.'creado': return $t.".creado";
+      case $p.'creado_date': return "CAST({$t}.creado AS DATE)";
       case $p.'eliminado': return $t.".eliminado";
+      case $p.'eliminado_date': return "CAST({$t}.eliminado AS DATE)";
       case $p.'cargo': return $t.".cargo";
       case $p.'organo': return $t.".organo";
       case $p.'departamento_judicial': return $t.".departamento_judicial";
@@ -161,7 +163,9 @@ class _PersonaSql extends EntitySql{
       case "{$p}fecha_nacimiento": return $this->format->conditionDate($f, $value, $option);
       case "{$p}email": return $this->format->conditionText($f, $value, $option);
       case "{$p}creado": return $this->format->conditionTimestamp($f, $value, $option);
+      case "{$p}creado_date": return $this->format->conditionDate($f, $value, $option);
       case "{$p}eliminado": return $this->format->conditionTimestamp($f, $value, $option);
+      case "{$p}eliminado_date": return $this->format->conditionDate($f, $value, $option);
       case "{$p}cargo": return $this->format->conditionText($f, $value, $option);
       case "{$p}organo": return $this->format->conditionText($f, $value, $option);
       case "{$p}departamento_judicial": return $this->format->conditionText($f, $value, $option);

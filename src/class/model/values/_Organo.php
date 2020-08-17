@@ -37,22 +37,32 @@ class _Organo extends EntityValues {
   public function descripcion($format = null) { return Format::convertCase($this->descripcion, $format); }
 
   public function setId($p) { $this->id = (is_null($p)) ? null : (string)$p; }
-
   public function setDescripcion($p) { $this->descripcion = (is_null($p)) ? null : (string)$p; }
 
+  public function resetDescripcion() { if(!Validation::is_empty($this->descripcion)) $this->descripcion = preg_replace('/\s\s+/', ' ', trim($this->descripcion)); }
+
   public function checkId($value) { 
+      if(Validation::is_undefined($value)) return null;
       return true; 
   }
 
   public function checkDescripcion($value) { 
-    $v = Validation::getInstanceValue($value)->string()->required();
-    return $this->_setLogsValidation("descripcion", $v);
+    $this->_logs->resetLogs("descripcion");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->required();
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("descripcion", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function _check(){
     $this->checkId($this->id);
     $this->checkDescripcion($this->descripcion);
     return !$this->_getLogs()->isError();
+  }
+
+  public function _reset(){
+    $this->resetDescripcion();
+    return $this;
   }
 
 

@@ -121,31 +121,24 @@ class _Persona extends EntityValues {
   public function tipoDocumento($format = null) { return Format::convertCase($this->tipoDocumento, $format); }
 
   public function setId($p) { $this->id = (is_null($p)) ? null : (string)$p; }
-
   public function setNombres($p) { $this->nombres = (is_null($p)) ? null : (string)$p; }
-
   public function setApellidos($p) { $this->apellidos = (is_null($p)) ? null : (string)$p; }
-
   public function setLegajo($p) { $this->legajo = (is_null($p)) ? null : (string)$p; }
-
   public function setNumeroDocumento($p) { $this->numeroDocumento = (is_null($p)) ? null : (string)$p; }
-
   public function setTelefonoLaboral($p) { $this->telefonoLaboral = (is_null($p)) ? null : (string)$p; }
-
   public function setTelefonoParticular($p) { $this->telefonoParticular = (is_null($p)) ? null : (string)$p; }
-
   public function _setFechaNacimiento(DateTime $p = null) { $this->fechaNacimiento = $p; }
 
   public function setFechaNacimiento($p) {
     if(!is_null($p)) {
-      $p = new SpanishDateTime($p);    
+      $p = new SpanishDateTime($p);
       if($p) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+      $p->setTime(0,0,0);
     }
-    $this->fechaNacimiento = $p;  
+    $this->fechaNacimiento = $p;
   }
 
   public function setEmail($p) { $this->email = (is_null($p)) ? null : (string)$p; }
-
   public function _setCreado(DateTime $p = null) { $this->creado = $p; }
 
   public function setCreado($p) {
@@ -167,92 +160,112 @@ class _Persona extends EntityValues {
   }
 
   public function setCargo($p) { $this->cargo = (is_null($p)) ? null : (string)$p; }
-
   public function setOrgano($p) { $this->organo = (is_null($p)) ? null : (string)$p; }
-
   public function setDepartamentoJudicial($p) { $this->departamentoJudicial = (is_null($p)) ? null : (string)$p; }
-
   public function setDepartamentoJudicialInformado($p) { $this->departamentoJudicialInformado = (is_null($p)) ? null : (string)$p; }
-
   public function setTipoDocumento($p) { $this->tipoDocumento = (is_null($p)) ? null : (string)$p; }
 
+  public function resetNombres() { if(!Validation::is_empty($this->nombres)) $this->nombres = preg_replace('/\s\s+/', ' ', trim($this->nombres)); }
+  public function resetApellidos() { if(!Validation::is_empty($this->apellidos)) $this->apellidos = preg_replace('/\s\s+/', ' ', trim($this->apellidos)); }
+  public function resetLegajo() { if(!Validation::is_empty($this->legajo)) $this->legajo = preg_replace('/\s\s+/', ' ', trim($this->legajo)); }
+  public function resetNumeroDocumento() { if(!Validation::is_empty($this->numeroDocumento)) $this->numeroDocumento = preg_replace('/\s\s+/', ' ', trim($this->numeroDocumento)); }
+  public function resetTelefonoLaboral() { if(!Validation::is_empty($this->telefonoLaboral)) $this->telefonoLaboral = preg_replace('/\s\s+/', ' ', trim($this->telefonoLaboral)); }
+  public function resetTelefonoParticular() { if(!Validation::is_empty($this->telefonoParticular)) $this->telefonoParticular = preg_replace('/\s\s+/', ' ', trim($this->telefonoParticular)); }
+  public function resetEmail() { if(!Validation::is_empty($this->email)) $this->email = preg_replace('/\s\s+/', ' ', trim($this->email)); }
+
   public function checkId($value) { 
+      if(Validation::is_undefined($value)) return null;
       return true; 
   }
 
   public function checkNombres($value) { 
-    $v = Validation::getInstanceValue($value)->string();
-    return $this->_setLogsValidation("nombres", $v);
+      if(Validation::is_undefined($value)) return null;
+      return true; 
   }
 
   public function checkApellidos($value) { 
-    $v = Validation::getInstanceValue($value)->string();
-    return $this->_setLogsValidation("apellidos", $v);
+      if(Validation::is_undefined($value)) return null;
+      return true; 
   }
 
   public function checkLegajo($value) { 
-    $v = Validation::getInstanceValue($value)->string()->required();
-    return $this->_setLogsValidation("legajo", $v);
+    $this->_logs->resetLogs("legajo");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->required();
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("legajo", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkNumeroDocumento($value) { 
-    $v = Validation::getInstanceValue($value)->string();
-    return $this->_setLogsValidation("numero_documento", $v);
+      if(Validation::is_undefined($value)) return null;
+      return true; 
   }
 
   public function checkTelefonoLaboral($value) { 
-    $v = Validation::getInstanceValue($value)->string();
-    return $this->_setLogsValidation("telefono_laboral", $v);
+      if(Validation::is_undefined($value)) return null;
+      return true; 
   }
 
   public function checkTelefonoParticular($value) { 
-    $v = Validation::getInstanceValue($value)->string();
-    return $this->_setLogsValidation("telefono_particular", $v);
+      if(Validation::is_undefined($value)) return null;
+      return true; 
   }
 
   public function checkFechaNacimiento($value) { 
-    $v = Validation::getInstanceValue($value)->date();
-    return $this->_setLogsValidation("fecha_nacimiento", $v);
+      if(Validation::is_undefined($value)) return null;
+      return true; 
   }
 
   public function checkEmail($value) { 
-    $v = Validation::getInstanceValue($value)->string();
-    return $this->_setLogsValidation("email", $v);
+      if(Validation::is_undefined($value)) return null;
+      return true; 
   }
 
   public function checkCreado($value) { 
-    $v = Validation::getInstanceValue($value)->date()->required();
-    return $this->_setLogsValidation("creado", $v);
+    $this->_logs->resetLogs("creado");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->required();
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("creado", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkEliminado($value) { 
-    $v = Validation::getInstanceValue($value)->date();
-    return $this->_setLogsValidation("eliminado", $v);
+      if(Validation::is_undefined($value)) return null;
+      return true; 
   }
 
   public function checkCargo($value) { 
-    $v = Validation::getInstanceValue($value)->string()->required();
-    return $this->_setLogsValidation("cargo", $v);
+    $this->_logs->resetLogs("cargo");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->required();
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("cargo", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkOrgano($value) { 
-    $v = Validation::getInstanceValue($value)->string()->required();
-    return $this->_setLogsValidation("organo", $v);
+    $this->_logs->resetLogs("organo");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->required();
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("organo", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkDepartamentoJudicial($value) { 
-    $v = Validation::getInstanceValue($value)->string()->required();
-    return $this->_setLogsValidation("departamento_judicial", $v);
+    $this->_logs->resetLogs("departamento_judicial");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->required();
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("departamento_judicial", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkDepartamentoJudicialInformado($value) { 
-    $v = Validation::getInstanceValue($value)->string();
-    return $this->_setLogsValidation("departamento_judicial_informado", $v);
+      if(Validation::is_undefined($value)) return null;
+      return true; 
   }
 
   public function checkTipoDocumento($value) { 
-    $v = Validation::getInstanceValue($value)->string();
-    return $this->_setLogsValidation("tipo_documento", $v);
+      if(Validation::is_undefined($value)) return null;
+      return true; 
   }
 
   public function _check(){
@@ -273,6 +286,17 @@ class _Persona extends EntityValues {
     $this->checkDepartamentoJudicialInformado($this->departamentoJudicialInformado);
     $this->checkTipoDocumento($this->tipoDocumento);
     return !$this->_getLogs()->isError();
+  }
+
+  public function _reset(){
+    $this->resetNombres();
+    $this->resetApellidos();
+    $this->resetLegajo();
+    $this->resetNumeroDocumento();
+    $this->resetTelefonoLaboral();
+    $this->resetTelefonoParticular();
+    $this->resetEmail();
+    return $this;
   }
 
 
