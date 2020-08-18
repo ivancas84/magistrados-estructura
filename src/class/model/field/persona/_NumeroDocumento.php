@@ -8,7 +8,7 @@ class _FieldPersonaNumeroDocumento extends Field {
   public $fieldType = "nf";
   public $unique = true;
   public $notNull = false;
-  public $default = false;
+  public $default = null;
   public $length = "45";
   public $main = false;
   public $name = "numero_documento";

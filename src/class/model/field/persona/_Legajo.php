@@ -8,7 +8,7 @@ class _FieldPersonaLegajo extends Field {
   public $fieldType = "nf";
   public $unique = true;
   public $notNull = true;
-  public $default = false;
+  public $default = null;
   public $length = "45";
   public $main = false;
   public $name = "legajo";
