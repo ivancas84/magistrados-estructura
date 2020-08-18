@@ -6,8 +6,8 @@ departamento_judicial - per_dji
 tipo_documento - per_td
 
 id (id): string pk. NOT NULL. MAIN. UNIQUE.
-motivo (mot): string nf. NOT NULL.
-estado (est): string nf. NOT NULL.
+motivo (mot): string nf. NOT NULL. DEFAULT: Alta.
+estado (est): string nf. NOT NULL. DEFAULT: Creado.
 creado (cre): timestamp nf. NOT NULL. DEFAULT: current_timestamp().
 enviado (env): timestamp nf.
 evaluado (eva): timestamp nf.
