@@ -8,7 +8,7 @@ class _FieldAfiliacionPersona extends Field {
   public $fieldType = "mu";
   public $unique = false;
   public $notNull = true;
-  public $default = false;
+  public $default = null;
   public $length = "45";
   public $main = false;
   public $name = "persona";
