@@ -47,18 +47,33 @@ class _TipoDocumentoSql extends EntitySql{
   public function _conditionFieldStruct($field, $option, $value){
     $p = $this->prf();
 
-    $f = $this->_mappingField($field);
     switch ($field){
-      case "{$p}id": return $this->format->conditionText($f, $value, $option);
-      case "{$p}descripcion": return $this->format->conditionText($f, $value, $option);
+      case "{$p}id": return $this->format->conditionText($this->_mappingField($field), $value, $option);
+      case "{$p}id_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}id"), $value, $option);
 
-      case "{$p}max_id": return $this->format->conditionNumber($f, $value, $option);
-      case "{$p}min_id": return $this->format->conditionNumber($f, $value, $option);
-      case "{$p}count_id": return $this->format->conditionNumber($f, $value, $option);
+      case "{$p}descripcion": return $this->format->conditionText($this->_mappingField($field), $value, $option);
+      case "{$p}descripcion_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}descripcion"), $value, $option);
 
-      case "{$p}max_descripcion": return $this->format->conditionNumber($f, $value, $option);
-      case "{$p}min_descripcion": return $this->format->conditionNumber($f, $value, $option);
-      case "{$p}count_descripcion": return $this->format->conditionNumber($f, $value, $option);
+
+      case "{$p}max_id": return $this->format->conditionNumber($this->_mappingField($field), $value, $option);
+      case "{$p}max_id_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}max_id"), $value, $option);
+
+      case "{$p}min_id": return $this->format->conditionNumber($this->_mappingField($field), $value, $option);
+      case "{$p}min_id_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}min_id"), $value, $option);
+
+      case "{$p}count_id": return $this->format->conditionNumber($this->_mappingField($field), $value, $option);
+      case "{$p}count_id_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}count_id"), $value, $option);
+
+
+      case "{$p}max_descripcion": return $this->format->conditionNumber($this->_mappingField($field), $value, $option);
+      case "{$p}max_descripcion_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}max_descripcion"), $value, $option);
+
+      case "{$p}min_descripcion": return $this->format->conditionNumber($this->_mappingField($field), $value, $option);
+      case "{$p}min_descripcion_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}min_descripcion"), $value, $option);
+
+      case "{$p}count_descripcion": return $this->format->conditionNumber($this->_mappingField($field), $value, $option);
+      case "{$p}count_descripcion_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}count_descripcion"), $value, $option);
+
 
       default: return $this->_conditionFieldStructMain($field, $option, $value);
     }
