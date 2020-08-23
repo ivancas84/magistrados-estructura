@@ -6,6 +6,7 @@ $structure = array (
   Entity::getInstanceRequire("afiliacion"),
   Entity::getInstanceRequire("cargo"),
   Entity::getInstanceRequire("departamento_judicial"),
+  Entity::getInstanceRequire("file"),
   Entity::getInstanceRequire("organo"),
   Entity::getInstanceRequire("persona"),
   Entity::getInstanceRequire("tipo_documento"),

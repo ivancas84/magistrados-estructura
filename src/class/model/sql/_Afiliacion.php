@@ -146,10 +146,8 @@ class _AfiliacionSql extends EntitySql{
 
       case "{$p}modificado": return $this->format->conditionTimestamp($this->_mappingField($field), $value, $option);
       case "{$p}modificado_date": return $this->format->conditionDate($this->_mappingField($field), $value, $option);
-      case "{$p}modificado_is_set": {
-        
-        return $this->format->conditionIsSet($this->_mappingField("{$p}modificado"), $value, $option);
-      }
+      case "{$p}modificado_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}modificado"), $value, $option);
+
       case "{$p}observaciones": return $this->format->conditionText($this->_mappingField($field), $value, $option);
       case "{$p}observaciones_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}observaciones"), $value, $option);
 
