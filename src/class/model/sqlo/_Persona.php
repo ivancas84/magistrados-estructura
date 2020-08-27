@@ -83,23 +83,23 @@ UPDATE " . $this->entity->sn_() . " SET
 
   public function json(array $row = null){
     if(empty($row)) return null;
-    $row_ = EntityValues::getInstanceRequire($this->entity->getName())->_fromArray($row)->_toArray();
-    if(!is_null($row['car_id'])) $row_["cargo_"] = EntityValues::getInstanceRequire('cargo')->_fromArray($row, 'car_')->_toArray();
-    if(!is_null($row['org_id'])) $row_["organo_"] = EntityValues::getInstanceRequire('organo')->_fromArray($row, 'org_')->_toArray();
-    if(!is_null($row['dj_id'])) $row_["departamento_judicial_"] = EntityValues::getInstanceRequire('departamento_judicial')->_fromArray($row, 'dj_')->_toArray();
-    if(!is_null($row['dji_id'])) $row_["departamento_judicial_informado_"] = EntityValues::getInstanceRequire('departamento_judicial')->_fromArray($row, 'dji_')->_toArray();
-    if(!is_null($row['td_id'])) $row_["tipo_documento_"] = EntityValues::getInstanceRequire('tipo_documento')->_fromArray($row, 'td_')->_toArray();
+    $row_ = $this->container->getValues($this->entity->getName())->_fromArray($row)->_toArray();
+    if(!is_null($row['car_id'])) $row_["cargo_"] = $this->container->getValues('cargo')->_fromArray($row, 'car_')->_toArray();
+    if(!is_null($row['org_id'])) $row_["organo_"] = $this->container->getValues('organo')->_fromArray($row, 'org_')->_toArray();
+    if(!is_null($row['dj_id'])) $row_["departamento_judicial_"] = $this->container->getValues('departamento_judicial')->_fromArray($row, 'dj_')->_toArray();
+    if(!is_null($row['dji_id'])) $row_["departamento_judicial_informado_"] = $this->container->getValues('departamento_judicial')->_fromArray($row, 'dji_')->_toArray();
+    if(!is_null($row['td_id'])) $row_["tipo_documento_"] = $this->container->getValues('tipo_documento')->_fromArray($row, 'td_')->_toArray();
     return $row_;
   }
 
   public function values(array $row){
     $row_ = [];
-    $row_["persona"] = EntityValues::getInstanceRequire("persona")->_fromArray($row);
-    $row_["cargo"] = EntityValues::getInstanceRequire('cargo')->_fromArray($row, 'car_');
-    $row_["organo"] = EntityValues::getInstanceRequire('organo')->_fromArray($row, 'org_');
-    $row_["departamento_judicial"] = EntityValues::getInstanceRequire('departamento_judicial')->_fromArray($row, 'dj_');
-    $row_["departamento_judicial_informado"] = EntityValues::getInstanceRequire('departamento_judicial')->_fromArray($row, 'dji_');
-    $row_["tipo_documento"] = EntityValues::getInstanceRequire('tipo_documento')->_fromArray($row, 'td_');
+    $row_["persona"] = $this->container->getValues("persona")->_fromArray($row);
+    $row_["cargo"] = $this->container->getValues('cargo')->_fromArray($row, 'car_');
+    $row_["organo"] = $this->container->getValues('organo')->_fromArray($row, 'org_');
+    $row_["departamento_judicial"] = $this->container->getValues('departamento_judicial')->_fromArray($row, 'dj_');
+    $row_["departamento_judicial_informado"] = $this->container->getValues('departamento_judicial')->_fromArray($row, 'dji_');
+    $row_["tipo_documento"] = $this->container->getValues('tipo_documento')->_fromArray($row, 'td_');
     return $row_;
   }
 

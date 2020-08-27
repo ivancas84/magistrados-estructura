@@ -15,7 +15,7 @@ class _FieldAfiliacionEnviado extends Field {
   public $alias = "env";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('afiliacion'); }
+  public function getEntity(){ return $this->container->getEntity('afiliacion'); }
 
 
 }

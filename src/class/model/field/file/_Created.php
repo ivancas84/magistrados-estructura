@@ -15,7 +15,7 @@ class _FieldFileCreated extends Field {
   public $alias = "cre";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('file'); }
+  public function getEntity(){ return $this->container->getEntity('file'); }
 
 
 }

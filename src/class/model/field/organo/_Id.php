@@ -15,7 +15,7 @@ class _FieldOrganoId extends Field {
   public $alias = "id";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('organo'); }
+  public function getEntity(){ return $this->container->getEntity('organo'); }
 
 
 }

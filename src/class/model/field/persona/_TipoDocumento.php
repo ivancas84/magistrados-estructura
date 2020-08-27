@@ -15,9 +15,9 @@ class _FieldPersonaTipoDocumento extends Field {
   public $alias = "td";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('persona'); }
+  public function getEntity(){ return $this->container->getEntity('persona'); }
 
-  public function getEntityRef(){ return Entity::getInstanceRequire('tipo_documento'); }
+  public function getEntityRef(){ return $this->container->getEntity('tipo_documento'); }
 
 
 }

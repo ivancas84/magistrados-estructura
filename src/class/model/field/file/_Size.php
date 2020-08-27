@@ -15,7 +15,7 @@ class _FieldFileSize extends Field {
   public $alias = "siz";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('file'); }
+  public function getEntity(){ return $this->container->getEntity('file'); }
 
 
 }

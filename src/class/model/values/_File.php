@@ -12,7 +12,7 @@ class _File extends EntityValues {
   protected $created = UNDEFINED;
 
   public function _setDefault(){
-    if($this->id == UNDEFINED) $this->setId(null);
+    if($this->id == UNDEFINED) $this->setId(uniqid());
     if($this->name == UNDEFINED) $this->setName(null);
     if($this->type == UNDEFINED) $this->setType(null);
     if($this->content == UNDEFINED) $this->setContent(null);

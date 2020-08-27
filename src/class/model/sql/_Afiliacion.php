@@ -3,12 +3,6 @@ require_once("class/model/Sql.php");
 
 class _AfiliacionSql extends EntitySql{
 
-  public function __construct(){
-    parent::__construct();
-    $this->entity = Entity::getInstanceRequire('afiliacion');
-  }
-
-
   public function _mappingField($field){
     $p = $this->prf();
     $t = $this->prt();
@@ -76,12 +70,12 @@ class _AfiliacionSql extends EntitySql{
 
   public function mappingField($field){
     if($f = $this->_mappingField($field)) return $f;
-    if($f = EntitySql::getInstanceRequire('persona', 'per')->_mappingField($field)) return $f;
-    if($f = EntitySql::getInstanceRequire('cargo', 'per_car')->_mappingField($field)) return $f;
-    if($f = EntitySql::getInstanceRequire('organo', 'per_org')->_mappingField($field)) return $f;
-    if($f = EntitySql::getInstanceRequire('departamento_judicial', 'per_dj')->_mappingField($field)) return $f;
-    if($f = EntitySql::getInstanceRequire('departamento_judicial', 'per_dji')->_mappingField($field)) return $f;
-    if($f = EntitySql::getInstanceRequire('tipo_documento', 'per_td')->_mappingField($field)) return $f;
+    if($f = $this->container->getSql('persona', 'per')->_mappingField($field)) return $f;
+    if($f = $this->container->getSql('cargo', 'per_car')->_mappingField($field)) return $f;
+    if($f = $this->container->getSql('organo', 'per_org')->_mappingField($field)) return $f;
+    if($f = $this->container->getSql('departamento_judicial', 'per_dj')->_mappingField($field)) return $f;
+    if($f = $this->container->getSql('departamento_judicial', 'per_dji')->_mappingField($field)) return $f;
+    if($f = $this->container->getSql('tipo_documento', 'per_td')->_mappingField($field)) return $f;
     throw new Exception("Campo no reconocido para {$this->entity->getName()}: {$field}");
   }
 
@@ -100,22 +94,22 @@ class _AfiliacionSql extends EntitySql{
 
   public function fields(){
     return $this->_fields() . ',
-' . EntitySql::getInstanceRequire('persona', 'per')->_fields() . ',
-' . EntitySql::getInstanceRequire('cargo', 'per_car')->_fields() . ',
-' . EntitySql::getInstanceRequire('organo', 'per_org')->_fields() . ',
-' . EntitySql::getInstanceRequire('departamento_judicial', 'per_dj')->_fields() . ',
-' . EntitySql::getInstanceRequire('departamento_judicial', 'per_dji')->_fields() . ',
-' . EntitySql::getInstanceRequire('tipo_documento', 'per_td')->_fields() . ' 
+' . $this->container->getSql('persona', 'per')->_fields() . ',
+' . $this->container->getSql('cargo', 'per_car')->_fields() . ',
+' . $this->container->getSql('organo', 'per_org')->_fields() . ',
+' . $this->container->getSql('departamento_judicial', 'per_dj')->_fields() . ',
+' . $this->container->getSql('departamento_judicial', 'per_dji')->_fields() . ',
+' . $this->container->getSql('tipo_documento', 'per_td')->_fields() . ' 
 ';
   }
 
   public function join(Render $render){
-    return EntitySql::getInstanceRequire('persona', 'per')->_join('persona', 'afil', $render) . '
-' . EntitySql::getInstanceRequire('cargo', 'per_car')->_join('cargo', 'per', $render) . '
-' . EntitySql::getInstanceRequire('organo', 'per_org')->_join('organo', 'per', $render) . '
-' . EntitySql::getInstanceRequire('departamento_judicial', 'per_dj')->_join('departamento_judicial', 'per', $render) . '
-' . EntitySql::getInstanceRequire('departamento_judicial', 'per_dji')->_join('departamento_judicial_informado', 'per', $render) . '
-' . EntitySql::getInstanceRequire('tipo_documento', 'per_td')->_join('tipo_documento', 'per', $render) . '
+    return $this->container->getSql('persona', 'per')->_join('persona', 'afil', $render) . '
+' . $this->container->getSql('cargo', 'per_car')->_join('cargo', 'per', $render) . '
+' . $this->container->getSql('organo', 'per_org')->_join('organo', 'per', $render) . '
+' . $this->container->getSql('departamento_judicial', 'per_dj')->_join('departamento_judicial', 'per', $render) . '
+' . $this->container->getSql('departamento_judicial', 'per_dji')->_join('departamento_judicial_informado', 'per', $render) . '
+' . $this->container->getSql('tipo_documento', 'per_td')->_join('tipo_documento', 'per', $render) . '
 ' ;
   }
 
@@ -263,22 +257,22 @@ class _AfiliacionSql extends EntitySql{
 
   protected function conditionFieldStruct($field, $option, $value) {
     if($c = $this->_conditionFieldStruct($field, $option, $value)) return $c;
-    if($c = EntitySql::getInstanceRequire('persona','per')->_conditionFieldStruct($field, $option, $value)) return $c;
-    if($c = EntitySql::getInstanceRequire('cargo','per_car')->_conditionFieldStruct($field, $option, $value)) return $c;
-    if($c = EntitySql::getInstanceRequire('organo','per_org')->_conditionFieldStruct($field, $option, $value)) return $c;
-    if($c = EntitySql::getInstanceRequire('departamento_judicial','per_dj')->_conditionFieldStruct($field, $option, $value)) return $c;
-    if($c = EntitySql::getInstanceRequire('departamento_judicial','per_dji')->_conditionFieldStruct($field, $option, $value)) return $c;
-    if($c = EntitySql::getInstanceRequire('tipo_documento','per_td')->_conditionFieldStruct($field, $option, $value)) return $c;
+    if($c = $this->container->getSql('persona','per')->_conditionFieldStruct($field, $option, $value)) return $c;
+    if($c = $this->container->getSql('cargo','per_car')->_conditionFieldStruct($field, $option, $value)) return $c;
+    if($c = $this->container->getSql('organo','per_org')->_conditionFieldStruct($field, $option, $value)) return $c;
+    if($c = $this->container->getSql('departamento_judicial','per_dj')->_conditionFieldStruct($field, $option, $value)) return $c;
+    if($c = $this->container->getSql('departamento_judicial','per_dji')->_conditionFieldStruct($field, $option, $value)) return $c;
+    if($c = $this->container->getSql('tipo_documento','per_td')->_conditionFieldStruct($field, $option, $value)) return $c;
   }
 
   protected function conditionFieldAux($field, $option, $value) {
     if($c = $this->_conditionFieldAux($field, $option, $value)) return $c;
-    if($c = EntitySql::getInstanceRequire('persona','per')->_conditionFieldAux($field, $option, $value)) return $c;
-    if($c = EntitySql::getInstanceRequire('cargo','per_car')->_conditionFieldAux($field, $option, $value)) return $c;
-    if($c = EntitySql::getInstanceRequire('organo','per_org')->_conditionFieldAux($field, $option, $value)) return $c;
-    if($c = EntitySql::getInstanceRequire('departamento_judicial','per_dj')->_conditionFieldAux($field, $option, $value)) return $c;
-    if($c = EntitySql::getInstanceRequire('departamento_judicial','per_dji')->_conditionFieldAux($field, $option, $value)) return $c;
-    if($c = EntitySql::getInstanceRequire('tipo_documento','per_td')->_conditionFieldAux($field, $option, $value)) return $c;
+    if($c = $this->container->getSql('persona','per')->_conditionFieldAux($field, $option, $value)) return $c;
+    if($c = $this->container->getSql('cargo','per_car')->_conditionFieldAux($field, $option, $value)) return $c;
+    if($c = $this->container->getSql('organo','per_org')->_conditionFieldAux($field, $option, $value)) return $c;
+    if($c = $this->container->getSql('departamento_judicial','per_dj')->_conditionFieldAux($field, $option, $value)) return $c;
+    if($c = $this->container->getSql('departamento_judicial','per_dji')->_conditionFieldAux($field, $option, $value)) return $c;
+    if($c = $this->container->getSql('tipo_documento','per_td')->_conditionFieldAux($field, $option, $value)) return $c;
   }
 
 

@@ -15,9 +15,9 @@ class _FieldPersonaDepartamentoJudicialInformado extends Field {
   public $alias = "dji";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('persona'); }
+  public function getEntity(){ return $this->container->getEntity('persona'); }
 
-  public function getEntityRef(){ return Entity::getInstanceRequire('departamento_judicial'); }
+  public function getEntityRef(){ return $this->container->getEntity('departamento_judicial'); }
 
 
 }

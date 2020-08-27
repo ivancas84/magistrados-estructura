@@ -15,7 +15,7 @@ class _FieldAfiliacionObservaciones extends Field {
   public $alias = "obs";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('afiliacion'); }
+  public function getEntity(){ return $this->container->getEntity('afiliacion'); }
 
 
 }

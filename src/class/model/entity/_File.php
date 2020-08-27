@@ -8,16 +8,16 @@ class _FileEntity extends Entity {
   public $alias = "file";
  
   public function getPk(){
-    return Field::getInstanceRequire("file", "id");
+    return $this->container->getField("file", "id");
   }
 
   public function getFieldsNf(){
     return array(
-      Field::getInstanceRequire("file", "name"),
-      Field::getInstanceRequire("file", "type"),
-      Field::getInstanceRequire("file", "content"),
-      Field::getInstanceRequire("file", "size"),
-      Field::getInstanceRequire("file", "created"),
+      $this->container->getField("file", "name"),
+      $this->container->getField("file", "type"),
+      $this->container->getField("file", "content"),
+      $this->container->getField("file", "size"),
+      $this->container->getField("file", "created"),
     );
   }
 

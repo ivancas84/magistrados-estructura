@@ -8,7 +8,7 @@ class _TipoDocumento extends EntityValues {
   protected $descripcion = UNDEFINED;
 
   public function _setDefault(){
-    if($this->id == UNDEFINED) $this->setId(null);
+    if($this->id == UNDEFINED) $this->setId(uniqid());
     if($this->descripcion == UNDEFINED) $this->setDescripcion(null);
     return $this;
   }

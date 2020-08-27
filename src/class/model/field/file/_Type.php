@@ -15,7 +15,7 @@ class _FieldFileType extends Field {
   public $alias = "typ";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('file'); }
+  public function getEntity(){ return $this->container->getEntity('file'); }
 
 
 }

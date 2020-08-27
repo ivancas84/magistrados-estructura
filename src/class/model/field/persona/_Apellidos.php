@@ -15,7 +15,7 @@ class _FieldPersonaApellidos extends Field {
   public $alias = "ape";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('persona'); }
+  public function getEntity(){ return $this->container->getEntity('persona'); }
 
 
 }

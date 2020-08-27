@@ -8,13 +8,13 @@ class _DepartamentoJudicialEntity extends Entity {
   public $alias = "dj";
  
   public function getPk(){
-    return Field::getInstanceRequire("departamento_judicial", "id");
+    return $this->container->getField("departamento_judicial", "id");
   }
 
   public function getFieldsNf(){
     return array(
-      Field::getInstanceRequire("departamento_judicial", "codigo"),
-      Field::getInstanceRequire("departamento_judicial", "nombre"),
+      $this->container->getField("departamento_judicial", "codigo"),
+      $this->container->getField("departamento_judicial", "nombre"),
     );
   }
 

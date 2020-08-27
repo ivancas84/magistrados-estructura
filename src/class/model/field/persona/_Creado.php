@@ -15,7 +15,7 @@ class _FieldPersonaCreado extends Field {
   public $alias = "cre";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('persona'); }
+  public function getEntity(){ return $this->container->getEntity('persona'); }
 
 
 }

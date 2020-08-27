@@ -15,7 +15,7 @@ class _FieldAfiliacionModificado extends Field {
   public $alias = "moa";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('afiliacion'); }
+  public function getEntity(){ return $this->container->getEntity('afiliacion'); }
 
 
 }

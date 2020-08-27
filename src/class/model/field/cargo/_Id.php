@@ -15,7 +15,7 @@ class _FieldCargoId extends Field {
   public $alias = "id";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('cargo'); }
+  public function getEntity(){ return $this->container->getEntity('cargo'); }
 
 
 }

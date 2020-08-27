@@ -15,7 +15,7 @@ class _FieldAfiliacionCreado extends Field {
   public $alias = "cre";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('afiliacion'); }
+  public function getEntity(){ return $this->container->getEntity('afiliacion'); }
 
 
 }

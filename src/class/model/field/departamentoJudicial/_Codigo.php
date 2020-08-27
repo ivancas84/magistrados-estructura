@@ -15,7 +15,7 @@ class _FieldDepartamentoJudicialCodigo extends Field {
   public $alias = "cod";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('departamento_judicial'); }
+  public function getEntity(){ return $this->container->getEntity('departamento_judicial'); }
 
 
 }
