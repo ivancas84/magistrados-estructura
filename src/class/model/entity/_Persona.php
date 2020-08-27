@@ -8,31 +8,31 @@ class _PersonaEntity extends Entity {
   public $alias = "pers";
  
   public function getPk(){
-    return Field::getInstanceRequire("persona", "id");
+    return $this->container->getField("persona", "id");
   }
 
   public function getFieldsNf(){
     return array(
-      Field::getInstanceRequire("persona", "nombres"),
-      Field::getInstanceRequire("persona", "apellidos"),
-      Field::getInstanceRequire("persona", "legajo"),
-      Field::getInstanceRequire("persona", "numero_documento"),
-      Field::getInstanceRequire("persona", "telefono_laboral"),
-      Field::getInstanceRequire("persona", "telefono_particular"),
-      Field::getInstanceRequire("persona", "fecha_nacimiento"),
-      Field::getInstanceRequire("persona", "email"),
-      Field::getInstanceRequire("persona", "creado"),
-      Field::getInstanceRequire("persona", "eliminado"),
+      $this->container->getField("persona", "nombres"),
+      $this->container->getField("persona", "apellidos"),
+      $this->container->getField("persona", "legajo"),
+      $this->container->getField("persona", "numero_documento"),
+      $this->container->getField("persona", "telefono_laboral"),
+      $this->container->getField("persona", "telefono_particular"),
+      $this->container->getField("persona", "fecha_nacimiento"),
+      $this->container->getField("persona", "email"),
+      $this->container->getField("persona", "creado"),
+      $this->container->getField("persona", "eliminado"),
     );
   }
 
   public function getFieldsMu(){
     return array(
-      Field::getInstanceRequire("persona", "cargo"),
-      Field::getInstanceRequire("persona", "organo"),
-      Field::getInstanceRequire("persona", "departamento_judicial"),
-      Field::getInstanceRequire("persona", "departamento_judicial_informado"),
-      Field::getInstanceRequire("persona", "tipo_documento"),
+      $this->container->getField("persona", "cargo"),
+      $this->container->getField("persona", "organo"),
+      $this->container->getField("persona", "departamento_judicial"),
+      $this->container->getField("persona", "departamento_judicial_informado"),
+      $this->container->getField("persona", "tipo_documento"),
     );
   }
 

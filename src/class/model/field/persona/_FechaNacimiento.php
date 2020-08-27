@@ -15,7 +15,7 @@ class _FieldPersonaFechaNacimiento extends Field {
   public $alias = "fn";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('persona'); }
+  public function getEntity(){ return $this->container->getEntity('persona'); }
 
 
 }

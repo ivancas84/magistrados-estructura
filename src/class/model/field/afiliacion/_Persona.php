@@ -15,9 +15,9 @@ class _FieldAfiliacionPersona extends Field {
   public $alias = "per";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('afiliacion'); }
+  public function getEntity(){ return $this->container->getEntity('afiliacion'); }
 
-  public function getEntityRef(){ return Entity::getInstanceRequire('persona'); }
+  public function getEntityRef(){ return $this->container->getEntity('persona'); }
 
 
 }

@@ -15,9 +15,9 @@ class _FieldPersonaOrgano extends Field {
   public $alias = "org";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('persona'); }
+  public function getEntity(){ return $this->container->getEntity('persona'); }
 
-  public function getEntityRef(){ return Entity::getInstanceRequire('organo'); }
+  public function getEntityRef(){ return $this->container->getEntity('organo'); }
 
 
 }

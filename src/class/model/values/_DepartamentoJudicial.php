@@ -9,7 +9,7 @@ class _DepartamentoJudicial extends EntityValues {
   protected $nombre = UNDEFINED;
 
   public function _setDefault(){
-    if($this->id == UNDEFINED) $this->setId(null);
+    if($this->id == UNDEFINED) $this->setId(uniqid());
     if($this->codigo == UNDEFINED) $this->setCodigo(null);
     if($this->nombre == UNDEFINED) $this->setNombre(null);
     return $this;

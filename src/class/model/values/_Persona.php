@@ -22,7 +22,7 @@ class _Persona extends EntityValues {
   protected $tipoDocumento = UNDEFINED;
 
   public function _setDefault(){
-    if($this->id == UNDEFINED) $this->setId(null);
+    if($this->id == UNDEFINED) $this->setId(uniqid());
     if($this->nombres == UNDEFINED) $this->setNombres(null);
     if($this->apellidos == UNDEFINED) $this->setApellidos(null);
     if($this->legajo == UNDEFINED) $this->setLegajo(null);

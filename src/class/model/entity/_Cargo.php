@@ -8,12 +8,12 @@ class _CargoEntity extends Entity {
   public $alias = "carg";
  
   public function getPk(){
-    return Field::getInstanceRequire("cargo", "id");
+    return $this->container->getField("cargo", "id");
   }
 
   public function getFieldsNf(){
     return array(
-      Field::getInstanceRequire("cargo", "descripcion"),
+      $this->container->getField("cargo", "descripcion"),
     );
   }
 

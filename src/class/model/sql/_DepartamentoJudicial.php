@@ -3,12 +3,6 @@ require_once("class/model/Sql.php");
 
 class _DepartamentoJudicialSql extends EntitySql{
 
-  public function __construct(){
-    parent::__construct();
-    $this->entity = Entity::getInstanceRequire('departamento_judicial');
-  }
-
-
   public function _mappingField($field){
     $p = $this->prf();
     $t = $this->prt();

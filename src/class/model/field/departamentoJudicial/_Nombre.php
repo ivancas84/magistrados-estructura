@@ -15,7 +15,7 @@ class _FieldDepartamentoJudicialNombre extends Field {
   public $alias = "nom";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('departamento_judicial'); }
+  public function getEntity(){ return $this->container->getEntity('departamento_judicial'); }
 
 
 }

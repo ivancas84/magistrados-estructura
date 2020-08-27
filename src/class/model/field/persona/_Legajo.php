@@ -15,7 +15,7 @@ class _FieldPersonaLegajo extends Field {
   public $alias = "leg";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('persona'); }
+  public function getEntity(){ return $this->container->getEntity('persona'); }
 
 
 }

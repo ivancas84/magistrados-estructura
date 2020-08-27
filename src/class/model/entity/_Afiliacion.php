@@ -8,24 +8,24 @@ class _AfiliacionEntity extends Entity {
   public $alias = "afil";
  
   public function getPk(){
-    return Field::getInstanceRequire("afiliacion", "id");
+    return $this->container->getField("afiliacion", "id");
   }
 
   public function getFieldsNf(){
     return array(
-      Field::getInstanceRequire("afiliacion", "motivo"),
-      Field::getInstanceRequire("afiliacion", "estado"),
-      Field::getInstanceRequire("afiliacion", "creado"),
-      Field::getInstanceRequire("afiliacion", "enviado"),
-      Field::getInstanceRequire("afiliacion", "evaluado"),
-      Field::getInstanceRequire("afiliacion", "modificado"),
-      Field::getInstanceRequire("afiliacion", "observaciones"),
+      $this->container->getField("afiliacion", "motivo"),
+      $this->container->getField("afiliacion", "estado"),
+      $this->container->getField("afiliacion", "creado"),
+      $this->container->getField("afiliacion", "enviado"),
+      $this->container->getField("afiliacion", "evaluado"),
+      $this->container->getField("afiliacion", "modificado"),
+      $this->container->getField("afiliacion", "observaciones"),
     );
   }
 
   public function getFieldsMu(){
     return array(
-      Field::getInstanceRequire("afiliacion", "persona"),
+      $this->container->getField("afiliacion", "persona"),
     );
   }
 

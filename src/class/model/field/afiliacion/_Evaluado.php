@@ -15,7 +15,7 @@ class _FieldAfiliacionEvaluado extends Field {
   public $alias = "eva";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('afiliacion'); }
+  public function getEntity(){ return $this->container->getEntity('afiliacion'); }
 
 
 }

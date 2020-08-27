@@ -8,12 +8,12 @@ class _TipoDocumentoEntity extends Entity {
   public $alias = "td";
  
   public function getPk(){
-    return Field::getInstanceRequire("tipo_documento", "id");
+    return $this->container->getField("tipo_documento", "id");
   }
 
   public function getFieldsNf(){
     return array(
-      Field::getInstanceRequire("tipo_documento", "descripcion"),
+      $this->container->getField("tipo_documento", "descripcion"),
     );
   }
 

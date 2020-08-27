@@ -1,0 +1,6 @@
+id (id): string pk. NOT NULL. MAIN. UNIQUE.
+name (nam): string nf. NOT NULL.
+type (typ): string nf. NOT NULL.
+content (con): string nf. NOT NULL.
+size (siz): integer nf. NOT NULL.
+created (cre): timestamp nf. NOT NULL. DEFAULT: current_timestamp().

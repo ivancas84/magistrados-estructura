@@ -8,12 +8,12 @@ class _OrganoEntity extends Entity {
   public $alias = "orga";
  
   public function getPk(){
-    return Field::getInstanceRequire("organo", "id");
+    return $this->container->getField("organo", "id");
   }
 
   public function getFieldsNf(){
     return array(
-      Field::getInstanceRequire("organo", "descripcion"),
+      $this->container->getField("organo", "descripcion"),
     );
   }
 

@@ -15,7 +15,7 @@ class _Afiliacion extends EntityValues {
   protected $persona = UNDEFINED;
 
   public function _setDefault(){
-    if($this->id == UNDEFINED) $this->setId(null);
+    if($this->id == UNDEFINED) $this->setId(uniqid());
     if($this->motivo == UNDEFINED) $this->setMotivo('Alta');
     if($this->estado == UNDEFINED) $this->setEstado('Creado');
     if($this->creado == UNDEFINED) $this->setCreado(date('c'));

@@ -15,7 +15,7 @@ class _FieldTipoDocumentoId extends Field {
   public $alias = "id";
 
 
-  public function getEntity(){ return Entity::getInstanceRequire('tipo_documento'); }
+  public function getEntity(){ return $this->container->getEntity('tipo_documento'); }
 
 
 }
