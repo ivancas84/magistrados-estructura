@@ -6,8 +6,7 @@ class AfiliacionPersist extends Persist {
   public $entityName = "afiliacion";
 
   public function main(){
-    $data = Filter::jsonPostRequired();
-    if(empty($data)) return;
+    if(empty($data = Filter::jsonPostRequired())) return;
 
     $row_ = $this->container->getDb()->unique($this->entityName, $data);
     $values = $this->container->getValues($this->entityName)->_fromArray($data);
@@ -15,19 +14,19 @@ class AfiliacionPersist extends Persist {
         
     if (!empty($row_)){ 
       $values->setId($row_["id"]);
-      $persist = $this->container->getSqlo($this->entityName)->update($values->_toArray());
+      $id = $this->update($this->entityName, $values->_toArray());
     } else {
       $values->_setDefault();
 
       $afiliaciones = $this->consultarAfiliacionesNoModificadas($values);
       $this->verificarEstadoEnviado($afiliaciones);
       $this->actualizarAfiliacionesNoModificadas($afiliaciones);
-      $persist = $this->container->getSqlo($this->entityName)->insert($values->_toArray());
+      $id = $this->insert($this->entityName, $values->_toArray());
     }
 
-    $this->container->getDb()->multi_query_transaction_log($persist["sql"]);
+    $this->container->getDb()->multi_query_transaction_log($this->getSql());
     
-    return $persist["id"];
+    return ["id" => $id, "detail" => $this->getDetail()];
   }
 
   public function consultarAfiliacionesNoModificadas(EntityValues $values){
@@ -51,9 +50,8 @@ class AfiliacionPersist extends Persist {
         "id" => $afiliacion["id"],
         "modificado" => new DateTime(),
       ];
-
-      $persist = $this->container->getSqlo($this->entityName)->update($_afiliacion);
-      $this->container->getDb()->multi_query_transaction_log($persist["sql"]);
+      
+      $this->update($this->entityName, $_afiliacion);
     }
   }
 }
