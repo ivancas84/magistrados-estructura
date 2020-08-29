@@ -2,7 +2,7 @@
 
 require_once("class/api/GetAll.php");
 
-class _FileGetAll extends GetAll {
+class _FileGetAllApi extends GetAllApi {
   public $entityName = "file";
 }
 

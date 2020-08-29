@@ -2,7 +2,7 @@
 
 require_once("class/api/GetAll.php");
 
-class _DepartamentoJudicialGetAll extends GetAll {
+class _DepartamentoJudicialGetAllApi extends GetAllApi {
   public $entityName = "departamento_judicial";
 }
 

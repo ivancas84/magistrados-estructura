@@ -2,7 +2,7 @@
 
 require_once("class/api/Ids.php");
 
-class _PersonaIds extends Ids {
+class _PersonaIdsApi extends IdsApi {
   public $entityName = "persona";
 }
 

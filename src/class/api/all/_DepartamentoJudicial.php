@@ -2,7 +2,7 @@
 
 require_once("class/api/All.php");
 
-class _DepartamentoJudicialAll extends All {
+class _DepartamentoJudicialAllApi extends AllApi {
   public $entityName = "departamento_judicial";
 }
 

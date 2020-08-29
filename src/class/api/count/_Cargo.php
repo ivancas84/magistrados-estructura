@@ -2,7 +2,7 @@
 
 require_once("class/api/Count.php");
 
-class _CargoCount extends Count {
+class _CargoCountApi extends CountApi {
   public $entityName = "cargo";
 }
 

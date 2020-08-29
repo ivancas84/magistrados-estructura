@@ -2,13 +2,22 @@
 
 require_once("class/api/Upload.php");
 require_once("function/array_combine_key.php");
-require_once("class/model/DbLog.php");
+require_once("class/tools/Filter.php");
+set_time_limit ( 0 );
 
-class InfoSueldosUpload extends Upload {
+
+class InfoSueldosUploadApi extends UploadApi {
   public $entityName = "info_sueldos";
 
+  public $registros = [];
+  public $evaluado;
+  public $errors = [];
+  public $organo;
+  
   public function main() {
-    $file = Filter::fileRequired("file"); 
+    $file = Filter::fileRequired("file");
+    $this->organo = Filter::postRequired("organo");
+    $this->evaluado = date("c");
 
     if ( $file["error"] > 0 ) throw new Exception ( "Error al subir archivo");
     
@@ -17,150 +26,212 @@ class InfoSueldosUpload extends Upload {
     $destination = $this->moveUploadedFile($file, $fileValue);
     $f = $this->insertFile($fileValue);
 
-    $evaluado = new DateTime();
-    $registros = $this->definirRegistros($destination);
+    $this->registros = $this->definirRegistros($destination);
 
-    $resultado = $this->procesarAltasEnviadas($evaluado, $registros);
-    
+    $ret = [
+      "file"=>$f,
+      "evaluado" => $this->evaluado,
+    ];
+
+    $resultado = $this->procesarExistentes();
+    $ret["altas_existentes"] = $resultado["altas_existentes"];
+    $ret["bajas_automaticas"] = $resultado["bajas_automaticas"];
+
+    $resultado = $this->procesarAltasEnviadas();
+    $ret["altas_aprobadas"] = $resultado["altas_aprobadas"];
+    $ret["altas_rechazadas"] = $resultado["altas_rechazadas"];
+   
+    $resultado = $this->procesarBajasEnviadas();
+    $ret["bajas_aprobadas"] = $resultado["bajas_aprobadas"];
+    $ret["bajas_rechazadas"] = $resultado["bajas_rechazadas"];
+
+    $ret["altas_automaticas"] = $this->procesarRestantes();
+
+    $ret["errors"] = $this->errors;
+
+    return $ret;
+  }
+
+  public function evaluarAfiliacion($afiliaciones, $estado){
+    foreach($afiliaciones as $afiliacion){
+      $afiliacion_ = [
+        "id" => $afiliacion["id"],
+        "evaluado" => $this->evaluado,
+        "estado" => $estado,
+      ];
+
+      try{
+        $this->container->getController("AfiliacionPersist")->main($afiliacion_);
+      } catch (Exception $exception) {
+        array_push($this->errors, "Error al actualizar afiliacion: " . $afiliacion["legajo"] . ": " . $exception->getMessage());
+      }
+    }
+  }
+  
+  public function crearAfiliacion($afiliaciones, $motivo){
+    foreach($afiliaciones as $afiliacion){
+      $afiliacion_ = [
+        "persona" => $afiliacion["persona"],
+        "creado" => $this->evaluado,
+        "evaluado" => $this->evaluado,
+        "motivo" => $motivo,
+        "estado" => "Aprobado",
+      ];
+
+      try{
+        $this->container->getController("AfiliacionPersist")->main($afiliacion_);
+      } catch (Exception $exception) {
+        array_push($this->errors, "Error al crear afiliacion: " . $afiliacion["legajo"] . ": " . $exception->getMessage());
+      }
+    }
+  }
+
+  public function procesarExistentes(){
+    $render = [
+      ["modificado_is_set", "=", false],
+      ["estado", "=", "Aprobado"],
+      ["motivo", "=", "Alta"],
+    ];
+
+    $existentes = $this->container->getDb()->all("afiliacion", $render);
+    $existentes = array_combine_key($existentes, "per_legajo");
+
+    $aprobadas = [];
+    $bajadas = [];
+    foreach($existentes as $key => $afiliacion){
+      if(!empty($this->registros[$key])) {
+        unset($this->registros[$key]);
+        array_push($aprobadas, $afiliacion);
+      }
+      else {
+        array_push($bajadas, $afiliacion);
+      }
+    }
+    $this->crearAfiliacion($bajadas, "Baja");
+
     return [
-      "file"=>$f, 
-      "altas_aprobadas" => $resultado["altas_aprobadas"],
-      "altas_rechazadas" => $resultado["altas_rechazadas"],
-      "evaluado" => $evaluado->format("c")
+      "altas_existentes" => count($aprobadas),
+      "bajas_automaticas" => count($bajadas),
     ];
   }
 
-  public function procesarAltasEnviadas($evaluado, $registros){
+
+  public function procesarRestantes(){
+    $legajos = array_column($this->registros, "legajo");
+    
+    $render = new Render();
+    $render->addCondition(["legajo","=",$legajos]);
+    $render->setSize(0);
+
+    $personas = $this->container->getDb()->all("persona", $render);
+    $personas = array_combine_key($personas, "legajo");
+
+    $departamentosJudiciales = $this->container->getDb()->all("departamento_judicial");
+    $departamentosJudiciales = array_combine_key($departamentosJudiciales, "codigo");
+
+    $persistLog = $this->container->getController("PersistLog");
+
+    $altasAutomaticas = 0;
+    foreach($this->registros as $legajo => $registro) {
+      if(!key_exists($registro["codigo_departamento"], $departamentosJudiciales)){
+        array_push($this->errors, "Error al crear persona: " . $registro["legajo"] . ": No existe el código de Departamento " . $registro["codigo_departamento"]);
+        continue;
+      }
+      if(array_key_exists($legajo,$personas)){
+        $id = $personas[$legajo]["id"];
+      } else {
+        $persona = $this->container->getValues("persona");
+        $persona->_setDefault();
+        $persona->setApellidos($registro["apellidos"]);
+        if(isset($registro["nombres"])) $persona->setNombres($registro["nombres"]);
+        $persona->setLegajo($legajo);
+        $persona->setOrgano($this->organo);
+        $persona->setDepartamentoJudicial($departamentosJudiciales[$registro["codigo_departamento"]]["id"]);
+        $persona->setDepartamentoJudicialInformado($departamentosJudiciales[$registro["codigo_departamento"]]["id"]);
+        
+        $insert = $this->container->getDb()->insert("persona", $persona->_toArray());
+        $id = $insert["id"];
+      }
+      $altasAutomaticas++;
+
+      $afiliacion = [
+        "persona" => $id,
+        "creado" => $this->evaluado,
+        "evaluado" => $this->evaluado,
+        "motivo" => "Alta",
+        "estado" => "Aprobado",
+      ];
+
+    
+      $this->container->getController("AfiliacionPersist")->main($afiliacion);
+    }
+
+    return $altasAutomaticas;
+  }
+
+
+  public function procesarAltasEnviadas(){
     $render = [
       ["modificado_is_set", "=", false],
       ["estado", "=", "Enviado"],
       ["motivo", "=", "Alta"],
     ];
 
-    $altasEnviadas = $this->db->all("afiliacion", $render);
+    $enviadas = $this->container->getDb()->all("afiliacion", $render);
 
-    array_combine_key($altasEnviadas, "per_legajo");
+    array_combine_key($enviadas, "per_legajo");
 
-    $altasAprobadas = [];
-    $altasRechazadas = [];
-    foreach($altasEnviadas as $key => $afiliacion){
-      if(!empty($registros[$key])) {
-        unset($registros[$key]);
-        array_push($altasAprobadas, $afiliacion);
+    $aprobadas = [];
+    $rechazadas = [];
+    foreach($enviadas as $key => $afiliacion){
+      if(!empty($this->registros[$key])) {
+        unset($this->registros[$key]);
+        array_push($aprobadas, $afiliacion);
       }
       else {
-        array_push($altasRechazadas, $afiliacion);
+        array_push($rechazadas, $afiliacion);
       }
     }
 
-    foreach($altasAprobadas as $afiliacion){
-      $afiliacion_ = [
-        "id" => $afiliacion["id"],
-        "estado" => "Aprobada",
-        "evaluado" => $evaluado
-      ];
-
-      $update = $this->container->getSqlo("afiliacion")->update($afiliacion_);
-      $this->db->query_log($update["sql"]);
-    }
-
-    foreach($altasRechazadas as $afiliacion){
-      $afiliacion_ = [
-        "id" => $afiliacion["id"],
-        "estado" => "Rechazada",
-        "evaluado" => $evaluado
-      ];
-
-      $update = $this->container->getSqlo("afiliacion")->update($afiliacion_);
-      $this->db->query_log($update["sql"]);
-    }
+    $this->evaluarAfiliacion($aprobadas, "Aprobada");
+    $this->evaluarAfiliacion($rechazadas, "Rechazada");
 
     return [
-      "altas_aprobadas" => count($altasAprobadas),
-      "altas_rechazadas" => count($altasRechazadas),
+      "altas_aprobadas" => count($aprobadas),
+      "altas_rechazadas" => count($rechazadas),
     ];
-
   }
 
-
-
-    // 
-    
-    /*
-    array_unique_combine($afiliacionesExistentes, "legajo");
-
-    $cantidadAfiliacionesExistentes = 0;
-    $afiliacionesExistentesQueDebenDarseDeBaja = [];
-    foreach($afiliacionesExistentes as $key => $afiliacion){
-      if(!empty($registros[$key])) {
-        unset($registros[$key]);
-        $cantidadAfiliacionesExistentes++; //cantidad de afiliaciones existentes que permaneceran
-        //aprobado != hoy, estado = alta
-      }
-      else {
-        array_push($afiliacionesExistentesQueDebenDarseDeBaja, $afiliacion); //afiliaciones existentes que seran dadas de baja forzadamente 
-        //no enviadas, completa evaluacion y creada con fecha de hoy, y estado = baja
-      }
-    }
-
-    $afiliacionesNuevas = $this->consultarAfiliacionesNuevas(); 
-    array_unique_combine($afiliacioneNuevas, "legajo");
-
-    $afiliacionesNuevasQueDebenSerAprobadas = [];
-    $afiliacionesNuevasQueDebenSerRechazadas = [];
-    foreach($afiliacioneNuevas as $key => $afiliacion){
-      if(!empty($registros[$key]) {
-        unset($registros[$key]);
-        array_push($afiliacionesNuevasQueDebenSerAprobadas, $afiliacion);
-        //enviado != hoy, estado = alta
-      }
-      else {
-        array_push($afiliacionesNuevasQueDebenSerRechazadas, $afiliacion);
-      }
-    }
-
-    
-    $afiliacionesBajadas = $this->consultarAfiliacionesBajadas(); 
-    array_unique_combine($afiliacionesBajadas, "legajo");
-
-    $afiliacionesBajadasQueDebenSerAprobadas = [];
-    $afiliacionesBajadasQueDebenSerRechazadas = [];
-    foreach($afiliacioneNuevas as $key => $afiliacion){
-      if(!empty($registros[$key]) {
-        unset($registros[$key]);
-        array_push($afiliacionesBajadasQueDebenSerAprobadas, $afiliacion);
-        //enviado != hoy, estado = alta
-      }
-      else {
-        array_push($afiliacionesBajadasQueDebenSerRechazadas, $afiliacion);
-      }
-    }
-
-    if(!empty($registros)){
-      //afiliaciones que no fueron enviadas
-    }*/
-
-  public function consultarAfiliacionesExistentes(){
-    $render = [
-      ["modificado_is_set", "=", false],
-      ["estado", "=", "Aprobado"],
-    ];
-
-    return $this->db->all("afiliacion", $render);
-  }
-
-  public function altasEnviadas(){
-    
-  }
-
-  public function consultarAfiliacionesBajadas(){
+  public function procesarBajasEnviadas(){
     $render = [
       ["modificado_is_set", "=", false],
       ["estado", "=", "Enviado"],
       ["motivo", "=", "Baja"],
     ];
 
-    return $this->db->all("afiliacion", $render);
+    $enviadas = $this->container->getDb()->all("afiliacion", $render);
+
+    array_combine_key($enviadas, "per_legajo");
+
+    $aprobadas = [];
+    $rechazadas = [];
+    foreach($enviadas as $key => $afiliacion){
+      if(!empty($this->registros[$key])) {
+        array_push($aprobadas, $afiliacion);
+      } else {
+        unset($this->registros[$key]);
+        array_push($rechazadas, $afiliacion);
+      }
+    }
+
+    $this->evaluarAfiliacion($aprobadas, "Aprobada");
+    $this->evaluarAfiliacion($rechazadas, "Rechazada");
+
+    return [
+      "bajas_aprobadas" => count($aprobadas),
+      "bajas_rechazadas" => count($rechazadas),
+    ];
+
   }
 
   public function definirRegistros($destination){
@@ -188,7 +259,7 @@ class InfoSueldosUpload extends Upload {
         if(key_exists(1, $nombre)) $reg["nombres"] = $nombre[1];
 
         if(key_exists($reg["legajo"], $registros)){
-          array_push($errores, "ERROR FILA " . ($i+1) . ": El legajo se encuentra repetido");
+          array_push($this->errors, "Legajo " . $reg["legajo"] . " se encuentra repetido");
           continue;
         }
 

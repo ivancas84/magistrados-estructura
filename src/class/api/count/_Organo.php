@@ -2,7 +2,7 @@
 
 require_once("class/api/Count.php");
 
-class _OrganoCount extends Count {
+class _OrganoCountApi extends CountApi {
   public $entityName = "organo";
 }
 

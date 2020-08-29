@@ -2,7 +2,7 @@
 
 require_once("class/api/Unique.php");
 
-class _AfiliacionUnique extends Unique {
+class _AfiliacionUniqueApi extends UniqueApi {
   public $entityName = "afiliacion";
 }
 

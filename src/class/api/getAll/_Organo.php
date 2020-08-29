@@ -2,7 +2,7 @@
 
 require_once("class/api/GetAll.php");
 
-class _OrganoGetAll extends GetAll {
+class _OrganoGetAllApi extends GetAllApi {
   public $entityName = "organo";
 }
 

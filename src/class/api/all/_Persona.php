@@ -2,7 +2,7 @@
 
 require_once("class/api/All.php");
 
-class _PersonaAll extends All {
+class _PersonaAllApi extends AllApi {
   public $entityName = "persona";
 }
 

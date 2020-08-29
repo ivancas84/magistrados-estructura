@@ -2,7 +2,7 @@
 
 require_once("class/api/Count.php");
 
-class _TipoDocumentoCount extends Count {
+class _TipoDocumentoCountApi extends CountApi {
   public $entityName = "tipo_documento";
 }
 

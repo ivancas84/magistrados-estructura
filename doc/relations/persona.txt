@@ -15,7 +15,7 @@ fecha_nacimiento (fn): date nf.
 email (ema): string nf.
 creado (cre): timestamp nf. NOT NULL. DEFAULT: current_timestamp().
 eliminado (eli): timestamp nf.
-cargo (car): string mu. NOT NULL.
+cargo (car): string mu.
 organo (org): string mu. NOT NULL.
 departamento_judicial (dj): string mu. NOT NULL.
 departamento_judicial_informado (dji): string mu.

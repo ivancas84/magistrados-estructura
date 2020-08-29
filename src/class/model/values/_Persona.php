@@ -235,11 +235,8 @@ class _Persona extends EntityValues {
   }
 
   public function checkCargo($value) { 
-    $this->_logs->resetLogs("cargo");
-    if(Validation::is_undefined($value)) return null;
-    $v = Validation::getInstanceValue($value)->required();
-    foreach($v->getErrors() as $error){ $this->_logs->addLog("cargo", "error", $error); }
-    return $v->isSuccess();
+      if(Validation::is_undefined($value)) return null;
+      return true; 
   }
 
   public function checkOrgano($value) { 

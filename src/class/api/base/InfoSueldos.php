@@ -1,11 +1,8 @@
 <?php
 
 require_once("class/api/Base.php");
-require_once("class/model/Sqlo.php");
-require_once("class/model/DbLog.php");
-require_once("class/model/Ma.php");
 
-class InfoSueldosBase extends Base {
+class InfoSueldosBaseApi extends BaseApi {
   /**
    * Generar informe de sueldos
    * @todo tiene caracteristicas de controlador de persistencia, se puede redefinir
@@ -29,7 +26,7 @@ class InfoSueldosBase extends Base {
       if(!empty($update["sql"])) array_push($detail, "afiliacion".$update["id"]);
     }
     
-    if(!empty($sql)) $this->db->multi_query_last_log($sql);
+    if(!empty($sql)) $this->container->getDb()->multi_query_last_log($sql);
 
     return [
       "id" => null, //id del archivo creado
@@ -50,11 +47,11 @@ class InfoSueldosBase extends Base {
   public function consultarAfiliacionesCreadas(){
     $render = [
       ["modificado_is_set", "=", false],
-      //["estado", "=", "Creado"],
-      //["motivo", "=", ["Alta", "Baja"]],
+      ["estado", "=", "Creado"],
+      ["motivo", "=", ["Alta", "Baja"]],
     ];
 
-    return $this->db->all("afiliacion", $render);
+    return $this->container->getDb()->all("afiliacion", $render);
   }
 
 }

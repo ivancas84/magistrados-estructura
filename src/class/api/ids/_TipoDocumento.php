@@ -2,7 +2,7 @@
 
 require_once("class/api/Ids.php");
 
-class _TipoDocumentoIds extends Ids {
+class _TipoDocumentoIdsApi extends IdsApi {
   public $entityName = "tipo_documento";
 }
 
