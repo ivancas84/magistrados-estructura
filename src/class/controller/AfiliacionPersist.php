@@ -1,28 +1,28 @@
 <?php
 require_once("class/model/Render.php");
+require_once("class/tools/Validation.php");
 
 class AfiliacionPersist {
 
   public function main($data){    
-    $persistLog = $this->container->getController("PersistLog");
+    $this->persistLog = $this->container->getController("PersistLog");
 
     $values = $this->container->getValues("afiliacion")->_fromArray($data);
     if(!$values->_check()) throw new Exception($values->_getLogs()->toString());
-        
-    if (!empty($values->id())){ 
-      $id = $persistLog->update("afiliacion", $values->_toArray());
+    if (!Validation::is_empty($values->id())){ 
+      $id = $this->persistLog->update("afiliacion", $values->_toArray());
     } else {
       $values->_setDefault();
 
       $afiliaciones = $this->consultarAfiliacionesNoModificadas($values);
       $this->verificarEstadoEnviado($afiliaciones);
       $this->actualizarAfiliacionesNoModificadas($afiliaciones);
-      $id = $persistLog->insert("afiliacion", $values->_toArray());
+      $id = $this->persistLog->insert("afiliacion", $values->_toArray());
     }
 
-    $this->container->getDb()->multi_query_transaction_log($persistLog->getSql());
+    $this->container->getDb()->multi_query_transaction_log($this->persistLog->getSql());
     
-    return ["id" => $id, "detail" => $persistLog->getDetail()];
+    return ["id" => $id, "detail" => $this->persistLog->getDetail()];
   }
 
   public function consultarAfiliacionesNoModificadas(EntityValues $values){
@@ -47,7 +47,7 @@ class AfiliacionPersist {
         "modificado" => new DateTime(),
       ];
       
-      $persistLog->update("afiliacion", $_afiliacion);
+      $this->persistLog->update("afiliacion", $_afiliacion);
     }
   } 
 }
