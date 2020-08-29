@@ -2,7 +2,7 @@
 
 require_once("class/api/Base.php");
 
-class InfoSueldosBase extends Base {
+class InfoSueldosBaseApi extends BaseApi {
   /**
    * Generar informe de sueldos
    * @todo tiene caracteristicas de controlador de persistencia, se puede redefinir

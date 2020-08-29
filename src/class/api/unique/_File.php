@@ -2,7 +2,7 @@
 
 require_once("class/api/Unique.php");
 
-class _FileUnique extends Unique {
+class _FileUniqueApi extends UniqueApi {
   public $entityName = "file";
 }
 

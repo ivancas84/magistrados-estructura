@@ -2,7 +2,7 @@
 
 require_once("class/api/Count.php");
 
-class _DepartamentoJudicialCount extends Count {
+class _DepartamentoJudicialCountApi extends CountApi {
   public $entityName = "departamento_judicial";
 }
 

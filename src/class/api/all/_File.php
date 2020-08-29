@@ -2,7 +2,7 @@
 
 require_once("class/api/All.php");
 
-class _FileAll extends All {
+class _FileAllApi extends AllApi {
   public $entityName = "file";
 }
 

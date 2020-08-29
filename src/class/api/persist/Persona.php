@@ -2,7 +2,7 @@
 
 require_once("class/api/Persist.php");
 
-class PersonaPersist extends Persist {
+class PersonaPersistApi extends PersistApi {
   public $entityName = "persona";
 }
 

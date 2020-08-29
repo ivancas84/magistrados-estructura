@@ -2,7 +2,7 @@
 
 require_once("class/api/GetAll.php");
 
-class _AfiliacionGetAll extends GetAll {
+class _AfiliacionGetAllApi extends GetAllApi {
   public $entityName = "afiliacion";
 }
 

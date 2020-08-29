@@ -2,7 +2,7 @@
 
 require_once("class/api/Unique.php");
 
-class _OrganoUnique extends Unique {
+class _OrganoUniqueApi extends UniqueApi {
   public $entityName = "organo";
 }
 

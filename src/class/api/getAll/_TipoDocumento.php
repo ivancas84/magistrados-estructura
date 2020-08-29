@@ -2,7 +2,7 @@
 
 require_once("class/api/GetAll.php");
 
-class _TipoDocumentoGetAll extends GetAll {
+class _TipoDocumentoGetAllApi extends GetAllApi {
   public $entityName = "tipo_documento";
 }
 
