@@ -60,19 +60,26 @@ class _File extends EntityValues {
   public function size() { return $this->size; }
   public function created($format = null) { return Format::date($this->created, $format); }
 
-  public function setId($p) { $this->id = (is_null($p)) ? null : (string)$p; }
-  public function setName($p) { $this->name = (is_null($p)) ? null : (string)$p; }
-  public function setType($p) { $this->type = (is_null($p)) ? null : (string)$p; }
-  public function setContent($p) { $this->content = (is_null($p)) ? null : (string)$p; }
-  public function setSize($p) { $this->size = (is_null($p)) ? null : intval($p); }
-  public function _setCreated(DateTime $p = null) { $this->created = $p; }
+  public function _setId(string $p = null) { return $this->id = $p; }  
+  public function setId($p) { return $this->id = (is_null($p)) ? null : (string)$p; }
 
+  public function _setName(string $p = null) { return $this->name = $p; }  
+  public function setName($p) { return $this->name = (is_null($p)) ? null : (string)$p; }
+
+  public function _setType(string $p = null) { return $this->type = $p; }  
+  public function setType($p) { return $this->type = (is_null($p)) ? null : (string)$p; }
+
+  public function _setContent(string $p = null) { return $this->content = $p; }  
+  public function setContent($p) { return $this->content = (is_null($p)) ? null : (string)$p; }
+
+  public function _setSize(integer $p = null) { return $this->size = $p; }    
+  public function setSize($p) { return $this->size = (is_null($p)) ? null : intval($p); }
+
+  public function _setCreated(DateTime $p = null) { return $this->created = $p; }  
   public function setCreated($p) {
-    if(!is_null($p)) {
-      $p = new SpanishDateTime($p);    
-      if($p) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-    }
-    $this->created = $p;  
+    if(!is_null($p) && !($p instanceof DateTime)) $p = new SpanishDateTime($p);
+    if($p instanceof DateTime) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+    return $this->created = $p;
   }
 
 
@@ -120,7 +127,7 @@ class _File extends EntityValues {
   public function checkCreated($value) { 
     $this->_logs->resetLogs("created");
     if(Validation::is_undefined($value)) return null;
-    $v = Validation::getInstanceValue($value)->required();
+    $v = Validation::getInstanceValue($value)->required()->isA('DateTime');
     foreach($v->getErrors() as $error){ $this->_logs->addLog("created", "error", $error); }
     return $v->isSuccess();
   }

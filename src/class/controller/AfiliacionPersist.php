@@ -7,8 +7,10 @@ class AfiliacionPersist {
   public function main($data){    
     $this->persistLog = $this->container->getController("PersistLog");
 
-    $values = $this->container->getValues("afiliacion")->_fromArray($data);
+    $values = $this->container->getValues("afiliacion")->_fromArray($data)->_reset();
+
     if(!$values->_check()) throw new Exception($values->_getLogs()->toString());
+    
     if (!Validation::is_empty($values->id())){ 
       $id = $this->persistLog->update("afiliacion", $values->_toArray());
     } else {

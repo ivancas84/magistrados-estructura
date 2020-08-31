@@ -78,51 +78,49 @@ class _Afiliacion extends EntityValues {
   public function observaciones($format = null) { return Format::convertCase($this->observaciones, $format); }
   public function persona($format = null) { return Format::convertCase($this->persona, $format); }
 
-  public function setId($p) { $this->id = (is_null($p)) ? null : (string)$p; }
-  public function setMotivo($p) { $this->motivo = (is_null($p)) ? null : (string)$p; }
-  public function setEstado($p) { $this->estado = (is_null($p)) ? null : (string)$p; }
-  public function _setCreado(DateTime $p = null) { $this->creado = $p; }
+  public function _setId(string $p = null) { return $this->id = $p; }  
+  public function setId($p) { return $this->id = (is_null($p)) ? null : (string)$p; }
 
+  public function _setMotivo(string $p = null) { return $this->motivo = $p; }  
+  public function setMotivo($p) { return $this->motivo = (is_null($p)) ? null : (string)$p; }
+
+  public function _setEstado(string $p = null) { return $this->estado = $p; }  
+  public function setEstado($p) { return $this->estado = (is_null($p)) ? null : (string)$p; }
+
+  public function _setCreado(DateTime $p = null) { return $this->creado = $p; }  
   public function setCreado($p) {
-    if(!is_null($p)) {
-      $p = new SpanishDateTime($p);    
-      if($p) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-    }
-    $this->creado = $p;  
+    if(!is_null($p) && !($p instanceof DateTime)) $p = new SpanishDateTime($p);
+    if($p instanceof DateTime) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+    return $this->creado = $p;
   }
 
-  public function _setEnviado(DateTime $p = null) { $this->enviado = $p; }
-
+  public function _setEnviado(DateTime $p = null) { return $this->enviado = $p; }  
   public function setEnviado($p) {
-    if(!is_null($p)) {
-      $p = new SpanishDateTime($p);    
-      if($p) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-    }
-    $this->enviado = $p;  
+    if(!is_null($p) && !($p instanceof DateTime)) $p = new SpanishDateTime($p);
+    if($p instanceof DateTime) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+    return $this->enviado = $p;
   }
 
-  public function _setEvaluado(DateTime $p = null) { $this->evaluado = $p; }
-
+  public function _setEvaluado(DateTime $p = null) { return $this->evaluado = $p; }  
   public function setEvaluado($p) {
-    if(!is_null($p)) {
-      $p = new SpanishDateTime($p);    
-      if($p) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-    }
-    $this->evaluado = $p;  
+    if(!is_null($p) && !($p instanceof DateTime)) $p = new SpanishDateTime($p);
+    if($p instanceof DateTime) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+    return $this->evaluado = $p;
   }
 
-  public function _setModificado(DateTime $p = null) { $this->modificado = $p; }
-
+  public function _setModificado(DateTime $p = null) { return $this->modificado = $p; }  
   public function setModificado($p) {
-    if(!is_null($p)) {
-      $p = new SpanishDateTime($p);    
-      if($p) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-    }
-    $this->modificado = $p;  
+    if(!is_null($p) && !($p instanceof DateTime)) $p = new SpanishDateTime($p);
+    if($p instanceof DateTime) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+    return $this->modificado = $p;
   }
 
-  public function setObservaciones($p) { $this->observaciones = (is_null($p)) ? null : (string)$p; }
-  public function setPersona($p) { $this->persona = (is_null($p)) ? null : (string)$p; }
+  public function _setObservaciones(string $p = null) { return $this->observaciones = $p; }  
+  public function setObservaciones($p) { return $this->observaciones = (is_null($p)) ? null : (string)$p; }
+
+  public function _setPersona(string $p = null) { return $this->persona = $p; }  
+  public function setPersona($p) { return $this->persona = (is_null($p)) ? null : (string)$p; }
+
 
   public function resetMotivo() { if(!Validation::is_empty($this->motivo)) $this->motivo = preg_replace('/\s\s+/', ' ', trim($this->motivo)); }
   public function resetEstado() { if(!Validation::is_empty($this->estado)) $this->estado = preg_replace('/\s\s+/', ' ', trim($this->estado)); }
@@ -152,24 +150,33 @@ class _Afiliacion extends EntityValues {
   public function checkCreado($value) { 
     $this->_logs->resetLogs("creado");
     if(Validation::is_undefined($value)) return null;
-    $v = Validation::getInstanceValue($value)->required();
+    $v = Validation::getInstanceValue($value)->required()->isA('DateTime');
     foreach($v->getErrors() as $error){ $this->_logs->addLog("creado", "error", $error); }
     return $v->isSuccess();
   }
 
   public function checkEnviado($value) { 
-      if(Validation::is_undefined($value)) return null;
-      return true; 
+    $this->_logs->resetLogs("enviado");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->isA('DateTime');
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("enviado", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkEvaluado($value) { 
-      if(Validation::is_undefined($value)) return null;
-      return true; 
+    $this->_logs->resetLogs("evaluado");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->isA('DateTime');
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("evaluado", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkModificado($value) { 
-      if(Validation::is_undefined($value)) return null;
-      return true; 
+    $this->_logs->resetLogs("modificado");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->isA('DateTime');
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("modificado", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkObservaciones($value) { 

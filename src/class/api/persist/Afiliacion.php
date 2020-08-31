@@ -1,5 +1,7 @@
 <?php
 
+require_once("class/tools/Filter.php");
+
 class AfiliacionPersistApi {
 
   public function main(){    
