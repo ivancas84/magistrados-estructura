@@ -42,9 +42,15 @@ class _DepartamentoJudicial extends EntityValues {
   public function codigo($format = null) { return Format::convertCase($this->codigo, $format); }
   public function nombre($format = null) { return Format::convertCase($this->nombre, $format); }
 
-  public function setId($p) { $this->id = (is_null($p)) ? null : (string)$p; }
-  public function setCodigo($p) { $this->codigo = (is_null($p)) ? null : (string)$p; }
-  public function setNombre($p) { $this->nombre = (is_null($p)) ? null : (string)$p; }
+  public function _setId(string $p = null) { return $this->id = $p; }  
+  public function setId($p) { return $this->id = (is_null($p)) ? null : (string)$p; }
+
+  public function _setCodigo(string $p = null) { return $this->codigo = $p; }  
+  public function setCodigo($p) { return $this->codigo = (is_null($p)) ? null : (string)$p; }
+
+  public function _setNombre(string $p = null) { return $this->nombre = $p; }  
+  public function setNombre($p) { return $this->nombre = (is_null($p)) ? null : (string)$p; }
+
 
   public function resetCodigo() { if(!Validation::is_empty($this->codigo)) $this->codigo = preg_replace('/\s\s+/', ' ', trim($this->codigo)); }
   public function resetNombre() { if(!Validation::is_empty($this->nombre)) $this->nombre = preg_replace('/\s\s+/', ' ', trim($this->nombre)); }

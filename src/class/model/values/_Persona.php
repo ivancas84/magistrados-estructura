@@ -120,50 +120,69 @@ class _Persona extends EntityValues {
   public function departamentoJudicialInformado($format = null) { return Format::convertCase($this->departamentoJudicialInformado, $format); }
   public function tipoDocumento($format = null) { return Format::convertCase($this->tipoDocumento, $format); }
 
-  public function setId($p) { $this->id = (is_null($p)) ? null : (string)$p; }
-  public function setNombres($p) { $this->nombres = (is_null($p)) ? null : (string)$p; }
-  public function setApellidos($p) { $this->apellidos = (is_null($p)) ? null : (string)$p; }
-  public function setLegajo($p) { $this->legajo = (is_null($p)) ? null : (string)$p; }
-  public function setNumeroDocumento($p) { $this->numeroDocumento = (is_null($p)) ? null : (string)$p; }
-  public function setTelefonoLaboral($p) { $this->telefonoLaboral = (is_null($p)) ? null : (string)$p; }
-  public function setTelefonoParticular($p) { $this->telefonoParticular = (is_null($p)) ? null : (string)$p; }
-  public function _setFechaNacimiento(DateTime $p = null) { $this->fechaNacimiento = $p; }
+  public function _setId(string $p = null) { return $this->id = $p; }  
+  public function setId($p) { return $this->id = (is_null($p)) ? null : (string)$p; }
 
+  public function _setNombres(string $p = null) { return $this->nombres = $p; }  
+  public function setNombres($p) { return $this->nombres = (is_null($p)) ? null : (string)$p; }
+
+  public function _setApellidos(string $p = null) { return $this->apellidos = $p; }  
+  public function setApellidos($p) { return $this->apellidos = (is_null($p)) ? null : (string)$p; }
+
+  public function _setLegajo(string $p = null) { return $this->legajo = $p; }  
+  public function setLegajo($p) { return $this->legajo = (is_null($p)) ? null : (string)$p; }
+
+  public function _setNumeroDocumento(string $p = null) { return $this->numeroDocumento = $p; }  
+  public function setNumeroDocumento($p) { return $this->numeroDocumento = (is_null($p)) ? null : (string)$p; }
+
+  public function _setTelefonoLaboral(string $p = null) { return $this->telefonoLaboral = $p; }  
+  public function setTelefonoLaboral($p) { return $this->telefonoLaboral = (is_null($p)) ? null : (string)$p; }
+
+  public function _setTelefonoParticular(string $p = null) { return $this->telefonoParticular = $p; }  
+  public function setTelefonoParticular($p) { return $this->telefonoParticular = (is_null($p)) ? null : (string)$p; }
+
+  public function _setFechaNacimiento(DateTime $p = null) { return $this->fechaNacimiento = $p; }
   public function setFechaNacimiento($p) {
-    if(!is_null($p)) {
-      $p = new SpanishDateTime($p);
-      if($p) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+    if(!is_null($p) && !($p instanceof DateTime)) $p = new SpanishDateTime($p);
+    if($p instanceof DateTime) {
+      $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
       $p->setTime(0,0,0);
     }
-    $this->fechaNacimiento = $p;
+    return $this->fechaNacimiento = $p;
   }
 
-  public function setEmail($p) { $this->email = (is_null($p)) ? null : (string)$p; }
-  public function _setCreado(DateTime $p = null) { $this->creado = $p; }
+  public function _setEmail(string $p = null) { return $this->email = $p; }  
+  public function setEmail($p) { return $this->email = (is_null($p)) ? null : (string)$p; }
 
+  public function _setCreado(DateTime $p = null) { return $this->creado = $p; }  
   public function setCreado($p) {
-    if(!is_null($p)) {
-      $p = new SpanishDateTime($p);    
-      if($p) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-    }
-    $this->creado = $p;  
+    if(!is_null($p) && !($p instanceof DateTime)) $p = new SpanishDateTime($p);
+    if($p instanceof DateTime) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+    return $this->creado = $p;
   }
 
-  public function _setEliminado(DateTime $p = null) { $this->eliminado = $p; }
-
+  public function _setEliminado(DateTime $p = null) { return $this->eliminado = $p; }  
   public function setEliminado($p) {
-    if(!is_null($p)) {
-      $p = new SpanishDateTime($p);    
-      if($p) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-    }
-    $this->eliminado = $p;  
+    if(!is_null($p) && !($p instanceof DateTime)) $p = new SpanishDateTime($p);
+    if($p instanceof DateTime) $p->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+    return $this->eliminado = $p;
   }
 
-  public function setCargo($p) { $this->cargo = (is_null($p)) ? null : (string)$p; }
-  public function setOrgano($p) { $this->organo = (is_null($p)) ? null : (string)$p; }
-  public function setDepartamentoJudicial($p) { $this->departamentoJudicial = (is_null($p)) ? null : (string)$p; }
-  public function setDepartamentoJudicialInformado($p) { $this->departamentoJudicialInformado = (is_null($p)) ? null : (string)$p; }
-  public function setTipoDocumento($p) { $this->tipoDocumento = (is_null($p)) ? null : (string)$p; }
+  public function _setCargo(string $p = null) { return $this->cargo = $p; }  
+  public function setCargo($p) { return $this->cargo = (is_null($p)) ? null : (string)$p; }
+
+  public function _setOrgano(string $p = null) { return $this->organo = $p; }  
+  public function setOrgano($p) { return $this->organo = (is_null($p)) ? null : (string)$p; }
+
+  public function _setDepartamentoJudicial(string $p = null) { return $this->departamentoJudicial = $p; }  
+  public function setDepartamentoJudicial($p) { return $this->departamentoJudicial = (is_null($p)) ? null : (string)$p; }
+
+  public function _setDepartamentoJudicialInformado(string $p = null) { return $this->departamentoJudicialInformado = $p; }  
+  public function setDepartamentoJudicialInformado($p) { return $this->departamentoJudicialInformado = (is_null($p)) ? null : (string)$p; }
+
+  public function _setTipoDocumento(string $p = null) { return $this->tipoDocumento = $p; }  
+  public function setTipoDocumento($p) { return $this->tipoDocumento = (is_null($p)) ? null : (string)$p; }
+
 
   public function resetNombres() { if(!Validation::is_empty($this->nombres)) $this->nombres = preg_replace('/\s\s+/', ' ', trim($this->nombres)); }
   public function resetApellidos() { if(!Validation::is_empty($this->apellidos)) $this->apellidos = preg_replace('/\s\s+/', ' ', trim($this->apellidos)); }
@@ -212,8 +231,11 @@ class _Persona extends EntityValues {
   }
 
   public function checkFechaNacimiento($value) { 
-      if(Validation::is_undefined($value)) return null;
-      return true; 
+    $this->_logs->resetLogs("fecha_nacimiento");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->isA('DateTime');
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("fecha_nacimiento", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkEmail($value) { 
@@ -224,14 +246,17 @@ class _Persona extends EntityValues {
   public function checkCreado($value) { 
     $this->_logs->resetLogs("creado");
     if(Validation::is_undefined($value)) return null;
-    $v = Validation::getInstanceValue($value)->required();
+    $v = Validation::getInstanceValue($value)->required()->isA('DateTime');
     foreach($v->getErrors() as $error){ $this->_logs->addLog("creado", "error", $error); }
     return $v->isSuccess();
   }
 
   public function checkEliminado($value) { 
-      if(Validation::is_undefined($value)) return null;
-      return true; 
+    $this->_logs->resetLogs("eliminado");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->isA('DateTime');
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("eliminado", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkCargo($value) { 
