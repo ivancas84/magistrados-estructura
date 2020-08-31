@@ -11,9 +11,11 @@ class InfoSueldosUploadApi extends UploadApi {
 
   public $registros = [];
   public $evaluado;
-  public $errors = [];
   public $organo;
-  
+
+  public $errors = [];
+  public $detail = [];
+    
   public function main() {
     $file = Filter::fileRequired("file");
     $this->organo = Filter::postRequired("organo");
@@ -37,17 +39,22 @@ class InfoSueldosUploadApi extends UploadApi {
     $ret["altas_existentes"] = $resultado["altas_existentes"];
     $ret["bajas_automaticas"] = $resultado["bajas_automaticas"];
 
+
     $resultado = $this->procesarAltasEnviadas();
     $ret["altas_aprobadas"] = $resultado["altas_aprobadas"];
     $ret["altas_rechazadas"] = $resultado["altas_rechazadas"];
    
+
     $resultado = $this->procesarBajasEnviadas();
     $ret["bajas_aprobadas"] = $resultado["bajas_aprobadas"];
     $ret["bajas_rechazadas"] = $resultado["bajas_rechazadas"];
 
+
     $ret["altas_automaticas"] = $this->procesarRestantes();
 
+
     $ret["errors"] = $this->errors;
+    $ret["detail"] = $this->detail;
 
     return $ret;
   }
@@ -61,7 +68,8 @@ class InfoSueldosUploadApi extends UploadApi {
       ];
 
       try{
-        $this->container->getController("AfiliacionPersist")->main($afiliacion_);
+        $persist = $this->container->getController("AfiliacionPersist")->main($afiliacion_);
+        $this->detail = array_merge($this->detail, $persist["detail"]); 
       } catch (Exception $exception) {
         array_push($this->errors, "Error al actualizar afiliacion: " . $afiliacion["legajo"] . ": " . $exception->getMessage());
       }
@@ -117,6 +125,7 @@ class InfoSueldosUploadApi extends UploadApi {
 
 
   public function procesarRestantes(){
+    if(empty($this->registros)) return 0;
     $legajos = array_column($this->registros, "legajo");
     
     $render = new Render();
@@ -148,7 +157,7 @@ class InfoSueldosUploadApi extends UploadApi {
         $persona->setOrgano($this->organo);
         $persona->setDepartamentoJudicial($departamentosJudiciales[$registro["codigo_departamento"]]["id"]);
         $persona->setDepartamentoJudicialInformado($departamentosJudiciales[$registro["codigo_departamento"]]["id"]);
-        
+        $persona->_reset();
         $insert = $this->container->getDb()->insert("persona", $persona->_toArray());
         $id = $insert["id"];
       }
@@ -179,7 +188,7 @@ class InfoSueldosUploadApi extends UploadApi {
 
     $enviadas = $this->container->getDb()->all("afiliacion", $render);
 
-    array_combine_key($enviadas, "per_legajo");
+    $enviadas = array_combine_key($enviadas, "per_legajo");
 
     $aprobadas = [];
     $rechazadas = [];
@@ -193,8 +202,8 @@ class InfoSueldosUploadApi extends UploadApi {
       }
     }
 
-    $this->evaluarAfiliacion($aprobadas, "Aprobada");
-    $this->evaluarAfiliacion($rechazadas, "Rechazada");
+    $this->evaluarAfiliacion($aprobadas, "Aprobado");
+    $this->evaluarAfiliacion($rechazadas, "Rechazado");
 
     return [
       "altas_aprobadas" => count($aprobadas),
@@ -211,12 +220,12 @@ class InfoSueldosUploadApi extends UploadApi {
 
     $enviadas = $this->container->getDb()->all("afiliacion", $render);
 
-    array_combine_key($enviadas, "per_legajo");
+    $enviadas = array_combine_key($enviadas, "per_legajo");
 
     $aprobadas = [];
     $rechazadas = [];
     foreach($enviadas as $key => $afiliacion){
-      if(!empty($this->registros[$key])) {
+      if(empty($this->registros[$key])) {
         array_push($aprobadas, $afiliacion);
       } else {
         unset($this->registros[$key]);
@@ -224,8 +233,8 @@ class InfoSueldosUploadApi extends UploadApi {
       }
     }
 
-    $this->evaluarAfiliacion($aprobadas, "Aprobada");
-    $this->evaluarAfiliacion($rechazadas, "Rechazada");
+    $this->evaluarAfiliacion($aprobadas, "Aprobado");
+    $this->evaluarAfiliacion($rechazadas, "Rechazado");
 
     return [
       "bajas_aprobadas" => count($aprobadas),
