@@ -68,7 +68,7 @@ class InfoSueldosUploadApi extends UploadApi {
       ];
 
       try{
-        $persist = $this->container->getController("AfiliacionPersist")->main($afiliacion_);
+        $persist = $this->container->getController("afiliacion_persist")->main($afiliacion_);
         $this->detail = array_merge($this->detail, $persist["detail"]); 
       } catch (Exception $exception) {
         array_push($this->errors, "Error al actualizar afiliacion: " . $afiliacion["legajo"] . ": " . $exception->getMessage());
@@ -87,7 +87,7 @@ class InfoSueldosUploadApi extends UploadApi {
       ];
 
       try{
-        $this->container->getController("AfiliacionPersist")->main($afiliacion_);
+        $this->container->getController("afiliacion_persist")->main($afiliacion_);
       } catch (Exception $exception) {
         array_push($this->errors, "Error al crear afiliacion: " . $afiliacion["legajo"] . ": " . $exception->getMessage());
       }
@@ -138,7 +138,7 @@ class InfoSueldosUploadApi extends UploadApi {
     $departamentosJudiciales = $this->container->getDb()->all("departamento_judicial");
     $departamentosJudiciales = array_combine_key($departamentosJudiciales, "codigo");
 
-    $persistLog = $this->container->getController("PersistLog");
+    $persistLog = $this->container->getController("persist_log");
 
     $altasAutomaticas = 0;
     foreach($this->registros as $legajo => $registro) {
@@ -172,7 +172,7 @@ class InfoSueldosUploadApi extends UploadApi {
       ];
 
     
-      $this->container->getController("AfiliacionPersist")->main($afiliacion);
+      $this->container->getController("afiliacion_persist")->main($afiliacion);
     }
 
     return $altasAutomaticas;

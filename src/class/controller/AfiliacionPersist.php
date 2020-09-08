@@ -5,7 +5,7 @@ require_once("class/tools/Validation.php");
 class AfiliacionPersist {
 
   public function main($data){    
-    $this->persistLog = $this->container->getController("PersistLog");
+    $this->persistLog = $this->container->getController("persist_log");
 
     $values = $this->container->getValues("afiliacion")->_fromArray($data)->_reset();
 
