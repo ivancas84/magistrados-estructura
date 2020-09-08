@@ -2,8 +2,9 @@
 
 CREATE SCHEMA IF NOT EXISTS `magistrados` DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish_ci ;
 
+USE `magistrados`;
 
-CREATE TABLE IF NOT EXISTS `magistrados`.`departamento_judicial` (
+CREATE TABLE IF NOT EXISTS `departamento_judicial` (
   `id` VARCHAR(45) NOT NULL,
   `codigo` VARCHAR(45) NOT NULL,
   `nombre` VARCHAR(255) NOT NULL,
@@ -12,7 +13,7 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_spanish_ci;
 
-CREATE TABLE IF NOT EXISTS `magistrados`.`cargo` (
+CREATE TABLE IF NOT EXISTS `cargo` (
   `id` VARCHAR(45) NOT NULL,
   `descripcion` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`))
@@ -20,7 +21,7 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_spanish_ci;
 
-CREATE TABLE IF NOT EXISTS `magistrados`.`organo` (
+CREATE TABLE IF NOT EXISTS `organo` (
   `id` VARCHAR(45) NOT NULL,
   `descripcion` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`))
@@ -28,7 +29,7 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_spanish_ci;
 
-CREATE TABLE IF NOT EXISTS `magistrados`.`tipo_documento` (
+CREATE TABLE IF NOT EXISTS `tipo_documento` (
   `id` VARCHAR(45) NOT NULL,
   `descripcion` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`))
@@ -36,23 +37,23 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_spanish_ci;
 
-CREATE TABLE IF NOT EXISTS `magistrados`.`persona` (
+CREATE TABLE IF NOT EXISTS `persona` (
   `id` VARCHAR(45) NOT NULL,
   `nombres` VARCHAR(255) NULL DEFAULT NULL,
   `apellidos` VARCHAR(255) NULL DEFAULT NULL,
-  `legajo` VARCHAR(45) NULL DEFAULT NULL,
-  `numero_documento` VARCHAR(45) NOT NULL,
+  `legajo` VARCHAR(45) NOT NULL,
+  `numero_documento` VARCHAR(45) NULL DEFAULT NULL,
   `telefono_laboral` VARCHAR(255) NULL DEFAULT NULL,
   `telefono_particular` VARCHAR(255) NULL DEFAULT NULL,
   `fecha_nacimiento` DATE NULL DEFAULT NULL,
   `email` VARCHAR(255) NULL DEFAULT NULL,
   `creado` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `eliminado` TIMESTAMP NULL DEFAULT NULL,
-  `cargo` VARCHAR(45) NOT NULL,
+  `cargo` VARCHAR(45) NULL DEFAULT NULL,
   `organo` VARCHAR(45) NOT NULL,
   `departamento_judicial` VARCHAR(45) NOT NULL,
-  `departamento_judicial_informado` VARCHAR(45) NOT NULL,
-  `tipo_documento` VARCHAR(45) NOT NULL,
+  `departamento_judicial_informado` VARCHAR(45) NULL DEFAULT NULL,
+  `tipo_documento` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_persona_cargo_idx` (`cargo` ASC),
   INDEX `fk_persona_departamento_judicial_idx` (`departamento_judicial` ASC),
@@ -61,27 +62,27 @@ CREATE TABLE IF NOT EXISTS `magistrados`.`persona` (
   INDEX `fk_persona_tipo_documento_idx` (`tipo_documento` ASC),
   CONSTRAINT `fk_persona_cargo`
     FOREIGN KEY (`cargo`)
-    REFERENCES `magistrados`.`cargo` (`id`)
+    REFERENCES `cargo` (`id`)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT,
   CONSTRAINT `fk_persona_departamento_judicial`
     FOREIGN KEY (`departamento_judicial`)
-    REFERENCES `magistrados`.`departamento_judicial` (`id`)
+    REFERENCES `departamento_judicial` (`id`)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT,
   CONSTRAINT `fk_persona_organo`
     FOREIGN KEY (`organo`)
-    REFERENCES `magistrados`.`organo` (`id`)
+    REFERENCES `organo` (`id`)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT,
   CONSTRAINT `fk_persona_departamento_judicial_informado`
     FOREIGN KEY (`departamento_judicial_informado`)
-    REFERENCES `magistrados`.`departamento_judicial` (`id`)
+    REFERENCES `departamento_judicial` (`id`)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT,
   CONSTRAINT `fk_persona_tipo_documento`
     FOREIGN KEY (`tipo_documento`)
-    REFERENCES `magistrados`.`tipo_documento` (`id`)
+    REFERENCES `tipo_documento` (`id`)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT)
 ENGINE = InnoDB
@@ -89,7 +90,7 @@ DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_spanish_ci;
 
 
-CREATE TABLE IF NOT EXISTS `magistrados`.`afiliacion` (
+CREATE TABLE IF NOT EXISTS `afiliacion` (
   `id` VARCHAR(45) NOT NULL,
   `motivo` VARCHAR(45) NOT NULL,
   `estado` VARCHAR(45) NOT NULL,
@@ -103,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `magistrados`.`afiliacion` (
   INDEX `fk_afiliacion_persona_idx` (`persona` ASC),
   CONSTRAINT `fk_afiliacion_persona`
     FOREIGN KEY (`persona`)
-    REFERENCES `magistrados`.`persona` (`id`)
+    REFERENCES `persona` (`id`)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT)
 ENGINE = InnoDB
