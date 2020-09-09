@@ -23,12 +23,12 @@ class _File extends EntityValues {
 
   public function _fromArray(array $row = NULL, string $p = ""){
     if(empty($row)) return;
-    if(isset($row[$p."id"])) $this->setId($row[$p."id"]);
-    if(isset($row[$p."name"])) $this->setName($row[$p."name"]);
-    if(isset($row[$p."type"])) $this->setType($row[$p."type"]);
-    if(isset($row[$p."content"])) $this->setContent($row[$p."content"]);
-    if(isset($row[$p."size"])) $this->setSize($row[$p."size"]);
-    if(isset($row[$p."created"])) $this->setCreated($row[$p."created"]);
+    if(key_exists($p."id", $row)) $this->setId($row[$p."id"]);
+    if(key_exists($p."name", $row)) $this->setName($row[$p."name"]);
+    if(key_exists($p."type", $row)) $this->setType($row[$p."type"]);
+    if(key_exists($p."content", $row)) $this->setContent($row[$p."content"]);
+    if(key_exists($p."size", $row)) $this->setSize($row[$p."size"]);
+    if(key_exists($p."created", $row)) $this->setCreated($row[$p."created"]);
     return $this;
   }
 
@@ -95,7 +95,7 @@ class _File extends EntityValues {
   public function checkName($value) { 
     $this->_logs->resetLogs("name");
     if(Validation::is_undefined($value)) return null;
-    $v = Validation::getInstanceValue($value)->required();
+    $v = Validation::getInstanceValue($value)->required()->max(255);
     foreach($v->getErrors() as $error){ $this->_logs->addLog("name", "error", $error); }
     return $v->isSuccess();
   }
@@ -103,7 +103,7 @@ class _File extends EntityValues {
   public function checkType($value) { 
     $this->_logs->resetLogs("type");
     if(Validation::is_undefined($value)) return null;
-    $v = Validation::getInstanceValue($value)->required();
+    $v = Validation::getInstanceValue($value)->required()->max(255);
     foreach($v->getErrors() as $error){ $this->_logs->addLog("type", "error", $error); }
     return $v->isSuccess();
   }
@@ -111,7 +111,7 @@ class _File extends EntityValues {
   public function checkContent($value) { 
     $this->_logs->resetLogs("content");
     if(Validation::is_undefined($value)) return null;
-    $v = Validation::getInstanceValue($value)->required();
+    $v = Validation::getInstanceValue($value)->required()->max(255);
     foreach($v->getErrors() as $error){ $this->_logs->addLog("content", "error", $error); }
     return $v->isSuccess();
   }
@@ -119,7 +119,7 @@ class _File extends EntityValues {
   public function checkSize($value) { 
     $this->_logs->resetLogs("size");
     if(Validation::is_undefined($value)) return null;
-    $v = Validation::getInstanceValue($value)->required();
+    $v = Validation::getInstanceValue($value)->required()->max(10);
     foreach($v->getErrors() as $error){ $this->_logs->addLog("size", "error", $error); }
     return $v->isSuccess();
   }

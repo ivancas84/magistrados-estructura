@@ -43,22 +43,22 @@ class _Persona extends EntityValues {
 
   public function _fromArray(array $row = NULL, string $p = ""){
     if(empty($row)) return;
-    if(isset($row[$p."id"])) $this->setId($row[$p."id"]);
-    if(isset($row[$p."nombres"])) $this->setNombres($row[$p."nombres"]);
-    if(isset($row[$p."apellidos"])) $this->setApellidos($row[$p."apellidos"]);
-    if(isset($row[$p."legajo"])) $this->setLegajo($row[$p."legajo"]);
-    if(isset($row[$p."numero_documento"])) $this->setNumeroDocumento($row[$p."numero_documento"]);
-    if(isset($row[$p."telefono_laboral"])) $this->setTelefonoLaboral($row[$p."telefono_laboral"]);
-    if(isset($row[$p."telefono_particular"])) $this->setTelefonoParticular($row[$p."telefono_particular"]);
-    if(isset($row[$p."fecha_nacimiento"])) $this->setFechaNacimiento($row[$p."fecha_nacimiento"]);
-    if(isset($row[$p."email"])) $this->setEmail($row[$p."email"]);
-    if(isset($row[$p."creado"])) $this->setCreado($row[$p."creado"]);
-    if(isset($row[$p."eliminado"])) $this->setEliminado($row[$p."eliminado"]);
-    if(isset($row[$p."cargo"])) $this->setCargo($row[$p."cargo"]);
-    if(isset($row[$p."organo"])) $this->setOrgano($row[$p."organo"]);
-    if(isset($row[$p."departamento_judicial"])) $this->setDepartamentoJudicial($row[$p."departamento_judicial"]);
-    if(isset($row[$p."departamento_judicial_informado"])) $this->setDepartamentoJudicialInformado($row[$p."departamento_judicial_informado"]);
-    if(isset($row[$p."tipo_documento"])) $this->setTipoDocumento($row[$p."tipo_documento"]);
+    if(key_exists($p."id", $row)) $this->setId($row[$p."id"]);
+    if(key_exists($p."nombres", $row)) $this->setNombres($row[$p."nombres"]);
+    if(key_exists($p."apellidos", $row)) $this->setApellidos($row[$p."apellidos"]);
+    if(key_exists($p."legajo", $row)) $this->setLegajo($row[$p."legajo"]);
+    if(key_exists($p."numero_documento", $row)) $this->setNumeroDocumento($row[$p."numero_documento"]);
+    if(key_exists($p."telefono_laboral", $row)) $this->setTelefonoLaboral($row[$p."telefono_laboral"]);
+    if(key_exists($p."telefono_particular", $row)) $this->setTelefonoParticular($row[$p."telefono_particular"]);
+    if(key_exists($p."fecha_nacimiento", $row)) $this->setFechaNacimiento($row[$p."fecha_nacimiento"]);
+    if(key_exists($p."email", $row)) $this->setEmail($row[$p."email"]);
+    if(key_exists($p."creado", $row)) $this->setCreado($row[$p."creado"]);
+    if(key_exists($p."eliminado", $row)) $this->setEliminado($row[$p."eliminado"]);
+    if(key_exists($p."cargo", $row)) $this->setCargo($row[$p."cargo"]);
+    if(key_exists($p."organo", $row)) $this->setOrgano($row[$p."organo"]);
+    if(key_exists($p."departamento_judicial", $row)) $this->setDepartamentoJudicial($row[$p."departamento_judicial"]);
+    if(key_exists($p."departamento_judicial_informado", $row)) $this->setDepartamentoJudicialInformado($row[$p."departamento_judicial_informado"]);
+    if(key_exists($p."tipo_documento", $row)) $this->setTipoDocumento($row[$p."tipo_documento"]);
     return $this;
   }
 
@@ -198,36 +198,51 @@ class _Persona extends EntityValues {
   }
 
   public function checkNombres($value) { 
-      if(Validation::is_undefined($value)) return null;
-      return true; 
+    $this->_logs->resetLogs("nombres");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->max(255);
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("nombres", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkApellidos($value) { 
-      if(Validation::is_undefined($value)) return null;
-      return true; 
+    $this->_logs->resetLogs("apellidos");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->max(255);
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("apellidos", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkLegajo($value) { 
     $this->_logs->resetLogs("legajo");
     if(Validation::is_undefined($value)) return null;
-    $v = Validation::getInstanceValue($value)->required();
+    $v = Validation::getInstanceValue($value)->required()->max(45);
     foreach($v->getErrors() as $error){ $this->_logs->addLog("legajo", "error", $error); }
     return $v->isSuccess();
   }
 
   public function checkNumeroDocumento($value) { 
-      if(Validation::is_undefined($value)) return null;
-      return true; 
+    $this->_logs->resetLogs("numero_documento");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->max(45);
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("numero_documento", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkTelefonoLaboral($value) { 
-      if(Validation::is_undefined($value)) return null;
-      return true; 
+    $this->_logs->resetLogs("telefono_laboral");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->max(255);
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("telefono_laboral", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkTelefonoParticular($value) { 
-      if(Validation::is_undefined($value)) return null;
-      return true; 
+    $this->_logs->resetLogs("telefono_particular");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->max(255);
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("telefono_particular", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkFechaNacimiento($value) { 
@@ -239,8 +254,11 @@ class _Persona extends EntityValues {
   }
 
   public function checkEmail($value) { 
-      if(Validation::is_undefined($value)) return null;
-      return true; 
+    $this->_logs->resetLogs("email");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->max(255);
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("email", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkCreado($value) { 
@@ -260,14 +278,17 @@ class _Persona extends EntityValues {
   }
 
   public function checkCargo($value) { 
-      if(Validation::is_undefined($value)) return null;
-      return true; 
+    $this->_logs->resetLogs("cargo");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->max(45);
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("cargo", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkOrgano($value) { 
     $this->_logs->resetLogs("organo");
     if(Validation::is_undefined($value)) return null;
-    $v = Validation::getInstanceValue($value)->required();
+    $v = Validation::getInstanceValue($value)->required()->max(45);
     foreach($v->getErrors() as $error){ $this->_logs->addLog("organo", "error", $error); }
     return $v->isSuccess();
   }
@@ -275,19 +296,25 @@ class _Persona extends EntityValues {
   public function checkDepartamentoJudicial($value) { 
     $this->_logs->resetLogs("departamento_judicial");
     if(Validation::is_undefined($value)) return null;
-    $v = Validation::getInstanceValue($value)->required();
+    $v = Validation::getInstanceValue($value)->required()->max(45);
     foreach($v->getErrors() as $error){ $this->_logs->addLog("departamento_judicial", "error", $error); }
     return $v->isSuccess();
   }
 
   public function checkDepartamentoJudicialInformado($value) { 
-      if(Validation::is_undefined($value)) return null;
-      return true; 
+    $this->_logs->resetLogs("departamento_judicial_informado");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->max(45);
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("departamento_judicial_informado", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkTipoDocumento($value) { 
-      if(Validation::is_undefined($value)) return null;
-      return true; 
+    $this->_logs->resetLogs("tipo_documento");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->max(45);
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("tipo_documento", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function _check(){
