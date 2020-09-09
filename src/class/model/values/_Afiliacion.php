@@ -29,15 +29,15 @@ class _Afiliacion extends EntityValues {
 
   public function _fromArray(array $row = NULL, string $p = ""){
     if(empty($row)) return;
-    if(isset($row[$p."id"])) $this->setId($row[$p."id"]);
-    if(isset($row[$p."motivo"])) $this->setMotivo($row[$p."motivo"]);
-    if(isset($row[$p."estado"])) $this->setEstado($row[$p."estado"]);
-    if(isset($row[$p."creado"])) $this->setCreado($row[$p."creado"]);
-    if(isset($row[$p."enviado"])) $this->setEnviado($row[$p."enviado"]);
-    if(isset($row[$p."evaluado"])) $this->setEvaluado($row[$p."evaluado"]);
-    if(isset($row[$p."modificado"])) $this->setModificado($row[$p."modificado"]);
-    if(isset($row[$p."observaciones"])) $this->setObservaciones($row[$p."observaciones"]);
-    if(isset($row[$p."persona"])) $this->setPersona($row[$p."persona"]);
+    if(key_exists($p."id", $row)) $this->setId($row[$p."id"]);
+    if(key_exists($p."motivo", $row)) $this->setMotivo($row[$p."motivo"]);
+    if(key_exists($p."estado", $row)) $this->setEstado($row[$p."estado"]);
+    if(key_exists($p."creado", $row)) $this->setCreado($row[$p."creado"]);
+    if(key_exists($p."enviado", $row)) $this->setEnviado($row[$p."enviado"]);
+    if(key_exists($p."evaluado", $row)) $this->setEvaluado($row[$p."evaluado"]);
+    if(key_exists($p."modificado", $row)) $this->setModificado($row[$p."modificado"]);
+    if(key_exists($p."observaciones", $row)) $this->setObservaciones($row[$p."observaciones"]);
+    if(key_exists($p."persona", $row)) $this->setPersona($row[$p."persona"]);
     return $this;
   }
 
@@ -134,7 +134,7 @@ class _Afiliacion extends EntityValues {
   public function checkMotivo($value) { 
     $this->_logs->resetLogs("motivo");
     if(Validation::is_undefined($value)) return null;
-    $v = Validation::getInstanceValue($value)->required();
+    $v = Validation::getInstanceValue($value)->required()->max(45);
     foreach($v->getErrors() as $error){ $this->_logs->addLog("motivo", "error", $error); }
     return $v->isSuccess();
   }
@@ -142,7 +142,7 @@ class _Afiliacion extends EntityValues {
   public function checkEstado($value) { 
     $this->_logs->resetLogs("estado");
     if(Validation::is_undefined($value)) return null;
-    $v = Validation::getInstanceValue($value)->required();
+    $v = Validation::getInstanceValue($value)->required()->max(45);
     foreach($v->getErrors() as $error){ $this->_logs->addLog("estado", "error", $error); }
     return $v->isSuccess();
   }
@@ -180,14 +180,17 @@ class _Afiliacion extends EntityValues {
   }
 
   public function checkObservaciones($value) { 
-      if(Validation::is_undefined($value)) return null;
-      return true; 
+    $this->_logs->resetLogs("observaciones");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->max(65535);
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("observaciones", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function checkPersona($value) { 
     $this->_logs->resetLogs("persona");
     if(Validation::is_undefined($value)) return null;
-    $v = Validation::getInstanceValue($value)->required();
+    $v = Validation::getInstanceValue($value)->required()->max(45);
     foreach($v->getErrors() as $error){ $this->_logs->addLog("persona", "error", $error); }
     return $v->isSuccess();
   }

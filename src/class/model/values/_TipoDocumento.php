@@ -15,8 +15,8 @@ class _TipoDocumento extends EntityValues {
 
   public function _fromArray(array $row = NULL, string $p = ""){
     if(empty($row)) return;
-    if(isset($row[$p."id"])) $this->setId($row[$p."id"]);
-    if(isset($row[$p."descripcion"])) $this->setDescripcion($row[$p."descripcion"]);
+    if(key_exists($p."id", $row)) $this->setId($row[$p."id"]);
+    if(key_exists($p."descripcion", $row)) $this->setDescripcion($row[$p."descripcion"]);
     return $this;
   }
 
@@ -53,7 +53,7 @@ class _TipoDocumento extends EntityValues {
   public function checkDescripcion($value) { 
     $this->_logs->resetLogs("descripcion");
     if(Validation::is_undefined($value)) return null;
-    $v = Validation::getInstanceValue($value)->required();
+    $v = Validation::getInstanceValue($value)->required()->max(45);
     foreach($v->getErrors() as $error){ $this->_logs->addLog("descripcion", "error", $error); }
     return $v->isSuccess();
   }

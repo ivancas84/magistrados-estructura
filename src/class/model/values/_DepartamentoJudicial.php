@@ -17,9 +17,9 @@ class _DepartamentoJudicial extends EntityValues {
 
   public function _fromArray(array $row = NULL, string $p = ""){
     if(empty($row)) return;
-    if(isset($row[$p."id"])) $this->setId($row[$p."id"]);
-    if(isset($row[$p."codigo"])) $this->setCodigo($row[$p."codigo"]);
-    if(isset($row[$p."nombre"])) $this->setNombre($row[$p."nombre"]);
+    if(key_exists($p."id", $row)) $this->setId($row[$p."id"]);
+    if(key_exists($p."codigo", $row)) $this->setCodigo($row[$p."codigo"]);
+    if(key_exists($p."nombre", $row)) $this->setNombre($row[$p."nombre"]);
     return $this;
   }
 
@@ -63,14 +63,17 @@ class _DepartamentoJudicial extends EntityValues {
   public function checkCodigo($value) { 
     $this->_logs->resetLogs("codigo");
     if(Validation::is_undefined($value)) return null;
-    $v = Validation::getInstanceValue($value)->required();
+    $v = Validation::getInstanceValue($value)->required()->max(45);
     foreach($v->getErrors() as $error){ $this->_logs->addLog("codigo", "error", $error); }
     return $v->isSuccess();
   }
 
   public function checkNombre($value) { 
-      if(Validation::is_undefined($value)) return null;
-      return true; 
+    $this->_logs->resetLogs("nombre");
+    if(Validation::is_undefined($value)) return null;
+    $v = Validation::getInstanceValue($value)->max(255);
+    foreach($v->getErrors() as $error){ $this->_logs->addLog("nombre", "error", $error); }
+    return $v->isSuccess();
   }
 
   public function _check(){

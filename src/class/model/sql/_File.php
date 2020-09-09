@@ -16,6 +16,8 @@ class _FileSql extends EntitySql{
       case $p.'size': return $t.".size";
       case $p.'created': return $t.".created";
       case $p.'created_date': return "CAST({$t}.created AS DATE)";
+      case $p.'created_ym': return "DATE_FORMAT({$t}.created, '%Y-%m')";
+      case $p.'created_y': return "DATE_FORMAT({$t}.created, '%Y')";
 
       case $p.'min_id': return "MIN({$t}.id)";
       case $p.'max_id': return "MAX({$t}.id)";
@@ -81,9 +83,11 @@ class _FileSql extends EntitySql{
       case "{$p}size": return $this->format->conditionNumber($this->_mappingField($field), $value, $option);
       case "{$p}size_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}size"), $value, $option);
 
-      case "{$p}created": return $this->format->conditionTimestamp($this->_mappingField($field), $value, $option);
-      case "{$p}created_date": return $this->format->conditionDate($this->_mappingField($field), $value, $option);
+      case "{$p}created": return $this->format->conditionDateTime($this->_mappingField($field), $value, $option, "Y-m-d H:i:s");
+      case "{$p}created_date": return $this->format->conditionDateTime($this->_mappingField($field), $value, $option, "Y-m-d");
       case "{$p}created_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}created"), $value, $option);
+      case "{$p}created_ym": return $this->format->conditionDateTimeAux($this->_mappingField($field), $value, $option, "Y-m");
+      case "{$p}created_y": return $this->format->conditionDateTimeAux($this->_mappingField($field), $value, $option, "Y");
 
 
       case "{$p}max_id": return $this->format->conditionNumber($this->_mappingField($field), $value, $option);
@@ -167,7 +171,7 @@ class _FileSql extends EntitySql{
     if(array_key_exists('type', $row)) $row_['type'] = $this->format->string($row['type']);
     if(array_key_exists('content', $row)) $row_['content'] = $this->format->string($row['content']);
     if(array_key_exists('size', $row)) $row_['size'] = $this->format->numeric($row['size']);
-    if(array_key_exists('created', $row)) $row_['created'] = $this->format->timestamp($row['created']);
+    if(array_key_exists('created', $row)) $row_['created'] = $this->format->dateTime($row['created'], "Y-m-d H:i:s");
 
     return $row_;
   }

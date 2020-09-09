@@ -14,12 +14,20 @@ class _AfiliacionSql extends EntitySql{
       case $p.'estado': return $t.".estado";
       case $p.'creado': return $t.".creado";
       case $p.'creado_date': return "CAST({$t}.creado AS DATE)";
+      case $p.'creado_ym': return "DATE_FORMAT({$t}.creado, '%Y-%m')";
+      case $p.'creado_y': return "DATE_FORMAT({$t}.creado, '%Y')";
       case $p.'enviado': return $t.".enviado";
       case $p.'enviado_date': return "CAST({$t}.enviado AS DATE)";
+      case $p.'enviado_ym': return "DATE_FORMAT({$t}.enviado, '%Y-%m')";
+      case $p.'enviado_y': return "DATE_FORMAT({$t}.enviado, '%Y')";
       case $p.'evaluado': return $t.".evaluado";
       case $p.'evaluado_date': return "CAST({$t}.evaluado AS DATE)";
+      case $p.'evaluado_ym': return "DATE_FORMAT({$t}.evaluado, '%Y-%m')";
+      case $p.'evaluado_y': return "DATE_FORMAT({$t}.evaluado, '%Y')";
       case $p.'modificado': return $t.".modificado";
       case $p.'modificado_date': return "CAST({$t}.modificado AS DATE)";
+      case $p.'modificado_ym': return "DATE_FORMAT({$t}.modificado, '%Y-%m')";
+      case $p.'modificado_y': return "DATE_FORMAT({$t}.modificado, '%Y')";
       case $p.'observaciones': return $t.".observaciones";
       case $p.'persona': return $t.".persona";
 
@@ -126,21 +134,29 @@ class _AfiliacionSql extends EntitySql{
       case "{$p}estado": return $this->format->conditionText($this->_mappingField($field), $value, $option);
       case "{$p}estado_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}estado"), $value, $option);
 
-      case "{$p}creado": return $this->format->conditionTimestamp($this->_mappingField($field), $value, $option);
-      case "{$p}creado_date": return $this->format->conditionDate($this->_mappingField($field), $value, $option);
+      case "{$p}creado": return $this->format->conditionDateTime($this->_mappingField($field), $value, $option, "Y-m-d H:i:s");
+      case "{$p}creado_date": return $this->format->conditionDateTime($this->_mappingField($field), $value, $option, "Y-m-d");
       case "{$p}creado_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}creado"), $value, $option);
+      case "{$p}creado_ym": return $this->format->conditionDateTimeAux($this->_mappingField($field), $value, $option, "Y-m");
+      case "{$p}creado_y": return $this->format->conditionDateTimeAux($this->_mappingField($field), $value, $option, "Y");
 
-      case "{$p}enviado": return $this->format->conditionTimestamp($this->_mappingField($field), $value, $option);
-      case "{$p}enviado_date": return $this->format->conditionDate($this->_mappingField($field), $value, $option);
+      case "{$p}enviado": return $this->format->conditionDateTime($this->_mappingField($field), $value, $option, "Y-m-d H:i:s");
+      case "{$p}enviado_date": return $this->format->conditionDateTime($this->_mappingField($field), $value, $option, "Y-m-d");
       case "{$p}enviado_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}enviado"), $value, $option);
+      case "{$p}enviado_ym": return $this->format->conditionDateTimeAux($this->_mappingField($field), $value, $option, "Y-m");
+      case "{$p}enviado_y": return $this->format->conditionDateTimeAux($this->_mappingField($field), $value, $option, "Y");
 
-      case "{$p}evaluado": return $this->format->conditionTimestamp($this->_mappingField($field), $value, $option);
-      case "{$p}evaluado_date": return $this->format->conditionDate($this->_mappingField($field), $value, $option);
+      case "{$p}evaluado": return $this->format->conditionDateTime($this->_mappingField($field), $value, $option, "Y-m-d H:i:s");
+      case "{$p}evaluado_date": return $this->format->conditionDateTime($this->_mappingField($field), $value, $option, "Y-m-d");
       case "{$p}evaluado_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}evaluado"), $value, $option);
+      case "{$p}evaluado_ym": return $this->format->conditionDateTimeAux($this->_mappingField($field), $value, $option, "Y-m");
+      case "{$p}evaluado_y": return $this->format->conditionDateTimeAux($this->_mappingField($field), $value, $option, "Y");
 
-      case "{$p}modificado": return $this->format->conditionTimestamp($this->_mappingField($field), $value, $option);
-      case "{$p}modificado_date": return $this->format->conditionDate($this->_mappingField($field), $value, $option);
+      case "{$p}modificado": return $this->format->conditionDateTime($this->_mappingField($field), $value, $option, "Y-m-d H:i:s");
+      case "{$p}modificado_date": return $this->format->conditionDateTime($this->_mappingField($field), $value, $option, "Y-m-d");
       case "{$p}modificado_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}modificado"), $value, $option);
+      case "{$p}modificado_ym": return $this->format->conditionDateTimeAux($this->_mappingField($field), $value, $option, "Y-m");
+      case "{$p}modificado_y": return $this->format->conditionDateTimeAux($this->_mappingField($field), $value, $option, "Y");
 
       case "{$p}observaciones": return $this->format->conditionText($this->_mappingField($field), $value, $option);
       case "{$p}observaciones_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}observaciones"), $value, $option);
@@ -281,10 +297,10 @@ class _AfiliacionSql extends EntitySql{
     if(array_key_exists('id', $row))  $row_['id'] = $this->format->string($row['id']);
     if(array_key_exists('motivo', $row)) $row_['motivo'] = $this->format->string($row['motivo']);
     if(array_key_exists('estado', $row)) $row_['estado'] = $this->format->string($row['estado']);
-    if(array_key_exists('creado', $row)) $row_['creado'] = $this->format->timestamp($row['creado']);
-    if(array_key_exists('enviado', $row)) $row_['enviado'] = $this->format->timestamp($row['enviado']);
-    if(array_key_exists('evaluado', $row)) $row_['evaluado'] = $this->format->timestamp($row['evaluado']);
-    if(array_key_exists('modificado', $row)) $row_['modificado'] = $this->format->timestamp($row['modificado']);
+    if(array_key_exists('creado', $row)) $row_['creado'] = $this->format->dateTime($row['creado'], "Y-m-d H:i:s");
+    if(array_key_exists('enviado', $row)) $row_['enviado'] = $this->format->dateTime($row['enviado'], "Y-m-d H:i:s");
+    if(array_key_exists('evaluado', $row)) $row_['evaluado'] = $this->format->dateTime($row['evaluado'], "Y-m-d H:i:s");
+    if(array_key_exists('modificado', $row)) $row_['modificado'] = $this->format->dateTime($row['modificado'], "Y-m-d H:i:s");
     if(array_key_exists('observaciones', $row)) $row_['observaciones'] = $this->format->string($row['observaciones']);
     if(array_key_exists('persona', $row)) $row_['persona'] = $this->format->string($row['persona']);
 

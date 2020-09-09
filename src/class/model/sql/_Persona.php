@@ -20,8 +20,12 @@ class _PersonaSql extends EntitySql{
       case $p.'email': return $t.".email";
       case $p.'creado': return $t.".creado";
       case $p.'creado_date': return "CAST({$t}.creado AS DATE)";
+      case $p.'creado_ym': return "DATE_FORMAT({$t}.creado, '%Y-%m')";
+      case $p.'creado_y': return "DATE_FORMAT({$t}.creado, '%Y')";
       case $p.'eliminado': return $t.".eliminado";
       case $p.'eliminado_date': return "CAST({$t}.eliminado AS DATE)";
+      case $p.'eliminado_ym': return "DATE_FORMAT({$t}.eliminado, '%Y-%m')";
+      case $p.'eliminado_y': return "DATE_FORMAT({$t}.eliminado, '%Y')";
       case $p.'cargo': return $t.".cargo";
       case $p.'organo': return $t.".organo";
       case $p.'departamento_judicial': return $t.".departamento_judicial";
@@ -167,19 +171,23 @@ class _PersonaSql extends EntitySql{
       case "{$p}telefono_particular": return $this->format->conditionText($this->_mappingField($field), $value, $option);
       case "{$p}telefono_particular_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}telefono_particular"), $value, $option);
 
-      case "{$p}fecha_nacimiento": return $this->format->conditionDate($this->_mappingField($field), $value, $option);
+      case "{$p}fecha_nacimiento": return $this->format->conditionDateTime($this->_mappingField($field), $value, $option, "Y-m-d");
       case "{$p}fecha_nacimiento_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}fecha_nacimiento"), $value, $option);
 
       case "{$p}email": return $this->format->conditionText($this->_mappingField($field), $value, $option);
       case "{$p}email_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}email"), $value, $option);
 
-      case "{$p}creado": return $this->format->conditionTimestamp($this->_mappingField($field), $value, $option);
-      case "{$p}creado_date": return $this->format->conditionDate($this->_mappingField($field), $value, $option);
+      case "{$p}creado": return $this->format->conditionDateTime($this->_mappingField($field), $value, $option, "Y-m-d H:i:s");
+      case "{$p}creado_date": return $this->format->conditionDateTime($this->_mappingField($field), $value, $option, "Y-m-d");
       case "{$p}creado_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}creado"), $value, $option);
+      case "{$p}creado_ym": return $this->format->conditionDateTimeAux($this->_mappingField($field), $value, $option, "Y-m");
+      case "{$p}creado_y": return $this->format->conditionDateTimeAux($this->_mappingField($field), $value, $option, "Y");
 
-      case "{$p}eliminado": return $this->format->conditionTimestamp($this->_mappingField($field), $value, $option);
-      case "{$p}eliminado_date": return $this->format->conditionDate($this->_mappingField($field), $value, $option);
+      case "{$p}eliminado": return $this->format->conditionDateTime($this->_mappingField($field), $value, $option, "Y-m-d H:i:s");
+      case "{$p}eliminado_date": return $this->format->conditionDateTime($this->_mappingField($field), $value, $option, "Y-m-d");
       case "{$p}eliminado_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}eliminado"), $value, $option);
+      case "{$p}eliminado_ym": return $this->format->conditionDateTimeAux($this->_mappingField($field), $value, $option, "Y-m");
+      case "{$p}eliminado_y": return $this->format->conditionDateTimeAux($this->_mappingField($field), $value, $option, "Y");
 
       case "{$p}cargo": return $this->format->conditionText($this->_mappingField($field), $value, $option);
       case "{$p}cargo_is_set": return $this->format->conditionIsSet($this->_mappingField("{$p}cargo"), $value, $option);
@@ -398,10 +406,10 @@ class _PersonaSql extends EntitySql{
     if(array_key_exists('numero_documento', $row)) $row_['numero_documento'] = $this->format->string($row['numero_documento']);
     if(array_key_exists('telefono_laboral', $row)) $row_['telefono_laboral'] = $this->format->string($row['telefono_laboral']);
     if(array_key_exists('telefono_particular', $row)) $row_['telefono_particular'] = $this->format->string($row['telefono_particular']);
-    if(array_key_exists('fecha_nacimiento', $row)) $row_['fecha_nacimiento'] = $this->format->date($row['fecha_nacimiento']);
+    if(array_key_exists('fecha_nacimiento', $row)) $row_['fecha_nacimiento'] = $this->format->dateTime($row['fecha_nacimiento'], "Y-m-d");
     if(array_key_exists('email', $row)) $row_['email'] = $this->format->string($row['email']);
-    if(array_key_exists('creado', $row)) $row_['creado'] = $this->format->timestamp($row['creado']);
-    if(array_key_exists('eliminado', $row)) $row_['eliminado'] = $this->format->timestamp($row['eliminado']);
+    if(array_key_exists('creado', $row)) $row_['creado'] = $this->format->dateTime($row['creado'], "Y-m-d H:i:s");
+    if(array_key_exists('eliminado', $row)) $row_['eliminado'] = $this->format->dateTime($row['eliminado'], "Y-m-d H:i:s");
     if(array_key_exists('cargo', $row)) $row_['cargo'] = $this->format->string($row['cargo']);
     if(array_key_exists('organo', $row)) $row_['organo'] = $this->format->string($row['organo']);
     if(array_key_exists('departamento_judicial', $row)) $row_['departamento_judicial'] = $this->format->string($row['departamento_judicial']);
