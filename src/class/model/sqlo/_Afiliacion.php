@@ -9,7 +9,7 @@ class _AfiliacionSqlo extends EntitySqlo {
 
   public $entityName = "afiliacion";
 
-  protected function _insert(array $row){ //@override
+  public function insert(array $row){ //@override
       $sql = "
   INSERT INTO " . $this->entity->sn_() . " (";
       $sql .= "id, " ;
@@ -42,7 +42,7 @@ VALUES ( ";
     return $sql;
   }
 
-  protected function _update(array $row){ //@override
+  public function _update(array $row){ //@override
     $sql = "
 UPDATE " . $this->entity->sn_() . " SET
 ";
@@ -62,25 +62,25 @@ UPDATE " . $this->entity->sn_() . " SET
 
   public function json(array $row = null){
     if(empty($row)) return null;
-    $row_ = $this->container->getValues($this->entity->getName())->_fromArray($row)->_toArray();
-    if(!is_null($row['per_id'])) $row_["persona_"] = $this->container->getValues('persona')->_fromArray($row, 'per_')->_toArray();
-    if(!is_null($row['per_car_id'])) $row_["persona_"]["cargo_"] = $this->container->getValues('cargo')->_fromArray($row, 'per_car_')->_toArray();
-    if(!is_null($row['per_org_id'])) $row_["persona_"]["organo_"] = $this->container->getValues('organo')->_fromArray($row, 'per_org_')->_toArray();
-    if(!is_null($row['per_dj_id'])) $row_["persona_"]["departamento_judicial_"] = $this->container->getValues('departamento_judicial')->_fromArray($row, 'per_dj_')->_toArray();
-    if(!is_null($row['per_dji_id'])) $row_["persona_"]["departamento_judicial_informado_"] = $this->container->getValues('departamento_judicial')->_fromArray($row, 'per_dji_')->_toArray();
-    if(!is_null($row['per_td_id'])) $row_["persona_"]["tipo_documento_"] = $this->container->getValues('tipo_documento')->_fromArray($row, 'per_td_')->_toArray();
+    $row_ = $this->container->getValue($this->entity->getName())->_fromArray($row, "set")->_toArray("json");
+    if(!is_null($row['per_id'])) $row_["persona_"] = $this->container->getValue('persona', 'per')->_fromArray($row, "set")->_toArray("json");
+    if(!is_null($row['per_car_id'])) $row_["persona_"]["cargo_"] = $this->container->getValue('cargo', 'per_car')->_fromArray($row, "set")->_toArray("json");
+    if(!is_null($row['per_org_id'])) $row_["persona_"]["organo_"] = $this->container->getValue('organo', 'per_org')->_fromArray($row, "set")->_toArray("json");
+    if(!is_null($row['per_dj_id'])) $row_["persona_"]["departamento_judicial_"] = $this->container->getValue('departamento_judicial', 'per_dj')->_fromArray($row, "set")->_toArray("json");
+    if(!is_null($row['per_dji_id'])) $row_["persona_"]["departamento_judicial_informado_"] = $this->container->getValue('departamento_judicial', 'per_dji')->_fromArray($row, "set")->_toArray("json");
+    if(!is_null($row['per_td_id'])) $row_["persona_"]["tipo_documento_"] = $this->container->getValue('tipo_documento', 'per_td')->_fromArray($row, "set")->_toArray("json");
     return $row_;
   }
 
   public function values(array $row){
     $row_ = [];
-    $row_["afiliacion"] = $this->container->getValues("afiliacion")->_fromArray($row);
-    $row_["persona"] = $this->container->getValues('persona')->_fromArray($row, 'per_');
-    $row_["cargo"] = $this->container->getValues('cargo')->_fromArray($row, 'per_car_');
-    $row_["organo"] = $this->container->getValues('organo')->_fromArray($row, 'per_org_');
-    $row_["departamento_judicial"] = $this->container->getValues('departamento_judicial')->_fromArray($row, 'per_dj_');
-    $row_["departamento_judicial_informado"] = $this->container->getValues('departamento_judicial')->_fromArray($row, 'per_dji_');
-    $row_["tipo_documento"] = $this->container->getValues('tipo_documento')->_fromArray($row, 'per_td_');
+    $row_["afiliacion"] = $this->container->getValue("afiliacion")->_fromArray($row, "set");
+    $row_["persona"] = $this->container->getValue('persona', 'per')->_fromArray($row, "set");
+    $row_["cargo"] = $this->container->getValue('cargo', 'per_car')->_fromArray($row, "set");
+    $row_["organo"] = $this->container->getValue('organo', 'per_org')->_fromArray($row, "set");
+    $row_["departamento_judicial"] = $this->container->getValue('departamento_judicial', 'per_dj')->_fromArray($row, "set");
+    $row_["departamento_judicial_informado"] = $this->container->getValue('departamento_judicial', 'per_dji')->_fromArray($row, "set");
+    $row_["tipo_documento"] = $this->container->getValue('tipo_documento', 'per_td')->_fromArray($row, "set");
     return $row_;
   }
 
