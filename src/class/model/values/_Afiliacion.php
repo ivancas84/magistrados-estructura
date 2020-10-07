@@ -15,15 +15,15 @@ class _Afiliacion extends EntityValues {
   protected $persona = UNDEFINED;
 
   public function _setDefault(){
-    if($this->id == UNDEFINED) $this->setId(uniqid());
-    if($this->motivo == UNDEFINED) $this->setMotivo('Alta');
-    if($this->estado == UNDEFINED) $this->setEstado('Creado');
-    if($this->creado == UNDEFINED) $this->setCreado(date('c'));
-    if($this->enviado == UNDEFINED) $this->setEnviado(null);
-    if($this->evaluado == UNDEFINED) $this->setEvaluado(null);
-    if($this->modificado == UNDEFINED) $this->setModificado(null);
-    if($this->observaciones == UNDEFINED) $this->setObservaciones(null);
-    if($this->persona == UNDEFINED) $this->setPersona(null);
+    if($this->id === UNDEFINED) $this->setId(uniqid());
+    if($this->motivo === UNDEFINED) $this->setMotivo('Alta');
+    if($this->estado === UNDEFINED) $this->setEstado('Creado');
+    if($this->creado === UNDEFINED) $this->setCreado(date('c'));
+    if($this->enviado === UNDEFINED) $this->setEnviado(null);
+    if($this->evaluado === UNDEFINED) $this->setEvaluado(null);
+    if($this->modificado === UNDEFINED) $this->setModificado(null);
+    if($this->observaciones === UNDEFINED) $this->setObservaciones(null);
+    if($this->persona === UNDEFINED) $this->setPersona(null);
     return $this;
   }
 
