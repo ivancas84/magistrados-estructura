@@ -12,12 +12,12 @@ class _File extends EntityValues {
   protected $created = UNDEFINED;
 
   public function _setDefault(){
-    if($this->id == UNDEFINED) $this->setId(uniqid());
-    if($this->name == UNDEFINED) $this->setName(null);
-    if($this->type == UNDEFINED) $this->setType(null);
-    if($this->content == UNDEFINED) $this->setContent(null);
-    if($this->size == UNDEFINED) $this->setSize(null);
-    if($this->created == UNDEFINED) $this->setCreated(date('c'));
+    if($this->id === UNDEFINED) $this->setId(uniqid());
+    if($this->name === UNDEFINED) $this->setName(null);
+    if($this->type === UNDEFINED) $this->setType(null);
+    if($this->content === UNDEFINED) $this->setContent(null);
+    if($this->size === UNDEFINED) $this->setSize(null);
+    if($this->created === UNDEFINED) $this->setCreated(date('c'));
     return $this;
   }
 

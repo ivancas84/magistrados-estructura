@@ -8,8 +8,8 @@ class _Organo extends EntityValues {
   protected $descripcion = UNDEFINED;
 
   public function _setDefault(){
-    if($this->id == UNDEFINED) $this->setId(uniqid());
-    if($this->descripcion == UNDEFINED) $this->setDescripcion(null);
+    if($this->id === UNDEFINED) $this->setId(uniqid());
+    if($this->descripcion === UNDEFINED) $this->setDescripcion(null);
     return $this;
   }
 

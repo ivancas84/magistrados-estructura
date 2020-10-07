@@ -22,22 +22,22 @@ class _Persona extends EntityValues {
   protected $tipoDocumento = UNDEFINED;
 
   public function _setDefault(){
-    if($this->id == UNDEFINED) $this->setId(uniqid());
-    if($this->nombres == UNDEFINED) $this->setNombres(null);
-    if($this->apellidos == UNDEFINED) $this->setApellidos(null);
-    if($this->legajo == UNDEFINED) $this->setLegajo(null);
-    if($this->numeroDocumento == UNDEFINED) $this->setNumeroDocumento(null);
-    if($this->telefonoLaboral == UNDEFINED) $this->setTelefonoLaboral(null);
-    if($this->telefonoParticular == UNDEFINED) $this->setTelefonoParticular(null);
-    if($this->fechaNacimiento == UNDEFINED) $this->setFechaNacimiento(null);
-    if($this->email == UNDEFINED) $this->setEmail(null);
-    if($this->creado == UNDEFINED) $this->setCreado(date('c'));
-    if($this->eliminado == UNDEFINED) $this->setEliminado(null);
-    if($this->cargo == UNDEFINED) $this->setCargo(null);
-    if($this->organo == UNDEFINED) $this->setOrgano(null);
-    if($this->departamentoJudicial == UNDEFINED) $this->setDepartamentoJudicial(null);
-    if($this->departamentoJudicialInformado == UNDEFINED) $this->setDepartamentoJudicialInformado(null);
-    if($this->tipoDocumento == UNDEFINED) $this->setTipoDocumento(null);
+    if($this->id === UNDEFINED) $this->setId(uniqid());
+    if($this->nombres === UNDEFINED) $this->setNombres(null);
+    if($this->apellidos === UNDEFINED) $this->setApellidos(null);
+    if($this->legajo === UNDEFINED) $this->setLegajo(null);
+    if($this->numeroDocumento === UNDEFINED) $this->setNumeroDocumento(null);
+    if($this->telefonoLaboral === UNDEFINED) $this->setTelefonoLaboral(null);
+    if($this->telefonoParticular === UNDEFINED) $this->setTelefonoParticular(null);
+    if($this->fechaNacimiento === UNDEFINED) $this->setFechaNacimiento(null);
+    if($this->email === UNDEFINED) $this->setEmail(null);
+    if($this->creado === UNDEFINED) $this->setCreado(date('c'));
+    if($this->eliminado === UNDEFINED) $this->setEliminado(null);
+    if($this->cargo === UNDEFINED) $this->setCargo(null);
+    if($this->organo === UNDEFINED) $this->setOrgano(null);
+    if($this->departamentoJudicial === UNDEFINED) $this->setDepartamentoJudicial(null);
+    if($this->departamentoJudicialInformado === UNDEFINED) $this->setDepartamentoJudicialInformado(null);
+    if($this->tipoDocumento === UNDEFINED) $this->setTipoDocumento(null);
     return $this;
   }
 
