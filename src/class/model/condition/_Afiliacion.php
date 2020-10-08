@@ -13,7 +13,7 @@ class _AfiliacionCondition extends ConditionEntityOptions{
   }
 
   public function idIsSet($option, $value) { 
-    return $this->_exists($this->mapping->id(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->id(), $option, settypebool($value));
   }
 
   public function motivo($option, $value) { 
@@ -26,7 +26,7 @@ class _AfiliacionCondition extends ConditionEntityOptions{
   }
 
   public function motivoIsSet($option, $value) { 
-    return $this->_exists($this->mapping->motivo(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->motivo(), $option, settypebool($value));
   }
 
   public function estado($option, $value) { 
@@ -39,7 +39,7 @@ class _AfiliacionCondition extends ConditionEntityOptions{
   }
 
   public function estadoIsSet($option, $value) { 
-    return $this->_exists($this->mapping->estado(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->estado(), $option, settypebool($value));
   }
 
   public function creado($option, $value) { 
@@ -79,7 +79,7 @@ class _AfiliacionCondition extends ConditionEntityOptions{
   }
 
   public function creadoIsSet($option, $value) { 
-    return $this->_exists($this->mapping->creado(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->creado(), $option, settypebool($value));
   }
 
   public function enviado($option, $value) { 
@@ -119,7 +119,7 @@ class _AfiliacionCondition extends ConditionEntityOptions{
   }
 
   public function enviadoIsSet($option, $value) { 
-    return $this->_exists($this->mapping->enviado(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->enviado(), $option, settypebool($value));
   }
 
   public function evaluado($option, $value) { 
@@ -159,7 +159,7 @@ class _AfiliacionCondition extends ConditionEntityOptions{
   }
 
   public function evaluadoIsSet($option, $value) { 
-    return $this->_exists($this->mapping->evaluado(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->evaluado(), $option, settypebool($value));
   }
 
   public function modificado($option, $value) { 
@@ -199,7 +199,7 @@ class _AfiliacionCondition extends ConditionEntityOptions{
   }
 
   public function modificadoIsSet($option, $value) { 
-    return $this->_exists($this->mapping->modificado(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->modificado(), $option, settypebool($value));
   }
 
   public function observaciones($option, $value) { 
@@ -212,7 +212,7 @@ class _AfiliacionCondition extends ConditionEntityOptions{
   }
 
   public function observacionesIsSet($option, $value) { 
-    return $this->_exists($this->mapping->observaciones(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->observaciones(), $option, settypebool($value));
   }
 
   public function persona($option, $value) { 
@@ -225,7 +225,7 @@ class _AfiliacionCondition extends ConditionEntityOptions{
   }
 
   public function personaIsSet($option, $value) { 
-    return $this->_exists($this->mapping->persona(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->persona(), $option, settypebool($value));
   }
 
 

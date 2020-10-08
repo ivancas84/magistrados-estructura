@@ -13,7 +13,7 @@ class _DepartamentoJudicialCondition extends ConditionEntityOptions{
   }
 
   public function idIsSet($option, $value) { 
-    return $this->_exists($this->mapping->id(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->id(), $option, settypebool($value));
   }
 
   public function codigo($option, $value) { 
@@ -26,7 +26,7 @@ class _DepartamentoJudicialCondition extends ConditionEntityOptions{
   }
 
   public function codigoIsSet($option, $value) { 
-    return $this->_exists($this->mapping->codigo(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->codigo(), $option, settypebool($value));
   }
 
   public function nombre($option, $value) { 
@@ -39,7 +39,7 @@ class _DepartamentoJudicialCondition extends ConditionEntityOptions{
   }
 
   public function nombreIsSet($option, $value) { 
-    return $this->_exists($this->mapping->nombre(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->nombre(), $option, settypebool($value));
   }
 
 

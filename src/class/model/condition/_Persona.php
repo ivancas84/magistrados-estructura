@@ -13,7 +13,7 @@ class _PersonaCondition extends ConditionEntityOptions{
   }
 
   public function idIsSet($option, $value) { 
-    return $this->_exists($this->mapping->id(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->id(), $option, settypebool($value));
   }
 
   public function nombres($option, $value) { 
@@ -26,7 +26,7 @@ class _PersonaCondition extends ConditionEntityOptions{
   }
 
   public function nombresIsSet($option, $value) { 
-    return $this->_exists($this->mapping->nombres(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->nombres(), $option, settypebool($value));
   }
 
   public function apellidos($option, $value) { 
@@ -39,7 +39,7 @@ class _PersonaCondition extends ConditionEntityOptions{
   }
 
   public function apellidosIsSet($option, $value) { 
-    return $this->_exists($this->mapping->apellidos(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->apellidos(), $option, settypebool($value));
   }
 
   public function legajo($option, $value) { 
@@ -52,7 +52,7 @@ class _PersonaCondition extends ConditionEntityOptions{
   }
 
   public function legajoIsSet($option, $value) { 
-    return $this->_exists($this->mapping->legajo(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->legajo(), $option, settypebool($value));
   }
 
   public function numeroDocumento($option, $value) { 
@@ -65,7 +65,7 @@ class _PersonaCondition extends ConditionEntityOptions{
   }
 
   public function numeroDocumentoIsSet($option, $value) { 
-    return $this->_exists($this->mapping->numeroDocumento(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->numeroDocumento(), $option, settypebool($value));
   }
 
   public function telefonoLaboral($option, $value) { 
@@ -78,7 +78,7 @@ class _PersonaCondition extends ConditionEntityOptions{
   }
 
   public function telefonoLaboralIsSet($option, $value) { 
-    return $this->_exists($this->mapping->telefonoLaboral(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->telefonoLaboral(), $option, settypebool($value));
   }
 
   public function telefonoParticular($option, $value) { 
@@ -91,7 +91,7 @@ class _PersonaCondition extends ConditionEntityOptions{
   }
 
   public function telefonoParticularIsSet($option, $value) { 
-    return $this->_exists($this->mapping->telefonoParticular(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->telefonoParticular(), $option, settypebool($value));
   }
 
   public function fechaNacimiento($option, $value) { 
@@ -122,7 +122,7 @@ class _PersonaCondition extends ConditionEntityOptions{
   }
 
   public function fechaNacimientoIsSet($option, $value) { 
-    return $this->_exists($this->mapping->fechaNacimiento(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->fechaNacimiento(), $option, settypebool($value));
   }
 
   public function email($option, $value) { 
@@ -135,7 +135,7 @@ class _PersonaCondition extends ConditionEntityOptions{
   }
 
   public function emailIsSet($option, $value) { 
-    return $this->_exists($this->mapping->email(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->email(), $option, settypebool($value));
   }
 
   public function creado($option, $value) { 
@@ -175,7 +175,7 @@ class _PersonaCondition extends ConditionEntityOptions{
   }
 
   public function creadoIsSet($option, $value) { 
-    return $this->_exists($this->mapping->creado(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->creado(), $option, settypebool($value));
   }
 
   public function eliminado($option, $value) { 
@@ -215,7 +215,7 @@ class _PersonaCondition extends ConditionEntityOptions{
   }
 
   public function eliminadoIsSet($option, $value) { 
-    return $this->_exists($this->mapping->eliminado(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->eliminado(), $option, settypebool($value));
   }
 
   public function cargo($option, $value) { 
@@ -228,7 +228,7 @@ class _PersonaCondition extends ConditionEntityOptions{
   }
 
   public function cargoIsSet($option, $value) { 
-    return $this->_exists($this->mapping->cargo(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->cargo(), $option, settypebool($value));
   }
 
   public function organo($option, $value) { 
@@ -241,7 +241,7 @@ class _PersonaCondition extends ConditionEntityOptions{
   }
 
   public function organoIsSet($option, $value) { 
-    return $this->_exists($this->mapping->organo(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->organo(), $option, settypebool($value));
   }
 
   public function departamentoJudicial($option, $value) { 
@@ -254,7 +254,7 @@ class _PersonaCondition extends ConditionEntityOptions{
   }
 
   public function departamentoJudicialIsSet($option, $value) { 
-    return $this->_exists($this->mapping->departamentoJudicial(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->departamentoJudicial(), $option, settypebool($value));
   }
 
   public function departamentoJudicialInformado($option, $value) { 
@@ -267,7 +267,7 @@ class _PersonaCondition extends ConditionEntityOptions{
   }
 
   public function departamentoJudicialInformadoIsSet($option, $value) { 
-    return $this->_exists($this->mapping->departamentoJudicialInformado(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->departamentoJudicialInformado(), $option, settypebool($value));
   }
 
   public function tipoDocumento($option, $value) { 
@@ -280,7 +280,7 @@ class _PersonaCondition extends ConditionEntityOptions{
   }
 
   public function tipoDocumentoIsSet($option, $value) { 
-    return $this->_exists($this->mapping->tipoDocumento(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->tipoDocumento(), $option, settypebool($value));
   }
 
 

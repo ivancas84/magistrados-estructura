@@ -13,7 +13,7 @@ class _FileCondition extends ConditionEntityOptions{
   }
 
   public function idIsSet($option, $value) { 
-    return $this->_exists($this->mapping->id(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->id(), $option, settypebool($value));
   }
 
   public function name($option, $value) { 
@@ -26,7 +26,7 @@ class _FileCondition extends ConditionEntityOptions{
   }
 
   public function nameIsSet($option, $value) { 
-    return $this->_exists($this->mapping->name(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->name(), $option, settypebool($value));
   }
 
   public function type($option, $value) { 
@@ -39,7 +39,7 @@ class _FileCondition extends ConditionEntityOptions{
   }
 
   public function typeIsSet($option, $value) { 
-    return $this->_exists($this->mapping->type(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->type(), $option, settypebool($value));
   }
 
   public function content($option, $value) { 
@@ -52,7 +52,7 @@ class _FileCondition extends ConditionEntityOptions{
   }
 
   public function contentIsSet($option, $value) { 
-    return $this->_exists($this->mapping->content(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->content(), $option, settypebool($value));
   }
 
   public function size($option, $value) { 
@@ -65,7 +65,7 @@ class _FileCondition extends ConditionEntityOptions{
   }
 
     public function sizeIsSet($option, $value) { 
-    return $this->_exists($this->mapping->size(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->size(), $option, settypebool($value));
   }
 
   public function created($option, $value) { 
@@ -105,7 +105,7 @@ class _FileCondition extends ConditionEntityOptions{
   }
 
   public function createdIsSet($option, $value) { 
-    return $this->_exists($this->mapping->created(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->created(), $option, settypebool($value));
   }
 
 

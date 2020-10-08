@@ -13,7 +13,7 @@ class _TipoDocumentoCondition extends ConditionEntityOptions{
   }
 
   public function idIsSet($option, $value) { 
-    return $this->_exists($this->mapping->id(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->id(), $option, settypebool($value));
   }
 
   public function descripcion($option, $value) { 
@@ -26,7 +26,7 @@ class _TipoDocumentoCondition extends ConditionEntityOptions{
   }
 
   public function descripcionIsSet($option, $value) { 
-    return $this->_exists($this->mapping->descripcion(), $option, settypebool($value));
+    return $this->sql->exists($this->mapping->descripcion(), $option, settypebool($value));
   }
 
 
