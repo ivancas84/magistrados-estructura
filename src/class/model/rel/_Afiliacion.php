@@ -1,7 +1,7 @@
 <?php
-require_once("class/model/Sql.php");
+require_once("class/model/Rel.php");
 
-class _AfiliacionSql extends EntitySql{
+class _AfiliacionRel extends EntityRel{
 
   public function mappingField($field){
     if($f = $this->container->getMapping($this->entity->getName())->_eval($field)) return $f;
@@ -53,6 +53,30 @@ class _AfiliacionSql extends EntitySql{
     if($c = $this->container->getConditionAux('departamento_judicial','per_dj')->_eval($field, [$option, $value])) return $c;
     if($c = $this->container->getConditionAux('departamento_judicial','per_dji')->_eval($field, [$option, $value])) return $c;
     if($c = $this->container->getConditionAux('tipo_documento','per_td')->_eval($field, [$option, $value])) return $c;
+  }
+
+  public function json(array $row = null){
+    if(empty($row)) return null;
+    $row_ = $this->container->getValue($this->entity->getName())->_fromArray($row, "set")->_toArray("json");
+    if(!is_null($row['per_id'])) $row_["persona_"] = $this->container->getValue('persona', 'per')->_fromArray($row, "set")->_toArray("json");
+    if(!is_null($row['per_car_id'])) $row_["persona_"]["cargo_"] = $this->container->getValue('cargo', 'per_car')->_fromArray($row, "set")->_toArray("json");
+    if(!is_null($row['per_org_id'])) $row_["persona_"]["organo_"] = $this->container->getValue('organo', 'per_org')->_fromArray($row, "set")->_toArray("json");
+    if(!is_null($row['per_dj_id'])) $row_["persona_"]["departamento_judicial_"] = $this->container->getValue('departamento_judicial', 'per_dj')->_fromArray($row, "set")->_toArray("json");
+    if(!is_null($row['per_dji_id'])) $row_["persona_"]["departamento_judicial_informado_"] = $this->container->getValue('departamento_judicial', 'per_dji')->_fromArray($row, "set")->_toArray("json");
+    if(!is_null($row['per_td_id'])) $row_["persona_"]["tipo_documento_"] = $this->container->getValue('tipo_documento', 'per_td')->_fromArray($row, "set")->_toArray("json");
+    return $row_;
+  }
+
+  public function values(array $row){
+    $row_ = [];
+    $row_["afiliacion"] = $this->container->getValue("afiliacion")->_fromArray($row, "set");
+    $row_["persona"] = $this->container->getValue('persona', 'per')->_fromArray($row, "set");
+    $row_["cargo"] = $this->container->getValue('cargo', 'per_car')->_fromArray($row, "set");
+    $row_["organo"] = $this->container->getValue('organo', 'per_org')->_fromArray($row, "set");
+    $row_["departamento_judicial"] = $this->container->getValue('departamento_judicial', 'per_dj')->_fromArray($row, "set");
+    $row_["departamento_judicial_informado"] = $this->container->getValue('departamento_judicial', 'per_dji')->_fromArray($row, "set");
+    $row_["tipo_documento"] = $this->container->getValue('tipo_documento', 'per_td')->_fromArray($row, "set");
+    return $row_;
   }
 
 
