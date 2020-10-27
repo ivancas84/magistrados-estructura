@@ -6,16 +6,13 @@ class _FieldDepartamentoJudicialCodigo extends Field {
 
   public $type = "varchar";
   public $fieldType = "nf";
-  public $unique = false;
-  public $notNull = true;
   public $default = null;
-  public $length = "45";
-  public $main = false;
   public $name = "codigo";
   public $alias = "cod";
-
-
-  public function getEntity(){ return $this->container->getEntity('departamento_judicial'); }
+  public $entityName = "departamento_judicial";
+  public $dataType = "string";  
+  public $subtype = "text";  
+  public $length = "45";  
 
 
 }

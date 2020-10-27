@@ -6,18 +6,14 @@ class _FieldPersonaCargo extends Field {
 
   public $type = "varchar";
   public $fieldType = "mu";
-  public $unique = false;
-  public $notNull = false;
   public $default = null;
-  public $length = "45";
-  public $main = false;
   public $name = "cargo";
   public $alias = "car";
-
-
-  public function getEntity(){ return $this->container->getEntity('persona'); }
-
-  public function getEntityRef(){ return $this->container->getEntity('cargo'); }
+  public $entityName = "persona";
+  public $entityRefName = "cargo";  
+  public $dataType = "string";  
+  public $subtype = "typeahead";  
+  public $length = "45";  
 
 
 }

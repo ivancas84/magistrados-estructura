@@ -6,16 +6,13 @@ class _FieldPersonaId extends Field {
 
   public $type = "varchar";
   public $fieldType = "pk";
-  public $unique = true;
-  public $notNull = true;
   public $default = null;
-  public $length = "45";
-  public $main = true;
   public $name = "id";
   public $alias = "id";
-
-
-  public function getEntity(){ return $this->container->getEntity('persona'); }
+  public $entityName = "persona";
+  public $dataType = "string";  
+  public $subtype = "text";  
+  public $length = "45";  
 
 
 }

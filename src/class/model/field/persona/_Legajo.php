@@ -6,16 +6,13 @@ class _FieldPersonaLegajo extends Field {
 
   public $type = "varchar";
   public $fieldType = "nf";
-  public $unique = true;
-  public $notNull = true;
   public $default = null;
-  public $length = "45";
-  public $main = false;
   public $name = "legajo";
   public $alias = "leg";
-
-
-  public function getEntity(){ return $this->container->getEntity('persona'); }
+  public $entityName = "persona";
+  public $dataType = "string";  
+  public $subtype = "text";  
+  public $length = "45";  
 
 
 }

@@ -6,16 +6,13 @@ class _FieldAfiliacionObservaciones extends Field {
 
   public $type = "text";
   public $fieldType = "nf";
-  public $unique = false;
-  public $notNull = false;
   public $default = null;
-  public $length = "65535";
-  public $main = false;
   public $name = "observaciones";
   public $alias = "obs";
-
-
-  public function getEntity(){ return $this->container->getEntity('afiliacion'); }
+  public $entityName = "afiliacion";
+  public $dataType = "text";  
+  public $subtype = "textarea";  
+  public $length = "65535";  
 
 
 }

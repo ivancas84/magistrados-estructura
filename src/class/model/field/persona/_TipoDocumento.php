@@ -6,18 +6,14 @@ class _FieldPersonaTipoDocumento extends Field {
 
   public $type = "varchar";
   public $fieldType = "mu";
-  public $unique = false;
-  public $notNull = false;
   public $default = null;
-  public $length = "45";
-  public $main = false;
   public $name = "tipo_documento";
   public $alias = "td";
-
-
-  public function getEntity(){ return $this->container->getEntity('persona'); }
-
-  public function getEntityRef(){ return $this->container->getEntity('tipo_documento'); }
+  public $entityName = "persona";
+  public $entityRefName = "tipo_documento";  
+  public $dataType = "string";  
+  public $subtype = "typeahead";  
+  public $length = "45";  
 
 
 }

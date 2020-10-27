@@ -1,8 +1,8 @@
 <?php
 
-require_once("class/model/value/_Persona.php");
+require_once("class/model/entityOptions/Value.php");
 
-class PersonaValue extends _PersonaValue {
+class PersonaValue extends ValueEntityOptions {
   public function resetNombres() { 
     if(!Validation::is_empty($this->nombres)) 
       $this->nombres = strto(

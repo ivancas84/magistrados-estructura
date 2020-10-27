@@ -6,20 +6,11 @@ require_once("class/model/Field.php");
 class _FileEntity extends Entity {
   public $name = "file";
   public $alias = "file";
- 
-  public function getPk(){
-    return $this->container->getField("file", "id");
-  }
-
-  public function getFieldsNf(){
-    return array(
-      $this->container->getField("file", "name"),
-      $this->container->getField("file", "type"),
-      $this->container->getField("file", "content"),
-      $this->container->getField("file", "size"),
-      $this->container->getField("file", "created"),
-    );
-  }
+  public $nf = ['name', 'type', 'content', 'size', 'created'];
+  public $mu = [];
+  public $_u = [];
+  public $notNull = ['id', 'name', 'type', 'content', 'size', 'created'];
+  public $unique = ['id'];
 
 
 }

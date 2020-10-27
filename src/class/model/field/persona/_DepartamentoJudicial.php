@@ -6,18 +6,14 @@ class _FieldPersonaDepartamentoJudicial extends Field {
 
   public $type = "varchar";
   public $fieldType = "mu";
-  public $unique = false;
-  public $notNull = true;
   public $default = null;
-  public $length = "45";
-  public $main = false;
   public $name = "departamento_judicial";
   public $alias = "dj";
-
-
-  public function getEntity(){ return $this->container->getEntity('persona'); }
-
-  public function getEntityRef(){ return $this->container->getEntity('departamento_judicial'); }
+  public $entityName = "persona";
+  public $entityRefName = "departamento_judicial";  
+  public $dataType = "string";  
+  public $subtype = "typeahead";  
+  public $length = "45";  
 
 
 }

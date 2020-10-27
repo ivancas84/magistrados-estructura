@@ -6,16 +6,11 @@ require_once("class/model/Field.php");
 class _OrganoEntity extends Entity {
   public $name = "organo";
   public $alias = "orga";
- 
-  public function getPk(){
-    return $this->container->getField("organo", "id");
-  }
-
-  public function getFieldsNf(){
-    return array(
-      $this->container->getField("organo", "descripcion"),
-    );
-  }
+  public $nf = ['descripcion'];
+  public $mu = [];
+  public $_u = [];
+  public $notNull = ['id', 'descripcion'];
+  public $unique = ['id'];
 
 
 }

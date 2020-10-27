@@ -6,16 +6,13 @@ class _FieldFileSize extends Field {
 
   public $type = "int";
   public $fieldType = "nf";
-  public $unique = false;
-  public $notNull = true;
   public $default = null;
-  public $length = "10";
-  public $main = false;
   public $name = "size";
   public $alias = "siz";
-
-
-  public function getEntity(){ return $this->container->getEntity('file'); }
+  public $entityName = "file";
+  public $dataType = "integer";  
+  public $subtype = "integer";  
+  public $length = "10";  
 
 
 }

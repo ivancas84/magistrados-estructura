@@ -1,0 +1,19 @@
+persona - per
+cargo - per_car
+organo - per_org
+departamento_judicial - per_dj
+departamento_judicial - per_dji
+tipo_documento - per_td
+
+id (id): string pk. NOT NULL. MAIN. UNIQUE.
+motivo (mot): string nf. NOT NULL. DEFAULT: Alta.
+estado (est): string nf. NOT NULL. DEFAULT: Creado.
+creado (cre): timestamp nf. NOT NULL. DEFAULT: current_timestamp().
+enviado (env): timestamp nf.
+evaluado (eva): timestamp nf.
+modificado (moa): timestamp nf.
+observaciones (obs): text nf.
+desde (des): date nf.
+hasta (has): date nf.
+monto (mon): float nf.
+persona (per): string mu. NOT NULL.
