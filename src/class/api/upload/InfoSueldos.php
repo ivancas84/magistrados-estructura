@@ -17,8 +17,12 @@ class InfoSueldosUploadApi extends UploadApi {
   public $detail = [];
     
   public function main() {
-    $file = Filter::fileRequired("file");
-    $this->organo = Filter::postRequired("organo");
+    $args = array("file" => array('filter'=> FILTER_DEFAULT,  'flags' => FILTER_REQUIRE_ARRAY));
+    $files = filter_var_array($_FILES, $args);
+    if(!isset($files["file"])) throw new Exception("Archivo " . "file" . " sin definir");
+    $file = $files["file"];
+
+    $this->organo = filter_input(INPUT_POST, "organo");
     $this->evaluado = date("c");
 
     if ( $file["error"] > 0 ) throw new Exception ( "Error al subir archivo");
