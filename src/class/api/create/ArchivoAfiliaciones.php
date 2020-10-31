@@ -8,7 +8,7 @@ class ArchivoAfiliacionesCreateApi extends BaseApi {
    */
 
   public $dir = null;
-  public $permission = "write";
+  public $permission = "w";
 
   public function main() {
     $this->container->getAuth()->authorize($this->entityName, $this->permission);
@@ -35,7 +35,6 @@ class ArchivoAfiliacionesCreateApi extends BaseApi {
   }
   
   public function filterOrgano(){
-    require_once("class/tools/Filter.php");
     $data = file_get_contents("php://input");
     if(!$data) throw new Exception("Error al obtener datos de input");
     $data = json_decode($data, true);
