@@ -4,18 +4,18 @@ require_once("class/model/entityOptions/Value.php");
 
 class PersonaValue extends ValueEntityOptions {
   public function resetNombres() { 
-    if(!Validation::is_empty($this->nombres)) 
-      $this->nombres = strto(
-        preg_replace('/\s\s+/', ' ', trim($this->nombres)),
+      $this->value["nombres"] = strto(
+        preg_replace('/\s\s+/', ' ', trim($this->value["nombres"])),
         "Xx Yy"
       ); 
+
   }
   
   public function resetApellidos() { 
-    if(!Validation::is_empty($this->apellidos)) 
-      $this->apellidos = strto(
-        preg_replace('/\s\s+/', ' ', trim($this->apellidos)), 
+    
+    $this->value["apellidos"] = strto(
+        preg_replace('/\s\s+/', ' ', trim($this->value["apellidos"])), 
         "Xx Yy"
-      ); 
+      );
   }
 }
