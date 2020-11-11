@@ -3,7 +3,7 @@ require_once("../config/config.php");
 
 
 function get_dir_contents($dir, &$results = array()) {
-    $files = scandir($dir);
+    $files = scandir($dir, SCANDIR_SORT_DESCENDING);
 
     foreach ($files as $key => $value) {
         $path = $dir . DIRECTORY_SEPARATOR . $value;
