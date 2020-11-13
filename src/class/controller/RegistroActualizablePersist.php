@@ -10,8 +10,8 @@ class RegistroActualizablePersist {
   public $noModificadas = []; //afiliaciones no modificadas (se consultan para el caso de que)
 
   public function main($data){    
-    $persist = $this->container->getControllerEntity("registro_actualizable_persist_sql",$this->entityName);
-    $this->container->getDb()->multi_query_transaction_log($persist["sql"]);
+    $persist = $this->container->getControllerEntity("registro_actualizable_persist_sql",$this->entityName)->main($data);
+    $this->container->getDb()->multi_query_transaction($persist["sql"]);
     return ["id" => $persist["id"], "detail" => $persist["detail"]];
   }
 }

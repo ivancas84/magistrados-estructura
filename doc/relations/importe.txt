@@ -1,0 +1,4 @@
+id (id): string pk. NOT NULL. MAIN. UNIQUE.
+valor (val): float nf. NOT NULL.
+periodo (per): date nf. NOT NULL.
+creado (cre): timestamp nf. NOT NULL. DEFAULT: current_timestamp().

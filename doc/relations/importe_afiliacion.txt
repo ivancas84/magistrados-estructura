@@ -1,0 +1,13 @@
+afiliacion - afi
+persona - afi_per
+cargo - afi_per_car
+organo - afi_per_org
+departamento_judicial - afi_per_dj
+departamento_judicial - afi_per_dji
+tipo_documento - afi_per_td
+importe - imp
+
+id (id): string pk. NOT NULL. MAIN. UNIQUE.
+creado (cre): timestamp nf. NOT NULL. DEFAULT: current_timestamp().
+afiliacion (afi): string mu. NOT NULL.
+importe (imp): string _u. NOT NULL. UNIQUE.

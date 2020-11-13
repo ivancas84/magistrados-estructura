@@ -110,3 +110,55 @@ CREATE TABLE IF NOT EXISTS `afiliacion` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_spanish_ci;
+
+
+
+CREATE TABLE IF NOT EXISTS `magistrados`.`importe` (
+  `id` VARCHAR(45) NOT NULL,
+  `valor` DECIMAL(12,2) NOT NULL,
+  `periodo` DATE NOT NULL,
+  `creado` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_spanish_ci;
+
+CREATE TABLE IF NOT EXISTS `magistrados`.`importe_afiliacion` (
+  `id` VARCHAR(45) NOT NULL,
+  `creado` TIMESTAMP NOT NULL DEFAULT current_timestamp,
+  `afiliacion` VARCHAR(45) NOT NULL,
+  `importe` VARCHAR(45) NOT NULL UNIQUE,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_importe_afiliacion_afiliacion`
+    FOREIGN KEY (`afiliacion`)
+    REFERENCES `magistrados`.`afiliacion` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
+  CONSTRAINT `fk_importe_afiliacion_importe`
+    FOREIGN KEY (`importe`)
+    REFERENCES `magistrados`.`importe` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_spanish_ci;
+
+CREATE TABLE IF NOT EXISTS `magistrados`.`importe_tramite_excepcional` (
+  `id` VARCHAR(45) NOT NULL,
+  `creado` TIMESTAMP NOT NULL DEFAULT current_timestamp,
+  `tramite_excepcional` VARCHAR(45) NOT NULL,
+  `importe` VARCHAR(45) NOT NULL UNIQUE,
+  PRIMARY KEY (`id`),   
+  CONSTRAINT `fk_importe_tramite_excepcional_tramite_excepcional`
+    FOREIGN KEY (`tramite_excepcional`)
+    REFERENCES `magistrados`.`tramite_excepcional` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
+  CONSTRAINT `fk_importe_tramite_excepcional_importe`
+    FOREIGN KEY (`importe`)
+    REFERENCES `magistrados`.`importe` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_spanish_ci;

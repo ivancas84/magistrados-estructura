@@ -11,6 +11,28 @@ function get_entity_relations($entityName) {
       'per_td' => 'tipo_documento',
     ];
 
+    case 'importe_afiliacion': return [
+      'afi' => 'afiliacion',
+      'afi_per' => 'persona',
+      'afi_per_car' => 'cargo',
+      'afi_per_org' => 'organo',
+      'afi_per_dj' => 'departamento_judicial',
+      'afi_per_dji' => 'departamento_judicial',
+      'afi_per_td' => 'tipo_documento',
+      'imp' => 'importe',
+    ];
+
+    case 'importe_tramite_excepcional': return [
+      'te' => 'tramite_excepcional',
+      'te_per' => 'persona',
+      'te_per_car' => 'cargo',
+      'te_per_org' => 'organo',
+      'te_per_dj' => 'departamento_judicial',
+      'te_per_dji' => 'departamento_judicial',
+      'te_per_td' => 'tipo_documento',
+      'imp' => 'importe',
+    ];
+
     case 'persona': return [
       'car' => 'cargo',
       'org' => 'organo',
