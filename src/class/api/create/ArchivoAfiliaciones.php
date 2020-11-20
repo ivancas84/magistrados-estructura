@@ -26,7 +26,7 @@ class ArchivoAfiliacionesCreateApi extends BaseApi {
       $this->fwrite($file, $ac);      
     }
     fclose($file);
-    if(!empty($sql)) $this->container->getDb()->multi_query_last_log($sql);
+    if(!empty($sql)) $this->container->getDb()->multi_query_last($sql);
 
     return [
       "path" => $path,
