@@ -1,6 +1,7 @@
 <?php
 
 require_once("class/api/Base.php");
+require_once("function/php_input.php");
 
 class ArchivoAfiliacionesCreateApi extends BaseApi {
   /**
@@ -10,76 +11,92 @@ class ArchivoAfiliacionesCreateApi extends BaseApi {
   public $dir = null;
   public $permission = "w";
 
+  protected $data = []; //parametros
+  protected $afiliacionesCreadas = []; //afiliaciones creadas que seran enviadas
+  protected $path; //path donde se definira el archivo
+  protected $file; //referencia al archivo
+  protected $detail = []; //detalle de entidades modificadas
+
   public function main() {
     $this->container->getAuth()->authorize($this->entityName, $this->permission);
 
-    $idOrgano = $this->filterOrgano();
-    $afiliacionesCreadas = $this->consultarAfiliacionesCreadas($idOrgano);
-    $detail = [];
-    $sql = "";
-    $path = $this->createPath($idOrgano);
-    $file = $this->openFile($path);
-    foreach($afiliacionesCreadas as $ac){
-      $value = $this->valueToUpdate($ac["id"]);
-      $sql .= $this->container->getSqlo("afiliacion")->update($value->_toArray("sql"));
-      array_push($detail, "afiliacion".$value->_get("id"));
-      $this->fwrite($file, $ac);      
-    }
-    fclose($file);
-    if(!empty($sql)) $this->container->getDb()->multi_query_last($sql);
+    $this->data = php_input();
+    $this->verificarAfiliacionesEnviadas(); //verificar si hay afiliaciones enviadas en el periodo ingresado
+    $this->consultarAfiliacionesCreadas(); //consultar afiliaciones creadas
+    $this->createPath();
+    $this->openFile();
+    $this->enviarAfiliaciones();
 
     return [
-      "path" => $path,
-      "detail" => $detail,
+      "path" => $this->path,
+      "detail" => $this->detail,
     ];
   }
   
-  public function filterOrgano(){
-    $data = file_get_contents("php://input");
-    if(!$data) throw new Exception("Error al obtener datos de input");
-    $data = json_decode($data, true);
-    if (!isset($data["organo"])) throw new Exception("El órgano no se encuentra definido");
-    return $data["organo"];
+  protected function verificarAfiliacionesEnviadas(){
+    $render = [
+      ["modificado.is_set", "=", false],
+      ["estado", "=", "Enviado"],
+      ["per-organo", "=", $this->data["organo"]],
+      ["enviado.ym","=",$this->data["periodo"]]
+    ];
+
+    if($this->container->getDb()->count("afiliacion", $render)) 
+      throw new Exception("El periodo ingresado ya fue enviado");
   }
   
-  public function consultarAfiliacionesCreadas($idOrgano){
+  public function consultarAfiliacionesCreadas(){
     $render = [
       ["modificado.is_set", "=", false],
       ["estado", "=", "Creado"],
       ["motivo", "=", ["Alta", "Baja"]],
-      ["per-organo", "=", $idOrgano],
+      ["per-organo", "=", $this->data["organo"]],
     ];
 
-    $r = $this->container->getDb()->all("afiliacion", $render);
-    if(empty($r)) throw new Exception("No existen afiliaciones creadas para el órgano solicitado");
-    return $r;
+    $this->afiliacionesCreadas = $this->container->getDb()->all("afiliacion", $render);
+    if(empty($this->afiliacionesCreadas)) throw new Exception("No existen afiliaciones creadas para el órgano solicitado");
   }
 
-  public function valueToUpdate($idAfiliacion){
+  
+
+  public function createPath(){
+    $dir = $_SERVER["DOCUMENT_ROOT"] . "/" . PATH_FILE . "/";
+    $subpath = date("Y/");
+    if(!file_exists($dir)) mkdir($dir.$subpath, 0755, true);
+    $organo = $this->container->getDb()->get("organo", $this->data["organo"]);
+    require_once("function/acronym.php");
+    $periodo = new DateTime($this->data["periodo"]);
+    $this->path = $subpath.$periodo->format("Y-m_").acronym($organo["descripcion"]).".txt";    
+  }
+
+  protected function openFile(){
+    $this->file = fopen($_SERVER["DOCUMENT_ROOT"] . "/" . PATH_FILE . "/".$this->path, "w");
+    if(!$this->file) throw new Exception("Error al crear archivo");
+  }
+
+  protected function enviarAfiliaciones(){    
+    $sql = "";
+    
+    foreach($this->afiliacionesCreadas as $ac){
+      $value = $this->valueToUpdate($ac["id"]);
+      $sql .= $this->container->getSqlo("afiliacion")->update($value->_toArray("sql"));
+      array_push($this->detail, "afiliacion".$value->_get("id"));
+      $this->fwrite($ac);      
+    }
+    fclose($this->file);
+    if(!empty($sql)) $this->container->getDb()->multi_query_last($sql);
+  }
+
+  private function fwrite($ac){    
+    $v = $this->container->getRel("afiliacion")->value($ac);
+    fwrite($this->file, $v["persona"]->_get("nombres"));
+  }
+
+  private function valueToUpdate($idAfiliacion){
     $value = $this->container->getValue("afiliacion");
     $value->_fastSet("id", $idAfiliacion);
     $value->_fastSet("enviado", new DateTime());
     $value->_fastSet("estado", "Enviado");
     return $value;
-  }
-
-  public function createPath($idOrgano){
-    $dir = $_SERVER["DOCUMENT_ROOT"] . "/" . PATH_FILE . "/";
-    $subpath = date("Y/");
-    if(!file_exists($dir)) mkdir($dir.$subpath, 0755, true);
-    $idOrgano = $this->container->getDb()->get("organo", $idOrgano);
-    require_once("function/acronym.php");
-    return $subpath.date("Y-m_").acronym($idOrgano["descripcion"]).".txt";    
-  }
-
-  public function openFile($path){
-    $file = fopen($_SERVER["DOCUMENT_ROOT"] . "/" . PATH_FILE . "/".$path, "w");
-    if(!$file) throw new Exception("Error al crear archivo");
-    return $file;
-  }
-
-  public function fwrite($file, $ac){    
-    $v = $this->container->getRel("afiliacion")->value($ac);
-    fwrite($file, $v["persona"]->_get("nombres"));
   }
 }

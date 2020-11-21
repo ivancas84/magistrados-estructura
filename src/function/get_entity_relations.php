@@ -19,7 +19,6 @@ function get_entity_relations($entityName) {
       'afi_per_dj' => 'departamento_judicial',
       'afi_per_dji' => 'departamento_judicial',
       'afi_per_td' => 'tipo_documento',
-      'imp' => 'importe',
     ];
 
     case 'importe_tramite_excepcional': return [
@@ -30,7 +29,6 @@ function get_entity_relations($entityName) {
       'te_per_dj' => 'departamento_judicial',
       'te_per_dji' => 'departamento_judicial',
       'te_per_td' => 'tipo_documento',
-      'imp' => 'importe',
     ];
 
     case 'persona': return [

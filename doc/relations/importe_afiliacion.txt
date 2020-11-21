@@ -5,9 +5,9 @@ organo - afi_per_org
 departamento_judicial - afi_per_dj
 departamento_judicial - afi_per_dji
 tipo_documento - afi_per_td
-importe - imp
 
 id (id): string pk. NOT NULL. MAIN. UNIQUE.
 creado (cre): timestamp nf. NOT NULL. DEFAULT: current_timestamp().
+valor (val): float nf. NOT NULL.
+periodo (per): date nf. NOT NULL.
 afiliacion (afi): string mu. NOT NULL.
-importe (imp): string _u. NOT NULL. UNIQUE.

@@ -5,6 +5,9 @@ require_once("function/filter_file.php");
 require_once("function/filter_post.php");
 require_once("function/php_input.php");
 require_once("function/set_log_db.php");
+require_once("function/nombres_parecidos.php");
+
+
 set_time_limit ( 0 );
 
 class ArchivoSueldosUploadApi extends UploadApi {
@@ -19,7 +22,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
    */
 
   public $departamentosJudiciales;
-  public $personas; 
+  public $personas = []; 
   public $respuesta = []; //respuesta al cliente
   /**
    * Array asociativo con los siguientes elementos
@@ -55,6 +58,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
     $this->respuesta["tramite_excepcional"] = [];    
 
     $this->verificarPeriodo(); //Analizar si no existen evaluaciones para el periodo ingresado  
+    
     $this->definirRegistros(); //Definir archivo["afiliacion"] y archivo["tramite_excepcional"] a evaluar
     
     if(!count($this->archivo["afiliacion"])) throw new Exception("No existen afiliaciones para procesar");
@@ -71,6 +75,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
     $this->procesarRegistrosBajasEnviadas("tramite_excepcional"); //respuesta de tramite_excepcional_bajas_aprobadas y tramite_excepcional_bajas_rechazadas
 
     $this->consultarPersonas(); //consultar personas de registos restantes
+    $this->verificarOrgano(); //verificar que las personas consultadas pertenezcan al mismo organo indicado
     $this->procesarRegistrosRestantes("afiliacion"); //respuesta de afiliacion_altas_automaticas
     $this->procesarRegistrosRestantes("tramite_excepcional"); //respuesta de tramite_excepcional_altas_automaticas
 
@@ -83,7 +88,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
   public function verificarPeriodo(){    
     $render = new Render();
     $render->setCondition([
-      ["imp-periodo.ym", "=", $this->periodo],
+      ["periodo.ym", "=", $this->periodo],
       ["afi_per-organo","=",$this->organo]
     ]);        
     $cantidad = $this->container->getDb()->count("importe_afiliacion", $render);
@@ -91,7 +96,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
 
     $render = new Render();
     $render->setCondition([
-      ["imp-periodo.ym", "=", $this->periodo],
+      ["periodo.ym", "=", $this->periodo],
       ["te_per-organo","=",$this->organo]
     ]);        
     $cantidad = $this->container->getDb()->count("importe_tramite_excepcional", $render);
@@ -105,9 +110,9 @@ class ArchivoSueldosUploadApi extends UploadApi {
     
     for($i = 0; $i < count($lines); $i++){
       $lines[$i] = trim($lines[$i]);
-
-      if(strlen($lines[$i]) != $this->longitudFila){ //if adicional para mayor eficiencia        
-        if(strlen($lines[$i]) > $this->longitudFila)  //longitud menor se ignora, longitud mayor se guarda error
+      
+      if(mb_strlen($lines[$i]) != $this->longitudFila){ //if adicional para mayor eficiencia        
+        if(mb_strlen($lines[$i]) > $this->longitudFila)  //longitud menor se ignora, longitud mayor se guarda error
           array_push($this->respuesta["errors"], "La longitud de la fila " . ($i + 1) . " supera el máximo permitido");
         continue;
       }
@@ -163,7 +168,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
     return explode(PHP_EOL, $content);
   }
 
-  public function definirRegistroDeLinea($line){
+  protected function definirRegistroDeLinea($line){
     //obtiene un registro en funcion de la linea considerando las variables segun el organo
     $reg = [
       "codigo_departamento" => substr($line,0,2),
@@ -210,7 +215,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
     
     foreach($registrosExistentes as $legajo => $registro){
       if(!empty($this->archivo[$tipo][$legajo])) { //el registro esta en el archivo y ya existia en la base
-        array_push($this->respuesta[$tipo]["altas_existentes"], $registro);
+        array_push($this->respuesta[$tipo]["altas_existentes"], $registro);      
         $this->agregarImporteRegistro($tipo, $registro["id"], $this->archivo[$tipo][$legajo]["monto"]);
         unset($this->archivo[$tipo][$legajo]); //eliminar registro del archivo que ya fue procesada
       } else {
@@ -222,15 +227,16 @@ class ArchivoSueldosUploadApi extends UploadApi {
 
   public function procesarRegistrosAltasEnviadas($tipo){
     $enviadas = $this->consultarRegistrosAltasEnviadas($tipo);
-
     $this->respuesta[$tipo]["altas_aprobadas"] = [];
     $this->respuesta[$tipo]["altas_rechazadas"] = [];
 
     foreach($enviadas as $legajo => $registro){
+
       if(!empty($this->archivo[$tipo][$legajo])) {
+        $this->verificarNombres($registro,$this->archivo[$tipo][$legajo]);
         $this->evaluarRegistro($tipo, $registro["id"], "Aprobado");
         array_push($this->respuesta[$tipo]["altas_aprobadas"], $registro);
-        $this->agregarImporteRegistro($registro["id"], $this->archivo[$tipo][$legajo]["monto"]);
+        $this->agregarImporteRegistro($tipo, $registro["id"], $this->archivo[$tipo][$legajo]["monto"]);
         unset($this->archivo[$tipo][$legajo]);
       } else {
         $this->evaluarRegistro($tipo, $registro["id"], "Rechazado");
@@ -355,13 +361,8 @@ class ArchivoSueldosUploadApi extends UploadApi {
 
 
   protected function agregarImporteRegistro($tipo, $id, $valor){
-    $persist = $this->container->getController("persist_sql");
-    $importe = ["valor"=>$valor, "periodo"=>$this->periodo];
-    $p = $persist->id("importe", $importe);
-    $this->sql .= $p["sql"];
-    
-    $importe = [$tipo=>$id, "importe"=>$p["id"]];
-    $p = $persist->id("importe_" . $tipo, $importe);
+    $importe = [$tipo=>$id, "valor"=>$valor, "periodo"=>$this->periodo];
+    $p = $this->container->getController("persist_sql")->id("importe_" . $tipo, $importe);
     $this->sql .= $p["sql"];
   }
 
@@ -413,7 +414,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
     $render->setSize(false);
 
     $personas = $this->container->getDb()->all("persona", $render);
-    $this->personas = array_combine_key($personas, "legajo");
+    $this->personas = (!empty($personas)) ? array_combine_key($personas, "legajo") : [];
   }
 
   public function definirIdPersona($legajo, $registro){
@@ -431,5 +432,20 @@ class ArchivoSueldosUploadApi extends UploadApi {
     return $p["id"];
   }
 
+  protected function verificarNombres($registro, $archivo){
+    if(!nombres_parecidos(
+      $registro["per_nombres"]. " ".$registro["per_apellidos"],
+      $archivo["nombres"] . " " . $archivo["apellidos"]
+    )) array_push($this->respuesta["errors"], "Legajo " . $archivo["legajo"] . " no coincide el nombre con el del archivo");
+  }
+
+  protected function verificarOrgano(){
+    foreach($this->personas as $persona){
+      if($persona["organo"]!=$this->organo) array_push($this->respuesta["errors"], "Legajo " . $persona["legajo"] . " esta cargado con otro organo");
+    }
+    
+    
+    
+  }
 }
 

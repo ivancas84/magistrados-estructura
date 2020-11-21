@@ -34,7 +34,7 @@ class RegistroActualizablePersistSql {
 
   public function actualizar($value){    
     $registros = $this->consultarNoModificadas($value->_get("persona"));
-    $this->verificarEstadoEnviado($registros);
+    //$this->verificarEstadoEnviado($registros);
     return $this->actualizarNoModificadas($registros);
   }
 

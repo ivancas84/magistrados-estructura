@@ -5,9 +5,9 @@ organo - te_per_org
 departamento_judicial - te_per_dj
 departamento_judicial - te_per_dji
 tipo_documento - te_per_td
-importe - imp
 
 id (id): string pk. NOT NULL. MAIN. UNIQUE.
 creado (cre): timestamp nf. NOT NULL. DEFAULT: current_timestamp().
+valor (val): float nf. NOT NULL.
+periodo (per): date nf. NOT NULL.
 tramite_excepcional (te): string mu. NOT NULL.
-importe (imp): string _u. NOT NULL. UNIQUE.
