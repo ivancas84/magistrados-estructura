@@ -11,7 +11,6 @@ class AfiliacionPersistApi extends BaseApi {
     $persist = $this->container->getControllerEntity("registro_actualizable_persist_sql",$this->entityName)->main($data);
     $this->container->getDb()->multi_query_transaction($persist["sql"]);
     return ["id" => $persist["id"], "detail" => $persist["detail"]];
-    return ["id"=>$persist["id"], "detail"=>$persist["detail"]];
   }
 
 }

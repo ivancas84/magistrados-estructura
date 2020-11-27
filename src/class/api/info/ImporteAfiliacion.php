@@ -3,7 +3,7 @@ require_once("class/api/Base.php");
 require_once("class/model/Render.php");
 require_once("function/php_input.php");
 require_once("function/array_combine_key.php");
-class ImporteInfoApi extends BaseApi {
+class ImporteAfiliacionInfoApi extends BaseApi {
   /**
    * Controlador base
    * Elementos en comun a todos los controladores
@@ -16,14 +16,16 @@ class ImporteInfoApi extends BaseApi {
     $data = php_input();
     
     $render = new Render();
-    $render->setFields(["count", "valor.sum"]);
-    $render->setGroup(["afi_per-departamento_judicial"]);
     $render->setSize(false);
+
     $render->setCondition([
       ["periodo.ym","=",$data["periodo"]],
+      ["afi_per-departamento_judicial"],
+      ["afi_per-organo","=",$data["organo"]]
     ]);
 
-    if($data["organo"]) $render->addCondition(["afi_per-organo","=",$data["organo"]]);
+    if($data["cargo"]) $render->addCondition(["afi_per-cargo","=",$data["cargo"]]);
+    if($data["departamento_judicial_informado"]) $render->addCondition(["afi_per-cargo","=",$data["cargo"]]);
 
 
     $calculosIniciales = array_combine_key(

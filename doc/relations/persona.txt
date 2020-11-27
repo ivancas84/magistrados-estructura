@@ -13,6 +13,7 @@ telefono_laboral (tl): string nf.
 telefono_particular (tp): string nf.
 fecha_nacimiento (fn): date nf.
 email (ema): string nf.
+tribunal (tri): string nf.
 creado (cre): timestamp nf. NOT NULL. DEFAULT: current_timestamp().
 eliminado (eli): timestamp nf.
 cargo (car): string mu.

@@ -8,8 +8,9 @@ class TramiteExcepcionalPersistApi extends BaseApi {
     $data = file_get_contents("php://input");
     if(!$data) throw new Exception("Error al obtener datos de input");    
     if(empty($data = json_decode($data, true))) throw new Exception("Conjunto de datos vacío");
-    $persist = $this->container->getControllerEntity("registro_actualizable_persist","tramite_excepcional")->main($data);
-    return ["id"=>$persist["id"], "detail"=>$persist["detail"]];
+    $persist = $this->container->getControllerEntity("registro_actualizable_persist_sql","tramite_excepcional")->main($data);
+    $this->container->getDb()->multi_query_transaction($persist["sql"]);
+    return ["id" => $persist["id"], "detail" => $persist["detail"]];
   }
 
 }
