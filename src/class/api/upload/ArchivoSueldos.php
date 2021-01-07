@@ -61,7 +61,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
     
     $this->definirRegistros(); //Definir archivo["afiliacion"] y archivo["tramite_excepcional"] a evaluar
     
-    if(!count($this->archivo["afiliacion"])) throw new Exception("No existen afiliaciones para procesar");
+    if(!count($this->archivo["afiliacion"]) && !count($this->archivo["tramite_excepcional"])) throw new Exception("No existen afiliaciones para procesar");
     
     $this->consultarDepartamentosJudiciales(); //consultar departamentos judiciales (array asociativo donde la llave es el codigo del departamento judicial)
     
@@ -260,7 +260,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
       } else {        
         $this->evaluarRegistro($tipo, $registro["id"], "Rechazado");
         $monto = (!empty($registro["monto"])) ? $registro["monto"] : null;
-        $this->crearRegistro($tipo, $registro["persona"], "Alta", $monto );
+        $this->crearRegistroActualizar($tipo, $registro["persona"], "Alta", $monto );
         $this->actualizarDepartamentoJudicialRegistro($registro["per_departamento_judicial_informado"], $registro["per_id"], $tipo, $legajo); 
         $this->verificarNombres($registro["per_nombres"]. " ".$registro["per_apellidos"], $this->archivo[$tipo][$legajo]["nombres"] . " " . $this->archivo[$tipo][$legajo]["apellidos"], $legajo);
         if($tipo == "tramite_excepcional") $this->verificarImporteRegistro80($tipo, $legajo, $registro["monto"], $this->archivo[$tipo][$legajo]["monto"]);        
@@ -374,7 +374,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
     $this->sql .= $p["sql"];
   }
 
-  public function crearRegistroActualizar($tipo, $idPersona, $motivo){    
+  public function crearRegistroActualizar($tipo, $idPersona, $motivo, $valor=null){    
     $registro = [
       "persona" => $idPersona,
       "creado" => $this->evaluado->format("c"),
@@ -382,6 +382,10 @@ class ArchivoSueldosUploadApi extends UploadApi {
       "motivo" => $motivo,
       "estado" => "Aprobado",
     ];
+
+    if($tipo == "tramite_excepcional") {
+      $registro["monto"] = $valor;
+    }
 
     $persist = $this->container->getControllerEntity("registro_actualizable_persist_sql",$tipo)->main($registro);
     $this->sql .= $persist["sql"];
@@ -433,19 +437,21 @@ class ArchivoSueldosUploadApi extends UploadApi {
     if(array_key_exists($legajo,$this->personas)) {
       $this->actualizarDepartamentoJudicialRegistro($this->personas[$legajo]["departamento_judicial_informado"], $this->personas[$legajo]["id"], $tipo, $legajo); 
       $this->verificarNombres($this->personas[$legajo]["nombres"]. " ".$this->personas[$legajo]["apellidos"], $this->archivo[$tipo][$legajo]["nombres"] . " " . $this->archivo[$tipo][$legajo]["apellidos"], $legajo);
-      return $this->personas[$legajo]["id"];
+    } else {
+      $this->crearPersona($registro, $legajo);
     }
-    return $this->crearPersona($registro);
+    return $this->personas[$legajo]["id"];
   }
 
-  public function crearPersona($registro){
+  public function crearPersona($registro, $legajo){
     $persistSql = $this->container->getController("persist_sql");
     $registro["organo"] = $this->organo;
     $registro["departamento_judicial"] = $this->departamentosJudiciales[$registro["codigo_departamento"]]["id"];
     $registro["departamento_judicial_informado"] = $this->departamentosJudiciales[$registro["codigo_departamento"]]["id"];
     $p = $persistSql->id("persona", $registro);
     $this->sql .= $p["sql"];
-    return $p["id"];
+    $this->personas[$legajo] = $registro;
+    $this->personas[$legajo]["id"] = $p["id"];
   }
 
   protected function verificarNombres($nombre1, $nombre2, $legajo){
