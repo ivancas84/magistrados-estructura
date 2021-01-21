@@ -16,4 +16,5 @@ observaciones (obs): text nf.
 desde (des): date nf.
 hasta (has): date nf.
 monto (mon): float nf.
+modificacion (mob): boolean nf. NOT NULL.
 persona (per): string mu. NOT NULL.
