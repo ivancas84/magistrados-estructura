@@ -29,7 +29,8 @@ function get_entity_tree($entityName) {
           'te_per_org' => ['field_id'=>'organo', 'field_name'=>'organo', 'entity_name'=>'organo', 'children'=>[]],
           'te_per_dj' => ['field_id'=>'departamento_judicial', 'field_name'=>'departamento_judicial', 'entity_name'=>'departamento_judicial', 'children'=>[]],
           'te_per_dji' => ['field_id'=>'departamento_judicial_informado', 'field_name'=>'departamento_judicial_informado', 'entity_name'=>'departamento_judicial', 'children'=>[]],
-          'te_per_td' => ['field_id'=>'tipo_documento', 'field_name'=>'tipo_documento', 'entity_name'=>'tipo_documento', 'children'=>[]],]],]],    ];
+          'te_per_td' => ['field_id'=>'tipo_documento', 'field_name'=>'tipo_documento', 'entity_name'=>'tipo_documento', 'children'=>[]],]],
+        'te_suc' => ['field_id'=>'sucursal', 'field_name'=>'sucursal', 'entity_name'=>'sucursal', 'children'=>[]],]],    ];
 
     case 'persona': return [
 
@@ -46,7 +47,8 @@ function get_entity_tree($entityName) {
         'per_org' => ['field_id'=>'organo', 'field_name'=>'organo', 'entity_name'=>'organo', 'children'=>[]],
         'per_dj' => ['field_id'=>'departamento_judicial', 'field_name'=>'departamento_judicial', 'entity_name'=>'departamento_judicial', 'children'=>[]],
         'per_dji' => ['field_id'=>'departamento_judicial_informado', 'field_name'=>'departamento_judicial_informado', 'entity_name'=>'departamento_judicial', 'children'=>[]],
-        'per_td' => ['field_id'=>'tipo_documento', 'field_name'=>'tipo_documento', 'entity_name'=>'tipo_documento', 'children'=>[]],]],    ];
+        'per_td' => ['field_id'=>'tipo_documento', 'field_name'=>'tipo_documento', 'entity_name'=>'tipo_documento', 'children'=>[]],]],
+      'suc' => ['field_id'=>'sucursal', 'field_name'=>'sucursal', 'entity_name'=>'sucursal', 'children'=>[]],    ];
 
     default: return [];
   }

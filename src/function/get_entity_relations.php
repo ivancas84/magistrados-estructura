@@ -29,6 +29,7 @@ function get_entity_relations($entityName) {
       'te_per_dj' => 'departamento_judicial',
       'te_per_dji' => 'departamento_judicial',
       'te_per_td' => 'tipo_documento',
+      'te_suc' => 'sucursal',
     ];
 
     case 'persona': return [
@@ -46,6 +47,7 @@ function get_entity_relations($entityName) {
       'per_dj' => 'departamento_judicial',
       'per_dji' => 'departamento_judicial',
       'per_td' => 'tipo_documento',
+      'suc' => 'sucursal',
     ];
 
     default: return [];
