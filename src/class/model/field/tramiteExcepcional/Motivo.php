@@ -6,7 +6,7 @@ class FieldTramiteExcepcionalMotivo extends _FieldTramiteExcepcionalMotivo {
 
   public $default = "Alta";
   public $subtype ="select_text";
-  public $selectValues = ["Alta", "Baja", "Pendiente"];
+  public $selectValues = ["Alta", "Baja", "Modificación", "Pendiente"];
 
 
 }
