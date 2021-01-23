@@ -319,7 +319,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
     $render->setCondition([
       ["modificado.is_set", "=", false],
       ["estado", "=", "Enviado"],
-      ["motivo", "=", "Alta"],
+      ["motivo", "=", ["Alta","Modificación"]],
       ["per-organo", "=", $this->organo]
     ]);
 
