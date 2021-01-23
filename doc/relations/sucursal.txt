@@ -1,2 +1,2 @@
-id (id): string pk. NOT NULL. MAIN. UNIQUE.
-descripcion (des): string nf. NOT NULL.
+id (id): string pk. NOT NULL. UNIQUE.
+descripcion (des): string nf. NOT NULL. MAIN.
