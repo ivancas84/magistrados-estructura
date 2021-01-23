@@ -54,9 +54,16 @@ class ArchivoSueldosCreateApi extends BaseApi {
     $render->setCondition([
       ["modificado.is_set", "=", false],
       ["estado", "=", "Creado"],
-      ["motivo", "=", ["Alta", "Baja"]],
+      ["motivo", "=", ["Alta", "Baja","Modificación"]],
       ["per-organo", "=", $this->data["organo"]],
     ]);
+
+    /*
+    No se contempla por el momento el chequeo de fechas
+    Porque por ejemplo se puede dar de baja un registro fuera de las fechas
+    O a lo sumo se podria controlar el motivo, si es alta controlar fechas
+    si es baja no controlar fechas.
+    Por el momento no se controlan, se deja comentado el codigo a continuacion
 
     if($this->data["tipo"] == "tramite_excepcional"){
       $render->addCondition([
@@ -69,7 +76,7 @@ class ArchivoSueldosCreateApi extends BaseApi {
           ["hasta","=",false]
         ]
       ]);
-    }
+    }*/
 
     $this->registrosCreados = $this->container->getDb()->all($this->data["tipo"], $render);
     if(empty($this->registrosCreados)) throw new Exception("No existen registros creados para el órgano solicitado");
@@ -110,7 +117,19 @@ class ArchivoSueldosCreateApi extends BaseApi {
 
   private function fwrite($ac){    
     $v = $this->container->getRel($this->data["tipo"])->value($ac);
-    fwrite($this->file, $v["persona"]->_get("nombres").PHP_EOL);
+    //if($v["organo"] == "Ministerio Público"){
+
+      $codigo = "010";
+      $codigo .= $v["persona"]->_get("legajo");
+      $codigo .= "40";
+      $codigo .= "00000000000";
+      $codigo .= ($v[$this->data["tipo"]]->_get("motivo") == "Alta") ? "3" : "4";
+      $codigo .= "                                                     ";
+      $codigo .= ($v["departamento_judicial"]->_get("nombre") != "San Isidro") ? "1" : " ";
+      $codigo .= "                     ";
+      $codigo .= ($v["departamento_judicial"]->_get("nombre") == "San Isidro") ? "1" : " ";
+    //}  
+    fwrite($this->file,  $codigo.PHP_EOL);
   }
 
   private function valueToUpdate($idAfiliacion){
