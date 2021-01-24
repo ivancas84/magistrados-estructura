@@ -50,6 +50,11 @@ function get_entity_relations($entityName) {
       'suc' => 'sucursal',
     ];
 
+    case 'viatico': return [
+      'org' => 'organo',
+      'dj' => 'departamento_judicial',
+    ];
+
     default: return [];
   }
 }

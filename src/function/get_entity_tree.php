@@ -50,6 +50,11 @@ function get_entity_tree($entityName) {
         'per_td' => ['field_id'=>'tipo_documento', 'field_name'=>'tipo_documento', 'entity_name'=>'tipo_documento', 'children'=>[]],]],
       'suc' => ['field_id'=>'sucursal', 'field_name'=>'sucursal', 'entity_name'=>'sucursal', 'children'=>[]],    ];
 
+    case 'viatico': return [
+
+      'org' => ['field_id'=>'organo', 'field_name'=>'organo', 'entity_name'=>'organo', 'children'=>[]],
+      'dj' => ['field_id'=>'departamento_judicial', 'field_name'=>'departamento_judicial', 'entity_name'=>'departamento_judicial', 'children'=>[]],    ];
+
     default: return [];
   }
 }
