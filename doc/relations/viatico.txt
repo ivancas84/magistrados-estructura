@@ -7,3 +7,5 @@ valor (val): float nf. NOT NULL. DEFAULT: 0.00.
 periodo (per): date nf. NOT NULL.
 organo (org): string mu. NOT NULL.
 departamento_judicial (dj): string mu. NOT NULL.
+
+UNIQUE MULTIPLE: periodo, organo, departamento_judicial
