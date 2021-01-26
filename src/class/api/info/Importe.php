@@ -13,46 +13,66 @@ class ImporteInfoApi extends BaseApi {
   public $permission = "R";
 
   public function main() {
-    $data = php_input();
+    $this->data = php_input();
     
+    $importeAfiliaciones = array_combine_key(
+      $this->consultarImporteAfiliaciones(), 
+      "afi_per_departamento_judicial"
+    );
+
+    $viaticos = array_combine_key(
+      $this->consultarViaticos(), 
+      "departamento_judicial"
+    );
+
+    $departamentosJudiciales = array_combine_key(
+      $this->consultarDepartamentosJudiciales(), 
+      "id"
+    );
+
+    foreach($departamentosJudiciales as $id => &$dj){
+      $dj["importe"] = (array_key_exists($id, $importeAfiliaciones)) ? floatval($importeAfiliaciones[$id]["valor_sum"]) : 0;
+      $dj["afiliaciones"] = (array_key_exists($id, $importeAfiliaciones)) ? floatval($importeAfiliaciones[$id]["count"]) : 0;
+      $dj["cuota_asociativa"] = round($dj["importe"] * CUOTA_ASOCIATIVA, 2);
+      $dj["fam"] = round($dj["cuota_asociativa"] * FAM, 2);
+      $dj["total_deduccion"] = round($dj["fam"] + $dj["cuota_asociativa"],2);
+      $dj["viatico"] = (array_key_exists($id, $viaticos)) ? floatval($viaticos[$id]["valor"]) : 0;
+      $dj["total_pagar"] = round($dj["importe"] - $dj["total_deduccion"], 2); 
+      $dj["total"] = round($dj["total_deduccion"] + $dj["viatico"], 2);
+    }
+
+    return array_values($departamentosJudiciales);
+  }
+
+  protected function consultarImporteAfiliaciones(){
     $render = new Render();
     $render->setFields(["count", "valor.sum"]);
     $render->setGroup(["afi_per-departamento_judicial"]);
     $render->setSize(false);
     $render->setCondition([
-      ["periodo.ym","=",$data["periodo"]],
+      ["periodo.ym","=",$this->data["periodo"]],
     ]);
 
-    if($data["organo"]) $render->addCondition(["afi_per-organo","=",$data["organo"]]);
+    $render->addCondition(["afi_per-organo","=",$this->data["organo"]]);    
+    return $this->container->getDb()->advanced("importe_afiliacion", $render);
+  }
 
-
-    $calculosIniciales = array_combine_key(
-      $this->container->getDb()->advanced("importe_afiliacion", $render), 
-      "afi_per_departamento_judicial"
-    );
-
+  protected function consultarDepartamentosJudiciales(){
     $render = new Render();
     $render->setSize(false);
-
-    $departamentosJudiciales = array_combine_key(
-      $this->container->getDb()->all("departamento_judicial", $render), 
-      "id"
-    );
-
-    foreach($departamentosJudiciales as $id => &$dj){
-      $dj["importe"] = (array_key_exists($id, $calculosIniciales)) ? floatval($calculosIniciales[$id]["valor_sum"]) : 0;
-      $dj["afiliaciones"] = (array_key_exists($id, $calculosIniciales)) ? floatval($calculosIniciales[$id]["count"]) : 0;
-      $dj["cuota_asociativa"] = round($dj["importe"] * CUOTA_ASOCIATIVA, 2);
-      $dj["fam"] = round($dj["cuota_asociativa"] * FAM, 2);
-      $dj["total_deduccion"] = round($dj["fam"] + $dj["cuota_asociativa"],2);
-      $dj["viatico"] = 0;
-      $dj["total_pagar"] = round($dj["importe"] - $dj["total_deduccion"], 2); 
-      $dj["total"] = round($dj["total_deduccion"] + $dj["viatico"], 2);
-
-
-    }
-
-    return array_values($departamentosJudiciales);
+    return $this->container->getDb()->all("departamento_judicial", $render);
   }
+
+  protected function consultarViaticos(){
+    $render = new Render();
+    $render->setSize(false);
+    $render->setCondition([
+      ["periodo.ym","=",$this->data["periodo"]],
+      ["organo","=",$this->data["organo"]],
+    ]);
+
+    return $this->container->getDb()->all("viatico", $render);
+  }
+  
 
 }
