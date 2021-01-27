@@ -26,7 +26,7 @@ class ArchivoSueldosCreateApi extends BaseApi {
     $this->consultarRegistrosCreados(); //consultar afiliaciones creadas
     $this->createPath();
     $this->openFile();
-    $this->enviarRegistros();
+    $this->enviarRegistros(); //almacenar enviado en la base de datos y crear archivo
 
     return [
       "path" => $this->path,
@@ -56,6 +56,8 @@ class ArchivoSueldosCreateApi extends BaseApi {
       ["estado", "=", "Creado"],
       ["motivo", "=", ["Alta", "Baja","Modificación"]],
       ["per-organo", "=", $this->data["organo"]],
+      ["desde","=",true],
+      ["hasta","=",true]
     ]);
 
     /*
@@ -71,18 +73,16 @@ class ArchivoSueldosCreateApi extends BaseApi {
           ["desde.ym","<=",$periodo->format("Y-m")],
           ["hasta.ym",">=",$periodo->format("Y-m")]
         ],
-        [
-          ["desde","=",false, "OR"],
-          ["hasta","=",false]
-        ]
+        //[
+        //  ["desde","=",false, "OR"],
+        //  ["hasta","=",false]
+        //]
       ]);
     }*/
 
     $this->registrosCreados = $this->container->getDb()->all($this->data["tipo"], $render);
     if(empty($this->registrosCreados)) throw new Exception("No existen registros creados para el órgano solicitado");
   }
-
-  
 
   public function createPath(){    
     $dir = $_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . PATH_FILE . DIRECTORY_SEPARATOR;
@@ -106,30 +106,121 @@ class ArchivoSueldosCreateApi extends BaseApi {
     $sql = "";
     
     foreach($this->registrosCreados as $ac){
-      $value = $this->valueToUpdate($ac["id"]);
-      $sql .= $this->container->getSqlo($this->data["tipo"])->update($value->_toArray("sql"));
-      array_push($this->detail, $this->data["tipo"].$value->_get("id"));
-      $this->fwrite($ac);      
+      $this->registrarBase($ac);
+      $this->registrarArchivo($ac);      
     }
     fclose($this->file);
     if(!empty($sql)) $this->container->getDb()->multi_query_last($sql);
   }
 
-  private function fwrite($ac){    
+  protected function registrarBase($ac){
+    $value = $this->valueToUpdate($ac["id"]);
+    $sql .= $this->container->getSqlo($this->data["tipo"])->update($value->_toArray("sql"));
+    array_push($this->detail, $this->data["tipo"].$value->_get("id"));
+  }
+  
+  private function registrarArchivo($ac){    
     $v = $this->container->getRel($this->data["tipo"])->value($ac);
-    //if($v["organo"] == "Ministerio Público"){
-
-      $codigo = "010";
-      $codigo .= $v["persona"]->_get("legajo");
-      $codigo .= "40";
-      $codigo .= "00000000000";
-      $codigo .= ($v[$this->data["tipo"]]->_get("motivo") == "Alta") ? "3" : "4";
-      $codigo .= "                                                     ";
-      $codigo .= ($v["departamento_judicial"]->_get("nombre") != "San Isidro") ? "1" : " ";
-      $codigo .= "                     ";
-      $codigo .= ($v["departamento_judicial"]->_get("nombre") == "San Isidro") ? "1" : " ";
-    //}  
+    if($this->data["tipo"]=="afiliacion") {
+      if($this->data["organo"]=="1"){
+        $codigo = $this->codigoAfiliacionAj($v);
+      } else {
+        $codigo = $this->codigoAfiliacionTe($v);
+      }
+    } else {
+      if($this->data["organo"]=="1"){
+        $codigo = $this->codigoTramiteExcepcionalAj($v);
+      } else {
+        $codigo = $this->codigoTramiteExcepcionalMp($v);
+      }
+    }  
     fwrite($this->file,  $codigo.PHP_EOL);
+  }
+
+  protected function codigoAfiliacionAj($v){
+    $codigo = "010"; //3 1..3 
+    $codigo .= $v["persona"]->_get("legajo"); //6 4..9 legajo
+    $codigo .= "40"; //2 10..11
+    $codigo .= "00000000000"; //11 12..22
+    $codigo .= ($v[$this->data["tipo"]]->_get("motivo") == "Alta") ? "3" : "4"; //1 23
+    $codigo .= "                                                     "; //53 24..76
+    $codigo .= ($v["departamento_judicial"]->_get("nombre") != "San Isidro") ? "1" : " "; //1 77
+    $codigo .= "                     "; //21 78..98
+    $codigo .= ($v["departamento_judicial"]->_get("nombre") == "San Isidro") ? "1" : " "; //1 99
+    return $codigo;
+  }
+
+  protected function codigoTramiteExcepcionalMp($v){
+    $codigo = "010"; //3 1..3 empresa (ministerio publico 010)
+    $codigo .= $v["persona"]->_get("legajo"); //6 4..9 legajo
+    $codigo .= "80"; //2 10..11 registro
+    $codigo .= "163"; //3 12..14 concepto
+    /**
+     * codigo que identifica a la entidad externa
+     * que practica algun descuento sobre la liquidacion de haberes
+     * de algunos agentes pertenecientes al Ministerio Publico
+     */
+    $codigo .= "2"; //1 15 subconcepto (para mp es 2?)
+    /**
+     * numero que permite distinguir entre distintos item de un mismo concepto
+     */
+    $codigo .= "00000"; //5 16..20 ceros (no se utilizan)
+    $codigo .= "  "; //2 21..22 orden/sec 
+    /**
+     * numero que se utiliza para identificar 
+     * que un agente posee mas de un descuento 
+     * para el mismo concepto, subconcepto, fecha de proceso y entidad
+     */
+    $codigo .= $v["tramite_excepcional"]->_get("desde", "y"); //2 23..24 año desde
+    $codigo .= $v["tramite_excepcional"]->_get("desde", "m"); //2 25..26 mes desde
+    $codigo .= "0"; //1 27 digito (siempre vale 0)
+    $codigo .= $v["tramite_excepcional"]->_get("hasta", "y"); //2 28..29 año hasta
+    $codigo .= $v["tramite_excepcional"]->_get("hasta", "m"); //2 30..31 mes hasta
+    $codigo .= "00"; //2 32..33 ceros 2
+    $codigo .= str_pad( //10 34..43 importe a descontar
+      str_replace(".","",$v->_get("monto")),10,0,STR_PAD_LEFT
+    ); 
+    $codigo .= "        "; //8 44..51 ceros 3
+    $codigo .= " "; //1 52 automatico 
+    /**
+     * la descripcion dice que debe ser 0 
+     * pero en los ejemplos esta blanco
+     */
+    $codigo .= "   "; //3 53..55 ceros 4
+    $codigo .= str_pad($v["sucursal"]->_get("descripcion"),16); //16 56..71 descripcion 
+    $codigo .= "000"; //3 72..74 (puede ser ceros o blancos)
+    $codigo .= str_pad($v["persona"]->_get("numero_documento"),8,"0",STR_PAD_LEFT);
+    $codigo .= str_pad(substr($v["persona"]->_get("apellidos"),0,20),20," ",STR_PAD_LEFT);
+    $codigo .= str_pad(substr($v["persona"]->_get("nombres"),0,20),20," ",STR_PAD_LEFT);
+    return $codigo;
+  }
+
+  protected function codigoTramiteExcepcionalAj($v){
+    $codigo = "010"; //3 1..3 empresa (ministerio publico 010)
+    $codigo .= $v["persona"]->_get("legajo"); //6 4..9 legajo
+    $codigo .= "80"; //2 10..11 registro
+    $codigo .= "163"; //3 12..14 concepto (moreno 156)
+    $codigo .= "2"; //1 15 subconcepto (para aj es 2)
+    $codigo .= "00000"; //5 16..20 ceros
+    $codigo .= "  "; //2 21..22 orden/secuencia 
+    /**
+     * numero que se utiliza para identificar 
+     * que un agente posee mas de un descuento 
+     * para el mismo concepto, subconcepto, fecha de proceso y entidad
+     * ej 01, 02, etc
+     */
+    $codigo .= "0"; //1 23 completar con 0
+    $codigo .= substr($v["tramite_excepcional"]->_get("desde", "y"),-1); //24 1 año desde
+    $codigo .= $v["tramite_excepcional"]->_get("desde", "m"); //2 25..26 mes desde
+    $codigo .= "0"; //1 27 completar con 0
+    $codigo .= "0000"; //5 28..31 completar con 0    
+    $codigo .= "00"; //2 32..33 completar con 0
+    $codigo .= str_pad(
+      str_replace(".","",$v["tramite_excepcional"]->_get("monto")),10,0,STR_PAD_LEFT
+    ); //10 34..43 monto a descontar
+    $codigo .= "            "; //12 44..55 blancos
+    $codigo .= str_pad($v["sucursal"]->_get("descripcion"),15); //16 56..71 descripcion 
+    return $codigo;
   }
 
   private function valueToUpdate($idAfiliacion){
