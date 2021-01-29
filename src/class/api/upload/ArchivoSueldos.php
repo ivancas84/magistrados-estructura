@@ -58,12 +58,12 @@ class ArchivoSueldosUploadApi extends UploadApi {
     $this->respuesta["tramite_excepcional"] = [];    
 
     $this->verificarPeriodo(); //Analizar si no existen evaluaciones para el periodo ingresado  
-    
+    $this->consultarDepartamentosJudiciales(); //consultar departamentos judiciales (array asociativo donde la llave es el codigo del departamento judicial)
+
     $this->definirRegistros(); //Definir archivo["afiliacion"] y archivo["tramite_excepcional"] a evaluar
     
     if(!count($this->archivo["afiliacion"]) && !count($this->archivo["tramite_excepcional"])) throw new Exception("No existen afiliaciones para procesar");
     
-    $this->consultarDepartamentosJudiciales(); //consultar departamentos judiciales (array asociativo donde la llave es el codigo del departamento judicial)
     
     $this->procesarRegistrosExistentes("afiliacion"); //respuesta de afiliacion_altas_existentes y afiliacion_bajas_automaticas
     $this->procesarRegistrosExistentes("tramite_excepcional"); //respuesta de tramite_excepcional_altas_existentes y tramite_excepcional_bajas_automaticas
@@ -119,10 +119,15 @@ class ArchivoSueldosUploadApi extends UploadApi {
 
       $reg = $this->definirRegistroDeLinea($lines[$i]);
 
+      if(!array_key_exists($reg["codigo_departamento"],$this->departamentosJudiciales)) {
+        array_push($this->respuesta["errors"], "SIN PROCESAR: Legajo " . $reg["legajo"] . " no existe departamento judicial");
+        continue;
+      }
+      
       switch($reg["descripcion_afiliacion"]){
         case "C.MAG.SOCIOS":
           if(key_exists($reg["legajo"], $this->archivo["afiliacion"])){
-            array_push($this->respuesta["errors"], "Legajo " . $reg["legajo"] . " es una afiliacion repetida");
+            array_push($this->respuesta["errors"], "SIN PROCESAR: Legajo " . $reg["legajo"] . " es una afiliacion repetida");
             continue 2;
           }
 
@@ -135,7 +140,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
           }
 
           if(key_exists($reg["legajo"], $this->archivo["tramite_excepcional"])){
-            array_push($this->respuesta["errors"], "Legajo " . $reg["legajo"] . " es un tramite excepcional repetido");
+            array_push($this->respuesta["errors"], "SIN PROCESAR: Legajo " . $reg["legajo"] . " es un tramite excepcional repetido");
             continue 2;
           }
 
@@ -444,6 +449,8 @@ class ArchivoSueldosUploadApi extends UploadApi {
   }
 
   public function crearPersona($registro, $legajo){
+    if(!array_key_exists($registro["codigo_departamento"],$this->departamentosJudiciales)) throw new Exception("El departamento judicial informado en el archivo no existe en la base de datos, codigo " . $registro["codigo_departamento"]);
+    
     $persistSql = $this->container->getController("persist_sql");
     $registro["organo"] = $this->organo;
     $registro["departamento_judicial"] = $this->departamentosJudiciales[$registro["codigo_departamento"]]["id"];
@@ -473,6 +480,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
      * Se realiza una verificacion (y si corresponde actualizacion) del departamento judicial informado
      **/    
     $codigo = $this->archivo[$tipo][$legajo]["codigo_departamento"];
+    if(!array_key_exists($codigo,$this->departamentosJudiciales)) throw new Exception("El departamento judicial informado en el archivo no existe en la base de datos, codigo " . $codigo);
     $idDepartamentoJudicial = $this->departamentosJudiciales[$codigo]["id"];
     if($idDepartamentoJudicial !== $departamentoJudicialInformado){
       $v = $this->container->getValue("persona");

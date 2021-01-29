@@ -56,10 +56,14 @@ class ArchivoSueldosCreateApi extends BaseApi {
       ["estado", "=", "Creado"],
       ["motivo", "=", ["Alta", "Baja","Modificación"]],
       ["per-organo", "=", $this->data["organo"]],
-      ["desde","=",true],
-      ["hasta","=",true]
     ]);
 
+    if($this->data["tipo"] == "tramite_excepcional"){
+      $render->addCondition([
+        ["desde","=",true],
+        ["hasta","=",true]
+      ]);
+    }
     /*
     No se contempla por el momento el chequeo de fechas
     Porque por ejemplo se puede dar de baja un registro fuera de las fechas
@@ -106,7 +110,7 @@ class ArchivoSueldosCreateApi extends BaseApi {
     $sql = "";
     
     foreach($this->registrosCreados as $ac){
-      $this->registrarBase($ac);
+      $sql .= $this->registrarBase($ac);
       $this->registrarArchivo($ac);      
     }
     fclose($this->file);
@@ -115,8 +119,8 @@ class ArchivoSueldosCreateApi extends BaseApi {
 
   protected function registrarBase($ac){
     $value = $this->valueToUpdate($ac["id"]);
-    $sql .= $this->container->getSqlo($this->data["tipo"])->update($value->_toArray("sql"));
     array_push($this->detail, $this->data["tipo"].$value->_get("id"));
+    return $this->container->getSqlo($this->data["tipo"])->update($value->_toArray("sql"));
   }
   
   private function registrarArchivo($ac){    
