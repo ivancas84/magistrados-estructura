@@ -32,13 +32,13 @@ class ImporteInfoApi extends BaseApi {
 
     foreach($departamentosJudiciales as $id => &$dj){
       $dj["importe"] = (array_key_exists($id, $importeAfiliaciones)) ? floatval($importeAfiliaciones[$id]["valor_sum"]) : 0;
-      $dj["afiliaciones"] = (array_key_exists($id, $importeAfiliaciones)) ? floatval($importeAfiliaciones[$id]["count"]) : 0;
+      $dj["afiliaciones"] = (array_key_exists($id, $importeAfiliaciones)) ? intval($importeAfiliaciones[$id]["count"]) : 0;
       $dj["cuota_asociativa"] = round($dj["importe"] * CUOTA_ASOCIATIVA, 2);
-      $dj["fam"] = round($dj["cuota_asociativa"] * FAM, 2);
+      $dj["fam"] = round($dj["afiliaciones"] * FAM, 2);
       $dj["total_deduccion"] = round($dj["fam"] + $dj["cuota_asociativa"],2);
       $dj["viatico"] = (array_key_exists($id, $viaticos)) ? floatval($viaticos[$id]["valor"]) : 0;
       $dj["total_pagar"] = round($dj["importe"] - $dj["total_deduccion"], 2); 
-      $dj["total"] = round($dj["total_deduccion"] + $dj["viatico"], 2);
+      $dj["total"] = round($dj["total_pagar"] + $dj["viatico"], 2);
     }
 
     return array_values($departamentosJudiciales);

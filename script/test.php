@@ -1,23 +1,12 @@
 <?php
-require_once("../config/config.php");
 
+$curl = curl_init();
 
-function get_dir_contents($dir, &$results = array()) {
-    $files = scandir($dir, SCANDIR_SORT_DESCENDING);
+curl_setopt($curl, CURLOPT_POST, 1);
 
-    foreach ($files as $key => $value) {
-        $path = $dir . DIRECTORY_SEPARATOR . $value;
-        if (!is_dir($path)) {
-            $results[] = trim(str_replace($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR  . PATH_FILE . DIRECTORY_SEPARATOR , "", $path), DIRECTORY_SEPARATOR);
-        } else if ($value != "." && $value != "..") {
-          get_dir_contents($path, $results);
-        }
-    }
+curl_setopt($curl, CURLOPT_URL, "https://votes.flowics.com/api/votes/o/12564/6012d664aeea3d06b03f1537?s=100&f=MZ5pHtHHTIneC1oMV6pkNg%3D%3D");
 
-    return $results;
-}
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+$result = curl_exec($curl);
 
-$result = get_dir_contents($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR  . PATH_FILE );
-
-echo "<pre>";
 print_r($result);

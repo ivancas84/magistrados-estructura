@@ -35,6 +35,7 @@ class ArchivoSueldosCreateApi extends BaseApi {
   }
   
   protected function verificarPeriodo(){
+    if($this->data["tipo"] != "afiliacion") return; //solo se verifica para registros 40
     $prefix = ($this->data["tipo"] == "afiliacion") ? "afi" : "te";
     $render = [
       ["periodo.ym","=",$this->data["periodo"]],

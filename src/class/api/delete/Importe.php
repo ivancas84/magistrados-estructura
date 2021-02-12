@@ -22,6 +22,15 @@ class ImporteDeleteApi  {
     ]);
     $ids = $this->container->getDb()->ids("importe_afiliacion", $render);    
     if(!empty($ids)) $sql .= $this->container->getSqlo("importe_afiliacion")->deleteAll($ids);
+    
+    $render = new Render();
+    $render->setSize(false);
+    $render->setCondition([
+      ["periodo.ym", "=", $data["periodo"]],
+      ["organo", "=", $data["organo"]]
+    ]);
+    $idsV = $this->container->getDb()->ids("viatico", $render);    
+    if(!empty($idsV)) $sql .= $this->container->getSqlo("viatico")->deleteAll($idsV);
 
     $render = new Render();
     $render->setSize(false);
@@ -33,7 +42,7 @@ class ImporteDeleteApi  {
     if(!empty($idsT)) $sql .= $this->container->getSqlo("importe_tramite_excepcional")->deleteAll($idsT);
 
 
-    if(empty($ids) && empty($idsT)) throw new Exception("No existen importes para el periodo seleccionado", 404);
+    if(empty($ids) && empty($idsT) && empty($idsV)) throw new Exception("No existen elementos para el periodo seleccionado", 404);
     $this->container->getDb()->multi_query_transaction($sql);    
   }
 
