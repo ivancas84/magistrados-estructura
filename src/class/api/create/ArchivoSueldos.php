@@ -15,6 +15,7 @@ class ArchivoSueldosCreateApi extends BaseApi {
   protected $registrosCreados = []; //registros (afiliaciones o tramites excepcionales) creados que seran enviados
   protected $path; //path donde se definira el archivo
   protected $file; //referencia al archivo
+  protected $fileDetail; //referencia al archivo de detalle
   protected $detail = []; //detalle de entidades modificadas
 
   public function main() {
@@ -25,8 +26,9 @@ class ArchivoSueldosCreateApi extends BaseApi {
     $this->verificarPeriodo(); //verificar si hay afiliaciones enviadas en el periodo ingresado
     $this->consultarRegistrosCreados(); //consultar afiliaciones creadas
     $this->createPath();
-    $this->openFile();
+    $this->openFiles();
     $this->enviarRegistros(); //almacenar enviado en la base de datos y crear archivo
+    $this->closeFiles();
 
     return [
       "path" => $this->path,
@@ -35,7 +37,7 @@ class ArchivoSueldosCreateApi extends BaseApi {
   }
   
   protected function verificarPeriodo(){
-    if($this->data["tipo"] != "afiliacion") return; //solo se verifica para registros 40
+    //if($this->data["tipo"] != "afiliacion") return; //solo se verifica para registros 40
     $prefix = ($this->data["tipo"] == "afiliacion") ? "afi" : "te";
     $render = [
       ["periodo.ym","=",$this->data["periodo"]],
@@ -49,9 +51,8 @@ class ArchivoSueldosCreateApi extends BaseApi {
   }
   
   public function consultarRegistrosCreados(){
-
     $periodo = new DateTime($this->data["periodo"]);
-    $render= new Render();
+    $render = new Render();
     $render->setCondition([
       ["modificado.is_set", "=", false],
       ["estado", "=", "Creado"],
@@ -99,13 +100,21 @@ class ArchivoSueldosCreateApi extends BaseApi {
     $organo = $this->container->getDb()->get("organo", $this->data["organo"]);
     require_once("function/acronym.php");
     $periodo = new DateTime($this->data["periodo"]);
-    $this->path = $subpath.$periodo->format("Y-m_").acronym($organo["descripcion"]).".txt";    
+    $this->path = $subpath.$periodo->format("Y-m_").acronym($organo["descripcion"]);    
   }
 
-  protected function openFile(){
-    $this->file = fopen($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . PATH_FILE . DIRECTORY_SEPARATOR.$this->path, "w");
-    if(!$this->file) throw new Exception("Error al crear archivo");
+  protected function openFiles(){
+    $this->file = fopen($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . PATH_FILE . DIRECTORY_SEPARATOR.$this->path.".txt", "w");
+    $this->fileDetail = fopen($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . PATH_FILE . DIRECTORY_SEPARATOR.$this->path."_detalle.txt", "w");
+
+    if(!$this->file || !$this->fileDetail) throw new Exception("Error al crear archivo");
   }
+
+  protected function closeFiles(){
+    fclose($this->file);
+    fclose($this->fileDetail);
+  }
+
 
   protected function enviarRegistros(){
     $sql = "";
@@ -114,7 +123,6 @@ class ArchivoSueldosCreateApi extends BaseApi {
       $sql .= $this->registrarBase($ac);
       $this->registrarArchivo($ac);      
     }
-    fclose($this->file);
     if(!empty($sql)) $this->container->getDb()->multi_query_last($sql);
   }
 
@@ -132,14 +140,17 @@ class ArchivoSueldosCreateApi extends BaseApi {
       } else {
         $codigo = $this->codigoAfiliacionTe($v);
       }
+      $detalle = $this->detalle($v, "afiliacion");
     } else {
       if($this->data["organo"]=="1"){
         $codigo = $this->codigoTramiteExcepcionalAj($v);
       } else {
         $codigo = $this->codigoTramiteExcepcionalMp($v);
       }
+      $detalle = $this->detalle($v, "tramite_excepcional");
     }  
     fwrite($this->file,  $codigo.PHP_EOL);
+    fwrite($this->fileDetail,  $codigo. PHP_EOL . $detalle.PHP_EOL.PHP_EOL);
   }
 
   protected function codigoAfiliacionAj($v){
@@ -227,6 +238,12 @@ class ArchivoSueldosCreateApi extends BaseApi {
     $codigo .= str_pad($v["sucursal"]->_get("descripcion"),15); //16 56..71 descripcion 
     return $codigo;
   }
+
+  protected function detalle($v, $tipo){
+    return $v["persona"]->_get("apellidos", "Xx Yy") . " ".$v["persona"]->_get("nombres", "Xx Yy") . " " . $v["persona"]->_get("legajo", "Xx Yy")
+. " " . $v["persona"]->_get("apellidos", "Xx Yy") . " " . $v["departamento_judicial"]->_get("codigo") . "-". $v["departamento_judicial"]->_get("nombre") . " " . $v[$tipo]->_get("motivo"); 
+  }
+  
 
   private function valueToUpdate($idAfiliacion){
     $value = $this->container->getValue($this->data["tipo"]);

@@ -62,7 +62,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
 
     $this->definirRegistros(); //Definir archivo["afiliacion"] y archivo["tramite_excepcional"] a evaluar
     
-    if(!count($this->archivo["afiliacion"]) && !count($this->archivo["tramite_excepcional"])) throw new Exception("No existen afiliaciones para procesar");
+    if(!count($this->archivo["afiliacion"]) && !count($this->archivo["tramite_excepcional"])) throw new Exception("No existen registros 40 para procesar");
     
     
     $this->procesarRegistrosExistentes("afiliacion"); //respuesta de afiliacion_altas_existentes y afiliacion_bajas_automaticas
@@ -123,24 +123,27 @@ class ArchivoSueldosUploadApi extends UploadApi {
         array_push($this->respuesta["errors"], "SIN PROCESAR: Legajo " . $reg["legajo"] . " no existe departamento judicial");
         continue;
       }
-      
-      switch($reg["descripcion_afiliacion"]){
-        case "C.MAG.SOCIOS": case "CM.PROVINCIA":
-          if(key_exists($reg["legajo"], $this->archivo["afiliacion"])){
-            array_push($this->respuesta["errors"], "SIN PROCESAR: Legajo " . $reg["legajo"] . " es una afiliacion repetida");
+
+      $l = $reg["legajo"];
+      switch($reg["codigo_afiliacion"]){
+        case "161": case "162": case "1621": case "1622":
+          if(key_exists($l, $this->archivo["afiliacion"])){
+            array_push($this->respuesta["errors"], "Legajo " . $l . " es un registro 40 repetido, se sumaran los importes");
+            $this->archivo["afiliacion"][$l]["monto"] = floatval($this->archivo["afiliacion"][$l]["monto"]) + floatval($reg["monto"]);
             continue 2;
           }
 
           $this->archivo["afiliacion"][$reg["legajo"]] = $reg;
         break;
 
-        case "Bco.Ciudad":
-          if(!key_exists($reg["legajo"], $this->archivo["afiliacion"])){
-            array_push($this->respuesta["errors"], "Legajo " . $reg["legajo"] . " es un tramite excepcional y no existe afiliacion");
+        case "1631": case "1632":
+          if(!key_exists($l, $this->archivo["afiliacion"])){
+            array_push($this->respuesta["errors"], "Legajo " . $l . " es un registro 80 y no existe registro 40");
           }
 
-          if(key_exists($reg["legajo"], $this->archivo["tramite_excepcional"])){
-            array_push($this->respuesta["errors"], "SIN PROCESAR: Legajo " . $reg["legajo"] . " es un tramite excepcional repetido");
+          if(key_exists($l, $this->archivo["tramite_excepcional"])){
+            array_push($this->respuesta["errors"], "Legajo " . $l . " es un registro 80 repetido, se sumaran importes");
+            $this->archivo["tramite_excepcional"][$l]["monto"] = floatval($this->archivo["tramite_excepcional"][$l]["monto"]) + floatval($reg["monto"]);
             continue 2;
           }
 
