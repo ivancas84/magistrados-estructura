@@ -119,11 +119,17 @@ class ArchivoSueldosCreateApi extends BaseApi {
   protected function enviarRegistros(){
     $sql = "";
     
+    fwrite($this->fileDetail, "COLEGIO DE MAGISTRADOS Y FUNCIONARIOS DEL PODER JUDICIAL DE LA PROVINCIA DE BUENOS AIRES" . PHP_EOL);
+    fwrite($this->fileDetail, date("d/m/Y") . " " . $this->registrosCreados[0]["per_org_descripcion"] .  PHP_EOL);
+    $tipo = ($this->data["tipo"] == "afiliacion") ? "Registro 40" : "Registro 80"; 
+    fwrite($this->fileDetail, $tipo .  PHP_EOL . PHP_EOL);
+    
+    
     foreach($this->registrosCreados as $ac){
       $sql .= $this->registrarBase($ac);
       $this->registrarArchivo($ac);      
     }
-    if(!empty($sql)) $this->container->getDb()->multi_query_last($sql);
+    //if(!empty($sql)) $this->container->getDb()->multi_query_last($sql);
   }
 
   protected function registrarBase($ac){
@@ -150,7 +156,7 @@ class ArchivoSueldosCreateApi extends BaseApi {
       $detalle = $this->detalle($v, "tramite_excepcional");
     }  
     fwrite($this->file,  $codigo.PHP_EOL);
-    fwrite($this->fileDetail,  $codigo. PHP_EOL . $detalle.PHP_EOL.PHP_EOL);
+    fwrite($this->fileDetail,  $detalle . PHP_EOL);
   }
 
   protected function codigoAfiliacionAj($v){
@@ -240,8 +246,9 @@ class ArchivoSueldosCreateApi extends BaseApi {
   }
 
   protected function detalle($v, $tipo){
-    return $v["persona"]->_get("apellidos", "Xx Yy") . " ".$v["persona"]->_get("nombres", "Xx Yy") . " " . $v["persona"]->_get("legajo", "Xx Yy")
-. " " . $v["persona"]->_get("apellidos", "Xx Yy") . " " . $v["departamento_judicial"]->_get("codigo") . "-". $v["departamento_judicial"]->_get("nombre") . " " . $v[$tipo]->_get("motivo"); 
+    return $v["persona"]->_get("legajo", "Xx Yy") . " " 
+    . $v["persona"]->_get("apellidos", "Xx Yy") . " ".$v["persona"]->_get("nombres", "Xx Yy") 
+. " " . $v["persona"]->_get("apellidos", "Xx Yy") . " - " . $v["departamento_judicial"]->_get("codigo") . " " . $v["departamento_judicial"]->_get("nombre") . " - " . $v[$tipo]->_get("motivo") ; 
   }
   
 

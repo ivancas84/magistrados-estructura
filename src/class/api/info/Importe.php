@@ -53,7 +53,7 @@ class ImporteInfoApi extends BaseApi {
       ["periodo.ym","=",$this->data["periodo"]],
     ]);
 
-    $render->addCondition(["afi_per-organo","=",$this->data["organo"]]);    
+    if(array_key_exists("organo",$this->data) && !empty($this->data["organo"])) $render->addCondition(["afi_per-organo","=",$this->data["organo"]]);    
     return $this->container->getDb()->advanced("importe_afiliacion", $render);
   }
 
@@ -67,9 +67,10 @@ class ImporteInfoApi extends BaseApi {
     $render = new Render();
     $render->setSize(false);
     $render->setCondition([
-      ["periodo.ym","=",$this->data["periodo"]],
-      ["organo","=",$this->data["organo"]],
+      ["periodo.ym","=",$this->data["periodo"]]
     ]);
+
+    if(array_key_exists("organo",$this->data) && !empty($this->data["organo"])) $render->addCondition(["organo","=",$this->data["organo"]]);
 
     return $this->container->getDb()->all("viatico", $render);
   }
