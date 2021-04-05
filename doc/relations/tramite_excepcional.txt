@@ -1,10 +1,10 @@
-persona - per
-cargo - per_car
-organo - per_org
-departamento_judicial - per_dj
-departamento_judicial - per_dji
-tipo_documento - per_td
-sucursal - suc
+persona - per_per
+cargo - per_car_car
+organo - per_org_org
+departamento_judicial - per_dj_dj
+departamento_judicial - per_dji_dji
+tipo_documento - per_td_td
+sucursal - suc_suc
 
 id (id): string pk. NOT NULL. MAIN. UNIQUE.
 motivo (mot): string nf. NOT NULL. DEFAULT: Alta.

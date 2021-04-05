@@ -1,5 +1,5 @@
-organo - org
-departamento_judicial - dj
+organo - org_org
+departamento_judicial - dj_dj
 
 id (id): string pk. NOT NULL. MAIN. UNIQUE.
 creado (cre): timestamp nf. NOT NULL. DEFAULT: current_timestamp().
