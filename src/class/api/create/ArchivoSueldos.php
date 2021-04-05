@@ -129,7 +129,7 @@ class ArchivoSueldosCreateApi extends BaseApi {
       $sql .= $this->registrarBase($ac);
       $this->registrarArchivo($ac);      
     }
-    //if(!empty($sql)) $this->container->getDb()->multi_query_last($sql);
+    if(!empty($sql)) $this->container->getDb()->multi_query_last($sql);
   }
 
   protected function registrarBase($ac){

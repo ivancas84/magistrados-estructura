@@ -404,7 +404,9 @@ class ArchivoSueldosUploadApi extends UploadApi {
 
   protected function agregarImporteRegistro($tipo, $id, $valor){
     $importe = [$tipo=>$id, "valor"=>$valor, "periodo"=>$this->periodo];
-    $p = $this->container->getController("persist_sql")->id("importe_" . $tipo, $importe);
+    //echo "<pre>"; 
+    //print_r($importe);
+    $p = $this->container->getControllerEntity("persist_sql", "importe_" . $tipo)->id($importe);
     $this->sql .= $p["sql"];
   }
 
@@ -449,7 +451,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
       $registro["monto"] = $valor;
     }
 
-    $persist = $this->container->getController("persist_sql")->id($tipo, $registro);
+    $persist = $this->container->getControllerEntity("persist_sql", $tipo)->id($registro);
     $this->sql .= $persist["sql"];
     return $persist["id"];
   }
@@ -488,11 +490,11 @@ class ArchivoSueldosUploadApi extends UploadApi {
   public function crearPersona($registro, $legajo){
     if(!array_key_exists($registro["codigo_departamento"],$this->departamentosJudiciales)) throw new Exception("El departamento judicial informado en el archivo no existe en la base de datos, codigo " . $registro["codigo_departamento"]);
     
-    $persistSql = $this->container->getController("persist_sql");
+    $persistSql = $this->container->getControllerEntity("persist_sql","persona");
     $registro["organo"] = $this->organo;
     $registro["departamento_judicial"] = $this->departamentosJudiciales[$registro["codigo_departamento"]]["id"];
     $registro["departamento_judicial_informado"] = $this->departamentosJudiciales[$registro["codigo_departamento"]]["id"];
-    $p = $persistSql->id("persona", $registro);
+    $p = $persistSql->id($registro);
     $this->sql .= $p["sql"];
     $this->personas[$legajo] = $registro;
     $this->personas[$legajo]["id"] = $p["id"];
