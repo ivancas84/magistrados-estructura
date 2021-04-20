@@ -104,7 +104,7 @@ class ArchivoSueldosCreateApi extends BaseApi {
   }
 
   protected function openFiles(){
-    $this->file = fopen($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . PATH_FILE . DIRECTORY_SEPARATOR.$this->path.".dat", "w");
+    $this->file = fopen($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . PATH_FILE . DIRECTORY_SEPARATOR.$this->path.".txt", "w");
     $this->fileDetail = fopen($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . PATH_FILE . DIRECTORY_SEPARATOR.$this->path."_detalle.txt", "w");
 
     if(!$this->file || !$this->fileDetail) throw new Exception("Error al crear archivo");
@@ -141,11 +141,7 @@ class ArchivoSueldosCreateApi extends BaseApi {
   private function registrarArchivo($ac){    
     $v = $this->container->getRel($this->data["tipo"])->value($ac);
     if($this->data["tipo"]=="afiliacion") {
-      if($this->data["organo"]=="1"){
-        $codigo = $this->codigoAfiliacionAj($v);
-      } else {
-        $codigo = $this->codigoAfiliacionTe($v);
-      }
+      $codigo = $this->codigoAfiliacionAjMp($v);
       $detalle = $this->detalle($v, "afiliacion");
     } else {
       if($this->data["organo"]=="1"){
@@ -159,7 +155,7 @@ class ArchivoSueldosCreateApi extends BaseApi {
     fwrite($this->fileDetail,  $detalle . PHP_EOL);
   }
 
-  protected function codigoAfiliacionAj($v){
+  protected function codigoAfiliacionAjMp($v){
     $codigo = "010"; //3 1..3 
     $codigo .= $v["persona"]->_get("legajo"); //6 4..9 legajo
     $codigo .= "40"; //2 10..11
@@ -235,10 +231,14 @@ class ArchivoSueldosCreateApi extends BaseApi {
     $codigo .= substr($v["tramite_excepcional"]->_get("desde", "y"),-1); //24 1 año desde
     $codigo .= $v["tramite_excepcional"]->_get("desde", "m"); //2 25..26 mes desde
     $codigo .= "0"; //1 27 completar con 0
-    $codigo .= "0000"; //5 28..31 completar con 0    
+    $codigo .= substr($v["tramite_excepcional"]->_get("hasta", "y"),-2); //24 1 año desde
+    $codigo .= $v["tramite_excepcional"]->_get("hasta", "m"); //2 25..26 mes desde
     $codigo .= "00"; //2 32..33 completar con 0
     $codigo .= str_pad(
-      str_replace(".","",$v["tramite_excepcional"]->_get("monto")),10,0,STR_PAD_LEFT
+      number_format(
+        $v["tramite_excepcional"]->_get("monto"),2,"",""
+      ),
+      10,0,STR_PAD_LEFT
     ); //10 34..43 monto a descontar
     $codigo .= "            "; //12 44..55 blancos
     $codigo .= str_pad($v["sucursal"]->_get("descripcion"),15); //16 56..71 descripcion 
