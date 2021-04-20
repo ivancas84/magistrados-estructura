@@ -25,7 +25,7 @@ class ImporteAfiliacionInfoApi extends BaseApi {
     ]);
 
     if($data["cargo"]) $render->addCondition(["afi_per-cargo","=",$data["cargo"]]);
-    if($data["departamento_judicial_informado"]) $render->addCondition(["afi_per-cargo","=",$data["cargo"]]);
+    if($data["departamento_judicial_informado"]) $render->addCondition(["afi_per-departamento_judicial_informado","=",$data["departamento_judicial_informado"]]);
 
 
     $calculosIniciales = array_combine_key(
@@ -45,7 +45,7 @@ class ImporteAfiliacionInfoApi extends BaseApi {
       $dj["importe"] = (array_key_exists($id, $calculosIniciales)) ? floatval($calculosIniciales[$id]["valor_sum"]) : 0;
       $dj["afiliaciones"] = (array_key_exists($id, $calculosIniciales)) ? floatval($calculosIniciales[$id]["count"]) : 0;
       $dj["cuota_asociativa"] = round($dj["importe"] * CUOTA_ASOCIATIVA, 2);
-      $dj["fam"] = round($dj["cuota_asociativa"] * FAM, 2);
+      $dj["fam"] = round($dj["afiliaciones"] * FAM, 2);
       $dj["total_deduccion"] = round($dj["fam"] + $dj["cuota_asociativa"],2);
       $dj["viatico"] = 0;
       $dj["total_pagar"] = round($dj["importe"] - $dj["total_deduccion"], 2); 

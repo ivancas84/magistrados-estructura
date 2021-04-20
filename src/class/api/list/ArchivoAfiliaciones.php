@@ -1,6 +1,7 @@
 <?php
 
 require_once("class/api/Base.php");
+require_once("function/php_input.php");
 
 class ArchivoAfiliacionesListApi extends BaseApi {
 
@@ -8,9 +9,8 @@ class ArchivoAfiliacionesListApi extends BaseApi {
   public $permission = "r";
 
   public function main() {
-    $this->container->getAuth()->authorize($this->entityName, $this->permission);
-
-    return $this->get_dir_contents($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR  . PATH_FILE);
+    $data = php_input();
+    return $this->get_dir_contents($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR  . PATH_FILE . DIRECTORY_SEPARATOR . $data["subdir"]);
   }
   
   function get_dir_contents($dir, &$results = array()) {
