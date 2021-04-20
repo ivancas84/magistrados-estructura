@@ -111,16 +111,22 @@ class ArchivoSueldosUploadApi extends UploadApi {
     for($i = 0; $i < count($lines); $i++){
       $lines[$i] = trim($lines[$i]);
       
-      if(mb_strlen($lines[$i]) != $this->longitudFila){ //if adicional para mayor eficiencia        
-        if(mb_strlen($lines[$i]) > $this->longitudFila)  //longitud menor se ignora, longitud mayor se guarda error
+      mb_internal_encoding('ISO-8859-1');    
+      $text = html_entity_decode($lines[$i], ENT_QUOTES, "ISO-8859-1");                 
+      $length = mb_strlen($text);
+
+      if($length != $this->longitudFila){ //if adicional para mayor eficiencia        
+        if($length > $this->longitudFila)  //longitud menor se ignora, longitud mayor se guarda error
           array_push($this->respuesta["errors"], "La longitud de la fila " . ($i + 1) . " supera el máximo permitido");
+        // else
+        //  array_push($this->respuesta["errors"], "La longitud de la fila " . ($i + 1) . " es inferior al mínimo permitido: " . $length);
         continue;
       }
 
       $reg = $this->definirRegistroDeLinea($lines[$i]);
 
       if(!array_key_exists($reg["codigo_departamento"],$this->departamentosJudiciales)) {
-        array_push($this->respuesta["errors"], "SIN PROCESAR: Legajo " . $reg["legajo"] . " no existe departamento judicial");
+             array_push($this->respuesta["errors"], "SIN PROCESAR: Legajo " . $reg["legajo"] . " no existe departamento judicial");
         continue;
       }
 
@@ -151,6 +157,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
         break;
 
         default:
+          array_push($this->respuesta["errors"], "Legajo " . $l . " sera ignorado");
           continue 2; //ignorar descripcion de afiliacion
       }      
     }
