@@ -104,7 +104,7 @@ class ArchivoSueldosCreateApi extends BaseApi {
   }
 
   protected function openFiles(){
-    $this->file = fopen($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . PATH_FILE . DIRECTORY_SEPARATOR.$this->path.".txt", "w");
+    $this->file = fopen($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . PATH_FILE . DIRECTORY_SEPARATOR.$this->path.".dat", "w");
     $this->fileDetail = fopen($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . PATH_FILE . DIRECTORY_SEPARATOR.$this->path."_detalle.txt", "w");
 
     if(!$this->file || !$this->fileDetail) throw new Exception("Error al crear archivo");
