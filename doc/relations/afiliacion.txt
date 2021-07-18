@@ -13,4 +13,5 @@ enviado (env): timestamp nf.
 evaluado (eva): timestamp nf.
 modificado (moa): timestamp nf.
 observaciones (obs): text nf.
+codigo (cod): integer nf.
 persona (per): string mu. NOT NULL.
