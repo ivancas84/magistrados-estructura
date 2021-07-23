@@ -1,10 +1,10 @@
 persona - per
 cargo - per_car
-organo - per_org
-departamento_judicial - per_dj
-departamento_judicial - per_dji
 tipo_documento - per_td
 sucursal - suc
+departamento_judicial - dj
+organo - org
+departamento_judicial - dji
 
 id (id): string pk. NOT NULL. MAIN. UNIQUE.
 motivo (mot): string nf. NOT NULL. DEFAULT: Alta.
@@ -17,5 +17,9 @@ observaciones (obs): text nf.
 desde (des): date nf.
 hasta (has): date nf.
 monto (mon): float nf.
+codigo (cod): integer nf.
 persona (per): string mu. NOT NULL.
 sucursal (suc): string mu. NOT NULL. DEFAULT: 1.
+departamento_judicial (dj): string mu.
+organo (org): string mu.
+departamento_judicial_informado (dji): string mu.

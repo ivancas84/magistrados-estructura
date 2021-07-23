@@ -33,27 +33,29 @@ class RegistroActualizablePersistSql {
 
 
   public function actualizar($value){    
-    $registros = $this->consultarNoModificadas($value->_get("persona"));
-    //$this->verificarEstadoEnviado($registros);
-    return $this->actualizarNoModificadas($registros);
+    $codigo =  $value->_get("codigo");
+    $registros = $this->noModificada_($value->_get("persona"), $codigo);
+    //$this->checkEstadoEnviado($registros);
+    return $this->updateNoModificada_($registros);
   }
 
-  public function consultarNoModificadas($idPersona){
+  public function noModificada_($idPersona, $codigo){
     $render = new Render();
     $render->setCondition([
       ["persona","=",$idPersona],
-      ["modificado","=",false]
+      ["modificado","=",false],
     ]);
+    $render->addCondition(["codigo","=",$codigo]);
     return $this->container->getDb()->all($this->entityName,$render);
   }
 
-  public function verificarEstadoEnviado($registros){
+  public function checkEstadoEnviado($registros){
     foreach($registros as $registro){
       if($registro["estado"] == "Enviado") throw new Exception("Existe un registro con estado enviado, no se puede cargar el nuevo registro");
     }
   }
 
-  public function actualizarNoModificadas($registros){
+  public function updateNoModificada_($registros){
     $sql = "";
     $detail = [];
     foreach($registros as $registro){

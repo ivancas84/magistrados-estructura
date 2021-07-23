@@ -1,10 +1,10 @@
 afiliacion - afi
 persona - afi_per
 cargo - afi_per_car
-organo - afi_per_org
-departamento_judicial - afi_per_dj
-departamento_judicial - afi_per_dji
 tipo_documento - afi_per_td
+departamento_judicial - afi_dj
+organo - afi_org
+departamento_judicial - afi_dji
 
 id (id): string pk. NOT NULL. MAIN. UNIQUE.
 creado (cre): timestamp nf. NOT NULL. DEFAULT: current_timestamp().

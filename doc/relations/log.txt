@@ -1,0 +1,5 @@
+id (id): string pk. NOT NULL. MAIN. UNIQUE.
+type (typ): string nf.
+description (des): mediumtext nf.
+user (use): string nf.
+created (cre): timestamp nf. NOT NULL. DEFAULT: current_timestamp().

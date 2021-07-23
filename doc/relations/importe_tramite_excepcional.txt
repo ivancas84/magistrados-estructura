@@ -1,11 +1,11 @@
 tramite_excepcional - te
 persona - te_per
 cargo - te_per_car
-organo - te_per_org
-departamento_judicial - te_per_dj
-departamento_judicial - te_per_dji
 tipo_documento - te_per_td
 sucursal - te_suc
+departamento_judicial - te_dj
+organo - te_org
+departamento_judicial - te_dji
 
 id (id): string pk. NOT NULL. MAIN. UNIQUE.
 creado (cre): timestamp nf. NOT NULL. DEFAULT: current_timestamp().

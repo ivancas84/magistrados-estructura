@@ -1,9 +1,9 @@
 persona - per
 cargo - per_car
-organo - per_org
-departamento_judicial - per_dj
-departamento_judicial - per_dji
 tipo_documento - per_td
+departamento_judicial - dj
+organo - org
+departamento_judicial - dji
 
 id (id): string pk. NOT NULL. MAIN. UNIQUE.
 motivo (mot): string nf. NOT NULL. DEFAULT: Alta.
@@ -15,3 +15,6 @@ modificado (moa): timestamp nf.
 observaciones (obs): text nf.
 codigo (cod): integer nf.
 persona (per): string mu. NOT NULL.
+departamento_judicial (dj): string mu.
+organo (org): string mu.
+departamento_judicial_informado (dji): string mu.
