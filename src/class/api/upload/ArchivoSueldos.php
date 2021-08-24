@@ -115,7 +115,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
 
     for($i = 0; $i < count($lines); $i++){
       $lines[$i] = trim($lines[$i]);
-      if(!$this->checkLongitudLinea($lines[$i])) continue;
+      if(!$this->checkLongitudLinea($lines, $i)) continue;
       $reg = $this->registro($lines[$i]);
       if(!$this->checkCodigoDepartamentoInexistente($reg)) continue;
       $this->warningLegajo40Repetido($reg);
@@ -170,8 +170,8 @@ class ArchivoSueldosUploadApi extends UploadApi {
 
   }
 
-  protected function checkLongitudLinea($line){
-    $text = html_entity_decode($line, ENT_QUOTES, "ISO-8859-1");                 
+  protected function checkLongitudLinea($lines, $i){
+    $text = html_entity_decode($lines[$i], ENT_QUOTES, "ISO-8859-1");                 
     $length = mb_strlen($text);
 
     if($length != $this->longitudFila){ //if adicional para mayor eficiencia        

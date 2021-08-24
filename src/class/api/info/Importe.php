@@ -17,7 +17,7 @@ class ImporteInfoApi extends BaseApi {
     
     $importeAfiliaciones = array_combine_key(
       $this->consultarImporteAfiliaciones(), 
-      "afi_per_departamento_judicial"
+      "afi_departamento_judicial"
     );
 
     $viaticos = array_combine_key(
@@ -47,15 +47,16 @@ class ImporteInfoApi extends BaseApi {
   protected function consultarImporteAfiliaciones(){
     $render = new Render();
     $render->setFields(["count", "valor.sum"]);
-    $render->setGroup(["afi_per-departamento_judicial"]);
+    $render->setGroup(["afi-departamento_judicial"]);
     $render->setSize(false);
     $render->setCondition([
       ["periodo.ym","=",$this->data["periodo"]],
+      ["afi-codigo","=~","161"]
     ]);
 
-    if(array_key_exists("organo",$this->data) && !empty($this->data["organo"])) $render->addCondition(["afi_per-organo","=",$this->data["organo"]]);    
-    if(array_key_exists("departamento_judicial",$this->data) && !empty($this->data["departamento_judicial"])) $render->addCondition(["afi_per-departamento_judicial","=",$this->data["departamento_judicial"]]);    
-    
+    if(array_key_exists("organo",$this->data) && !empty($this->data["organo"])) $render->addCondition(["afi-organo","=",$this->data["organo"]]);    
+    if(array_key_exists("departamento_judicial",$this->data) && !empty($this->data["departamento_judicial"])) $render->addCondition(["afi-departamento_judicial","=",$this->data["departamento_judicial"]]);    
+    //echo "<pre>".$this->container->getSqlo("importe_afiliacion")->select($render);
     return $this->container->getDb()->advanced("importe_afiliacion", $render);
   }
 

@@ -49,7 +49,6 @@ function get_entity_tree($entityName) {
 
     case 'viatico': return [
 
-      'org' => ['field_id'=>'organo', 'field_name'=>'organo', 'entity_name'=>'organo', 'children'=>[]],
       'dj' => ['field_id'=>'departamento_judicial', 'field_name'=>'departamento_judicial', 'entity_name'=>'departamento_judicial', 'children'=>[]],    ];
 
     default: return [];

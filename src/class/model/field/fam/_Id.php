@@ -2,14 +2,14 @@
 
 require_once("class/model/Field.php");
 
-class _FieldViaticoOrgano extends Field {
+class _FieldFamId extends Field {
 
   public $type = "varchar";
-  public $fieldType = "nf";
+  public $fieldType = "pk";
   public $default = null;
-  public $name = "organo";
-  public $alias = "org";
-  public $entityName = "viatico";
+  public $name = "id";
+  public $alias = "id";
+  public $entityName = "fam";
   public $dataType = "string";  
   public $subtype = "text";  
   public $length = "45";  

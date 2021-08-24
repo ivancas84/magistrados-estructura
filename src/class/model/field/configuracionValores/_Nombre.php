@@ -2,17 +2,17 @@
 
 require_once("class/model/Field.php");
 
-class _FieldViaticoOrgano extends Field {
+class _FieldConfiguracionValoresNombre extends Field {
 
   public $type = "varchar";
   public $fieldType = "nf";
   public $default = null;
-  public $name = "organo";
-  public $alias = "org";
-  public $entityName = "viatico";
+  public $name = "nombre";
+  public $alias = "nom";
+  public $entityName = "configuracion_valores";
   public $dataType = "string";  
   public $subtype = "text";  
-  public $length = "45";  
+  public $length = "255";  
 
 
 }

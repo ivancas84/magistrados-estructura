@@ -1,0 +1,5 @@
+id (id): string pk. NOT NULL. MAIN. UNIQUE.
+desde (des): date nf. NOT NULL.
+valor (val): float nf. NOT NULL.
+creado (cre): timestamp nf. NOT NULL. DEFAULT: current_timestamp().
+nombre (nom): string nf. NOT NULL.
