@@ -61,11 +61,11 @@ class ArchivoSueldosUploadApi extends UploadApi {
     $this->respuesta["afiliacion"] = [];
     $this->respuesta["tramite_excepcional"] = [];    
 
-    $this->checkPeriodo(); //Analizar si no existen evaluaciones para el periodo ingresado  
+    $this->noProcesarSiExistenImportesEnPeriodo(); //Analizar si no existen evaluaciones para el periodo ingresado  
     $this->departamentoJudicial_(); //consultar departamentos judiciales (array asociativo donde la llave es el codigo del departamento judicial)
 
     $this->registro_(); //Definir archivo["afiliacion"] y archivo["tramite_excepcional"] a evaluar
-    
+   
     if(!count($this->archivo["afiliacion"]) 
     && !count($this->archivo["tramite_excepcional"])) throw new Exception("No existen registros para procesar");    
     
@@ -79,8 +79,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
     $this->processRegistroBajaEnviada_("afiliacion"); //respuesta de afiliacion_bajas_aprobadas y afiliacion_bajas_rechazadas
     $this->processRegistroBajaEnviada_("tramite_excepcional"); //respuesta de tramite_excepcional_bajas_aprobadas y tramite_excepcional_bajas_rechazadas
 
-    $this->consultarPersonas(); //consultar personas de registos restantes
-    //$this->verificarOrgano(); //verificar que las personas consultadas pertenezcan al mismo organo indicado
+    $this->consultarPersonasDeRegistrosRestantes(); //consultar personas de registos restantes
     $this->procesarRegistrosRestantes("afiliacion"); //respuesta de afiliacion_altas_automaticas
     $this->procesarRegistrosRestantes("tramite_excepcional"); //respuesta de tramite_excepcional_altas_automaticas
 
@@ -90,7 +89,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
     return $this->respuesta;
   }
 
-  public function checkPeriodo(){    
+  public function noProcesarSiExistenImportesEnPeriodo(){    
     $render = new Render();
     $render->setCondition([
       ["periodo.ym", "=", $this->periodo->format("Y-m")],
@@ -115,21 +114,21 @@ class ArchivoSueldosUploadApi extends UploadApi {
 
     for($i = 0; $i < count($lines); $i++){
       $lines[$i] = trim($lines[$i]);
-      if(!$this->checkLongitudLinea($lines, $i)) continue;
+      if(!$this->errorLongitudLineaSiSuperaMaximo($lines, $i)) continue;
       $reg = $this->registro($lines[$i]);
-      if(!$this->checkCodigoDepartamentoInexistente($reg)) continue;
-      $this->warningLegajo40Repetido($reg);
+      if(!$this->errorCodigoDepartamentoSiNoExiste($reg)) continue;
       
       $l = $reg["legajo"].UNDEFINED.$reg["codigo_afiliacion"];
       switch($reg["codigo_afiliacion"]){
         case "161": case "162": case "1621": case "1622":
-          if(!$this->checkRegistro40Repetido($l, $reg)) continue 2;
+          $this->warningLegajo40SiEstaRepetido($reg);
+          if(!$this->sumarImportesRegistro40SiEstaRepetido($l, $reg)) continue 2;
           $this->archivo["afiliacion"][$l] = $reg;
         break;
 
         case "1631": case "1632":
-          $this->warningLegajo40Inexistente($reg);
-          if(!$this->checkRegistro80Repetido($l, $reg)) continue 2;
+          $this->warningLegajo40SiNoExiste($reg);
+          if(!$this->sumarImportesRegistro80SiEstaRepetido($l, $reg)) continue 2;
           $this->archivo["tramite_excepcional"][$l] = $reg;
         break;
 
@@ -140,18 +139,18 @@ class ArchivoSueldosUploadApi extends UploadApi {
     }
   }
 
-  protected function warningLegajo40Repetido($reg){
+  protected function warningLegajo40SiEstaRepetido($reg){
     if(in_array($reg["legajo"], $this->legajos40)) array_push($this->respuesta["errors"], "Legajo " . $reg["legajo"] . " es un legajo con dos registros 40");
     else array_push($this->legajos40, $reg["legajo"]);
   }
 
-  protected function warningLegajo40Inexistente($reg){
+  protected function warningLegajo40SiNoExiste($reg){
     if(!in_array($reg["legajo"], $this->legajos40)){
       array_push($this->respuesta["errors"], "Legajo " . $reg["legajo"] . " tiene registro 80 y no tiene registro 40");
     }
   }
 
-  protected function checkRegistro40Repetido($idRegistro, $registro){
+  protected function sumarImportesRegistro40SiEstaRepetido($idRegistro, $registro){
     if(key_exists($idRegistro, $this->archivo["afiliacion"])){
       array_push($this->respuesta["errors"], "Registro " . $idRegistro . " es un registro 40 repetido, se sumaran los importes");
       $this->archivo["afiliacion"][$idRegistro]["monto"] = floatval($this->archivo["afiliacion"][$idRegistro]["monto"]) + floatval($registro["monto"]);
@@ -160,7 +159,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
     return true;
   }
 
-  protected function checkRegistro80Repetido($idRegistro, $registro){
+  protected function sumarImportesRegistro80SiEstaRepetido($idRegistro, $registro){
     if(key_exists($idRegistro, $this->archivo["tramite_excepcional"])){
       array_push($this->respuesta["errors"], "Registro " . $idRegistro . " es un registro 80 repetido, se sumaran importes");
       $this->archivo["tramite_excepcional"][$idRegistro]["monto"] = floatval($this->archivo["tramite_excepcional"][$idRegistro]["monto"]) + floatval($registro["monto"]);
@@ -170,7 +169,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
 
   }
 
-  protected function checkLongitudLinea($lines, $i){
+  protected function errorLongitudLineaSiSuperaMaximo($lines, $i){
     $text = html_entity_decode($lines[$i], ENT_QUOTES, "ISO-8859-1");                 
     $length = mb_strlen($text);
 
@@ -185,7 +184,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
     return true;
   }
 
-  protected function checkCodigoDepartamentoInexistente($reg){
+  protected function errorCodigoDepartamentoSiNoExiste($reg){
     if(!array_key_exists($reg["codigo_departamento"],$this->departamentoJudicial_)) {
       array_push($this->respuesta["errors"], "SIN PROCESAR: Legajo " . $reg["legajo"] . " no existe departamento judicial");
       return false;
@@ -262,17 +261,17 @@ class ArchivoSueldosUploadApi extends UploadApi {
     $this->respuesta[$tipo]["bajas_automaticas"] = [];
 
     foreach($registrosExistentes as $identifierRegistro => $registro){
-      if(in_array($identifierRegistro, $this->archivo[$tipo])) { //el registro esta en el archivo y ya existia en la base
+      if(key_exists($identifierRegistro, $this->archivo[$tipo])) { //el registro esta en el archivo y ya existia en la base
         array_push($this->respuesta[$tipo]["altas_existentes"], $registro);
         
-        $this->updateDepartamentoJudicialRegistro(
+        $this->actualizarDepartamentoJudicialSiEsDistinto(
           $registro["departamento_judicial_informado"], 
           $registro["id"], 
           $tipo, 
           $identifierRegistro
         );         
 
-        if($tipo == "tramite_excepcional") $this->warningImporteRegistro80(
+        if($tipo == "tramite_excepcional") $this->warningImporteRegistro80SiEsDistinto(
           $identifierRegistro, 
           $registro["monto"], 
           $this->archivo[$tipo][$identifierRegistro]["monto"]
@@ -288,6 +287,8 @@ class ArchivoSueldosUploadApi extends UploadApi {
       } else {
         array_push($this->respuesta[$tipo]["bajas_automaticas"], $registro);
 
+        $monto = (key_exists("monto", $registro)) ? $registro["monto"] : null;
+
         $this->insertRegistro(
           $tipo, 
           $registro["persona"], 
@@ -296,13 +297,13 @@ class ArchivoSueldosUploadApi extends UploadApi {
           $registro["organo"],
           $registro["departamento_judicial"],
           $registro["departamento_judicial_informado"],
-          $registro["monto"]
+          $monto
         );
       }
     }
   }
 
-  protected function warningNombre($nombres, $apellidos, $tipo, $identifierRegistro){
+  protected function warningNombreSiEsDistinto($nombres, $apellidos, $tipo, $identifierRegistro){
     $nombre1 = "";
     if(!empty($nombres)) $nombre1 .= $nombres . " ";
     $nombre1 .= $apellidos;
@@ -310,7 +311,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
     if(!empty($this->archivo[$tipo][$identifierRegistro]["nombres"])) 
       $nombre2 .= $this->archivo[$tipo][$identifierRegistro]["nombres"] . " ";
     $nombre2 .= $this->archivo[$tipo][$identifierRegistro]["apellidos"];
-    return $this->warningNombres($nombre1, $nombre2, $identifierRegistro);
+    return $this->warningNombreSiEsDistintos($nombre1, $nombre2, $identifierRegistro);
   }
 
   public function processRegistroAltaEnviada_($tipo){
@@ -319,15 +320,15 @@ class ArchivoSueldosUploadApi extends UploadApi {
     $this->respuesta[$tipo]["altas_rechazadas"] = [];
 
     foreach($enviadas as $identifierRegistro => $registro){
-      if(array_key_exists($identifierRegistro, $this->archivo[$tipo])) {
-        $this->updateDepartamentoJudicialRegistro(
+      if(key_exists($identifierRegistro, $this->archivo[$tipo])) {
+        $this->actualizarDepartamentoJudicialSiEsDistinto(
           $registro["departamento_judicial_informado"], 
           $registro["id"], 
           $tipo, 
           $identifierRegistro
         );
 
-        $this->warningNombre(
+        $this->warningNombreSiEsDistinto(
           $registro["per_nombres"],
           $registro["per_apellidos"],
           $tipo, 
@@ -340,7 +341,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
           "Aprobado"
         );
 
-        if($tipo == "tramite_excepcional") $this->warningImporteRegistro80(
+        if($tipo == "tramite_excepcional") $this->warningImporteRegistro80SiEsDistinto(
           $identifierRegistro, 
           $registro["monto"], 
           $this->archivo[$tipo][$identifierRegistro]["monto"]
@@ -372,14 +373,13 @@ class ArchivoSueldosUploadApi extends UploadApi {
     $this->respuesta[$tipo]["bajas_aprobadas"] = [];
     $this->respuesta[$tipo]["bajas_rechazadas"] = [];
     foreach($enviadas as $identifierRegistro => $registro){
-      if(!array_key_exists($identifierRegistro, $this->archivo[$tipo])) {
+      if(!key_exists($identifierRegistro, $this->archivo[$tipo])) {
         $this->evaluarRegistroExistente($tipo, $registro["id"], "Aprobado");
         array_push($this->respuesta[$tipo]["bajas_aprobadas"], $registro);
       } else {        
         $this->evaluarRegistroExistente($tipo, $registro["id"], "Rechazado");
         $monto = (!empty($registro["monto"])) ? $registro["monto"] : null;
-        
-
+      
         $this->insertRegistro(
           $tipo, 
           $registro["persona"], 
@@ -391,29 +391,29 @@ class ArchivoSueldosUploadApi extends UploadApi {
           $monto 
         );
         
-        $this->updateDepartamentoJudicialRegistro(
+        $this->actualizarDepartamentoJudicialSiEsDistinto(
           $registro["departamento_judicial_informado"], 
           $registro["id"], 
           $tipo, 
           $identifierRegistro
         ); 
 
-        $this->warningNombre(
+        $this->insertImporteRegistro(
+          $tipo, 
+          $registro["id"],
+          $this->archivo[$tipo][$identifierRegistro]["monto"]
+        );
+
+        $this->warningNombreSiEsDistinto(
           $registro["per_nombres"],
           $registro["per_apellidos"],
           $tipo, 
           $identifierRegistro
         );
         
-        if($tipo == "tramite_excepcional") $this->warningImporteRegistro80(
+        if($tipo == "tramite_excepcional") $this->warningImporteRegistro80SiEsDistinto(
           $identifierRegistro, 
           $registro["monto"], 
-          $this->archivo[$tipo][$identifierRegistro]["monto"]
-        );
-
-        $this->insertImporteRegistro(
-          $tipo, 
-          $registro["id"], 
           $this->archivo[$tipo][$identifierRegistro]["monto"]
         );
         
@@ -606,7 +606,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
   }
   */
 
-  public function consultarPersonas(){
+  public function consultarPersonasDeRegistrosRestantes(){
     if(empty($this->archivo["afiliacion"]) && empty($this->archivo["tramite_excepcional"])) return [];
     $legajos = array_column($this->archivo["afiliacion"], "legajo");
     $legajos = array_merge($legajos, array_column($this->archivo["tramite_excepcional"], "legajo"));
@@ -621,10 +621,8 @@ class ArchivoSueldosUploadApi extends UploadApi {
 
   public function setIdPersona($registro, $tipo, $identifierRegistro){
     $legajo = $this->archivo[$tipo][$identifierRegistro]["legajo"];
-    if(array_key_exists($legajo,$this->personas)) {
-      //$this->updateDepartamentoJudicialRegistro($this->personas[$legajo]["departamento_judicial_informado"], $this->personas[$legajo]["id"], $tipo, $legajo); 
-      
-      $this->warningNombre(
+    if(key_exists($legajo,$this->personas)) {
+      $this->warningNombreSiEsDistinto(
         $this->personas[$legajo]["nombres"], 
         $this->personas[$legajo]["apellidos"], 
         $tipo, 
@@ -648,7 +646,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
     $this->personas[$legajo]["id"] = $p["id"];
   }
 
-  protected function warningNombres($nombre1, $nombre2, $identifierRegistro){
+  protected function warningNombreSiEsDistintos($nombre1, $nombre2, $identifierRegistro){
     if(!nombres_parecidos(
       $nombre1, 
       $nombre2,
@@ -657,44 +655,34 @@ class ArchivoSueldosUploadApi extends UploadApi {
     }
   }
 
-  protected function verificarOrgano(){
-    foreach($this->personas as $persona){
-      if($persona["organo"]!=$this->organo) array_push($this->respuesta["errors"], "Legajo " . $persona["legajo"] . " esta cargado con otro organo");
-    }          
-  }
+
 
   protected function idDepartamentoJudicial($codigo){
     if(!array_key_exists($codigo,$this->departamentoJudicial_)) throw new Exception("El departamento judicial informado en el archivo no existe en la base de datos, codigo " . $codigo);
     return $this->departamentoJudicial_[$codigo]["id"];
   }
 
-  protected function updateDepartamentoJudicialRegistro($idDepartamentoJudicialInformado, $idRegistro, $tipo, $identifierRegistro){
+  protected function actualizarDepartamentoJudicialSiEsDistinto($idDepartamentoJudicialInformado, $idRegistro, $tipo, $identifierRegistro){
     /**
      * Para los registros existentes en el archivo y en la base de datos
      * Se realiza una verificacion (y si corresponde actualizacion) del departamento judicial informado
      **/    
-    // switch($this->archivo[$tipo][$identifierRegistro]["codigo_afiliacion"]){
-      //case "162": case "1621": $codigo = "10"; break;
-      //case "1622": $codigo = "19"; break;
-      //case "1615": $codigo = "08"; break;
-      // default: $codigo = $this->archivo[$tipo][$identifierRegistro]["codigo_departamento"];
-    // }
     $idDepartamentoJudicialArchivo = $this->idDepartamentoJudicial(
       $this->archivo[$tipo][$identifierRegistro]["codigo_departamento"]
     );
     
     if($idDepartamentoJudicialArchivo !== $idDepartamentoJudicialInformado){
-      $v = $this->container->getValue("registro");
+      $v = $this->container->getValue($tipo);
       $v->_set("id", $idRegistro);
       $v->_set("departamento_judicial_informado", $idDepartamentoJudicialArchivo);
       $v->_call("reset")->_call("check");
-      $this->sql .= $this->container->getSqlo("registro")->update($v->_toArray("sql"));
+      $this->sql .= $this->container->getSqlo($tipo)->update($v->_toArray("sql"));
       if($v->logs->isError()) throw new Exception("Error al actualizar departamento judicial id " . $identifierRegistro. ": " . $v->logs->toString());
       array_push($this->respuesta["errors"], "Se ha actualizado el Departamento Judicial Informado del registro " . $identifierRegistro);
     }
   }
 
-  protected function warningImporteRegistro80($identifierRegistro, $importeDb, $importeArchivo){
+  protected function warningImporteRegistro80SiEsDistinto($identifierRegistro, $importeDb, $importeArchivo){
     if(floatval($importeDb) != floatval($importeArchivo)) array_push($this->respuesta["errors"], "El importe del registro 80 para " . $identifierRegistro . " no coincide");
   }  
 }
