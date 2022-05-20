@@ -34,7 +34,7 @@ class ArchivoSueldosCreateApi extends BaseApi {
   protected $detail = []; //detalle de entidades modificadas
 
   public function main() {
-    $this->data = php_input()[$this->entityName];
+    $this->data = php_input();
     $this->checkPeriodo(); //verificar si hay afiliaciones enviadas en el periodo ingresado
     $this->registroCreado_(); //consultar afiliaciones creadas;;
     $this->createPath();
