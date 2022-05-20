@@ -48,8 +48,20 @@ class ArchivoSueldosUploadApi extends UploadApi {
   public $longitudFila; //longitud de la fila del archivo
   public $longitudNumero; //longitud del numero del archivo
   public $longitudValor; //longitud del valor del archivo
+  public $user;
+  /**
+   * El atributo user, se utiliza para identificar el conjunto de logs a ac-
+   * tualizar.
+   * Anteriormente se utilizaba un unico campo para almacenar la informacion.
+   * Pero se saturaba el servidor.
+   * Se hizo una leve modificacion del codigo para almacenar cada sentencia
+   * en un log separado. Hace mas lento el procesamiento pero no satura el 
+   * servidor.
+   */
 
   public function main() {
+    $this->user = uniqid();
+
     parent::main(); //crear metadatos y subir archivo
     
     $this->organo = filter_post("organo");
@@ -83,8 +95,8 @@ class ArchivoSueldosUploadApi extends UploadApi {
     $this->procesarRegistrosRestantes("afiliacion"); //respuesta de afiliacion_altas_automaticas
     $this->procesarRegistrosRestantes("tramite_excepcional"); //respuesta de tramite_excepcional_altas_automaticas
 
-    $log = set_log_db(["type"=>"archivo sueldos " . $this->organo . " creado", "description"=>$this->sql]);
-    $this->respuesta["log"] = $log;
+    //$log = set_log_db(["type"=>"archivo sueldos " . $this->organo . " creado", "description"=>$this->sql]);
+    $this->respuesta["log"] = $this->user;
 
     return $this->respuesta;
   }
@@ -536,7 +548,8 @@ class ArchivoSueldosUploadApi extends UploadApi {
   protected function insertImporteRegistro($tipo, $id, $valor){
     $importe = [$tipo=>$id, "valor"=>$valor, "periodo"=>$this->periodo];
     $p = $this->container->getControllerEntity("persist_sql", "importe_" . $tipo)->id($importe);
-    $this->sql .= $p["sql"];
+    $log = set_log_db(["user"=>$this->user, "description"=>$p["sql"]]);
+
   }
 
   public function insertRegistro(
@@ -567,7 +580,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
     if($tipo == "tramite_excepcional") $registro["monto"] = $valor;
 
     $persist = $this->container->getControllerEntity("registro_actualizable_persist_sql",$tipo)->main($registro);
-    $this->sql .= $persist["sql"];
+    $log = set_log_db(["user"=>$this->user, "description"=>$persist["sql"]]);
     return $persist["id"];
   }
 
@@ -581,7 +594,8 @@ class ArchivoSueldosUploadApi extends UploadApi {
     ];
 
     $persist = $this->container->getControllerEntity("registro_actualizable_persist_sql", $tipo)->main($registro);
-    $this->sql .= $persist["sql"];
+    $log = set_log_db(["user"=>$this->user, "description"=>$persist["sql"]]);
+
   }  
 
   /**
@@ -601,7 +615,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
     }
 
     $persist = $this->container->getControllerEntity("persist_sql", $tipo)->id($registro);
-    $this->sql .= $persist["sql"];
+    $log = set_log_db(["user"=>$this->user, "description"=>$persist["sql"]]);
     return $persist["id"];
   }
   */
@@ -641,7 +655,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
   public function crearPersona($registro, $legajo){
     $persistSql = $this->container->getControllerEntity("persist_sql","persona");
     $p = $persistSql->id($registro);
-    $this->sql .= $p["sql"];
+    $log = set_log_db(["user"=>$this->user, "description"=>$p["sql"]]);
     $this->personas[$legajo] = $registro;
     $this->personas[$legajo]["id"] = $p["id"];
   }
@@ -676,7 +690,9 @@ class ArchivoSueldosUploadApi extends UploadApi {
       $v->_set("id", $idRegistro);
       $v->_set("departamento_judicial_informado", $idDepartamentoJudicialArchivo);
       $v->_call("reset")->_call("check");
-      $this->sql .= $this->container->getSqlo($tipo)->update($v->_toArray("sql"));
+      $sql .= $this->container->getSqlo($tipo)->update($v->_toArray("sql"));
+      $log = set_log_db(["user"=>$this->user, "description"=>$sql]);
+
       if($v->logs->isError()) throw new Exception("Error al actualizar departamento judicial id " . $identifierRegistro. ": " . $v->logs->toString());
       array_push($this->respuesta["errors"], "Se ha actualizado el Departamento Judicial Informado del registro " . $identifierRegistro);
     }
