@@ -35,11 +35,37 @@ class ArchivoSueldosCreateApi extends BaseApi {
 
   public function main() {
     $this->data = php_input();
-    $this->checkPeriodo(); //verificar si hay afiliaciones enviadas en el periodo ingresado
-    $this->registroCreado_(); //consultar afiliaciones creadas;;
+    $this->checkPeriodo(); 
+    /**
+     * Verificar si hay afiliaciones enviadas en el periodo ingresado.
+     * Si existen importes para el tipo de registro, periodo y organo se con-
+     * sidera procesado.
+     */
+    $this->registroCreado_();
+    /**
+     * consultar registros creados.
+     * Los registros creados son aquellos que tienen:
+     *   Motivo "Creado".
+     *   Estado "Alta", "Baja" o  "Modificado".
+     *   Fecha de modificacion NO asignada.
+     */
     $this->createPath();
+    /**
+     * Crear estructura de directorios donde se almacenara el archivo
+     */
     $this->openFiles();
-    $this->sendRegistro_(); //almacenar enviado en la base de datos y crear archivo
+    /**
+     * Abrir archivos para cargar el contenido.
+     * Se abren dos archivos, uno para el area de sueldos y otro con el 
+     * detalle.
+     */
+    $this->sendRegistro_(); 
+    /**
+     * registrar en base de datos que fue enviado y crear archivos.
+     * El registro en la base de datos consiste en:
+     *   Cambiar motivo a Enviado.
+     *   Registrar fecha de enviado.
+     */
     $this->closeFiles();
 
     return [

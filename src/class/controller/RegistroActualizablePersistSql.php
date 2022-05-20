@@ -10,42 +10,56 @@ class RegistroActualizablePersistSql {
   public $noModificadas = []; //afiliaciones no modificadas (se consultan para el caso de que)
 
   public function main($data){    
-    $value = $this->container->getValue($this->entityName)->_fromArray($data, "set");
+    $this->registro = $this->container->getValue($this->entityName)->_fromArray($data, "set");
 
-    if(!Validation::is_empty($value->_get("id"))){
-      $value->_call("reset")->_call("check");
-      if($value->logs->isError()) throw new Exception($value->logs->toString());
-      $sql = $this->container->getSqlo($this->entityName)->update($value->_toArray("sql"));
+    if(!Validation::is_empty($this->registro->_get("id"))){
+      /**
+       * Las actualizaciones sobre una registro no efectuan ningun cambio 
+       * adicional
+       */
+      $this->registro->_call("reset")->_call("check");
+      if($this->registro->logs->isError()) throw new Exception($this->registro->logs->toString());
+      $sql = $this->container->getSqlo($this->entityName)->update($this->registro->_toArray("sql"));
       $detail = [];
     } else {
-      $value->_call("setDefault");
-      $value->_set("id",uniqid()); //id habitualmente esta en null y no se asigna al definir valores por defecto
-      $value->_call("reset")->_call("check");
-      if($value->logs->isError()) throw new Exception($value->logs->toString());
-      $actualizacion = $this->actualizar($value);    
-      $sql = $actualizacion["sql"] . $this->container->getSqlo($this->entityName)->insert($value->_toArray("sql"));
+      /**
+       * Para las inserciones de nuevos registros se busca aquellos registros 
+       * existentes que posean el mismo codigo
+       */
+      $this->registro->_call("setDefault");
+      $this->registro->_set("id",uniqid()); //id habitualmente esta en null y no se asigna al definir valores por defecto
+      $this->registro->_call("reset")->_call("check");
+      if($this->registro->logs->isError()) throw new Exception($this->registro->logs->toString());
+      $actualizacion = $this->actualizar($this->registro);    
+      $sql = $actualizacion["sql"] . $this->container->getSqlo($this->entityName)->insert($this->registro->_toArray("sql"));
       $detail = $actualizacion["detail"];      
     }
 
-    array_push($detail, $this->entityName.$value->_get("id"));
-    return ["id" => $value->_get("id"), "detail" => $detail, "sql"=> $sql];
+    array_push($detail, $this->entityName.$this->registro->_get("id"));
+    return ["id" => $this->registro->_get("id"), "detail" => $detail, "sql"=> $sql];
   }
 
 
-  public function actualizar($value){    
-    $codigo =  $value->_get("codigo");
-    $registros = $this->noModificada_($value->_get("persona"), $codigo);
-    //$this->checkEstadoEnviado($registros);
+  public function actualizar(){    
+    $registros = $this->noModificada_();
+    $this->checkEstadoEnviado($registros);
     return $this->updateNoModificada_($registros);
   }
 
-  public function noModificada_($idPersona, $codigo){
+  public function noModificada_(){
+    /**
+     * Afiliacion no modificadas. (estado != modificado).
+     * Se busca solamente las del mismo codigo, entendiendo que una persona
+     * puede tener al mismo tiempo varias afiliaciones con diferente codigo.
+     * Que una persona tenga varias afiliaciones con el mismo codigo es una si-
+     * tuacion que no deberia suceder, pero por error humano sucede.
+     */
     $render = new Render();
     $render->setCondition([
-      ["persona","=",$idPersona],
+      ["persona","=",$this->registro->_get("persona")],
       ["modificado","=",false],
     ]);
-    $render->addCondition(["codigo","=",$codigo]);
+    $render->addCondition(["codigo","=",$this->registro->_get("codigo")]);
     return $this->container->getDb()->all($this->entityName,$render);
   }
 
@@ -59,10 +73,10 @@ class RegistroActualizablePersistSql {
     $sql = "";
     $detail = [];
     foreach($registros as $registro){
-      $value = $this->container->getValue($this->entityName);
-      $value->_fastSet("id",$registro["id"]);
-      $value->_fastSet("modificado",new DateTime());
-      $sql .= $this->container->getSqlo($this->entityName)->update($value->_toArray("sql"));
+      $reg = $this->container->getValue($this->entityName);
+      $reg->_fastSet("id",$registro["id"]);
+      $reg->_fastSet("modificado",new DateTime());
+      $sql .= $this->container->getSqlo($this->entityName)->update($reg->_toArray("sql"));
       array_push($detail, $this->entityName.$registro["id"]);
     }
     return ["sql" => $sql, "detail" => $detail];

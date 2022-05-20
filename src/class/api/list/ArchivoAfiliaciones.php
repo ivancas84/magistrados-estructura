@@ -18,6 +18,8 @@ class ArchivoAfiliacionesListApi extends BaseApi {
 
     foreach ($files as $key => $value) {
       $path = $dir . DIRECTORY_SEPARATOR . $value;
+      // $results[] = trim(str_replace($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR  . PATH_FILE . DIRECTORY_SEPARATOR , "", $path), DIRECTORY_SEPARATOR);
+
       if (!is_dir($path)) {
         $results[] = trim(str_replace($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR  . PATH_FILE . DIRECTORY_SEPARATOR , "", $path), DIRECTORY_SEPARATOR);
       } else if ($value != "." && $value != "..") {
