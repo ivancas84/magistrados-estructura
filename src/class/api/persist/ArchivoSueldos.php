@@ -11,27 +11,29 @@ class ArchivoSueldosPersistApi  {
   public function main(){
     $data = php_input();
 
+    $progress = intval($data["progress"])+1;
+
+    $render = $this->container->getRender("log");
+    $render->setPage($progress);
+    $render->setSize(1);
+    $render->setParams(["user"=>$data["log"]]);
+    $render->setOrder(["created"=>"asc"]);
+
     $db = new Ma(TXN_HOST, TXN_USER, TXN_PASS, TXN_DBNAME);
     $db->container = $this->container;
 
-    $row = $db->get("log", $data["log"]);
-    
-    $progress = intval($data["progress"]);
-    $description = explode(";", $row["description"]);
-  
-    for($i = $progress; $i < count($description)-1; $i++) { //la ultima sentencia es una cadena vacia, se ignora
-      try {
-        $db2 = new Db(DATA_HOST);
-        $db2->container = $this->container;
-        $db2->query($description[$i]);
-        if($i && !($i % 50)) break;
-      } catch(Exception $ex){
-        echo "ERROR: " . $description[$i];
-        throw $ex;
-      }
+    $row = $db->one("log", $render);
+
+    try {
+      $db2 = new Db(DATA_HOST);
+      $db2->container = $this->container;
+      $db2->query($row["description"]);
+    } catch(Exception $ex){
+      echo "ERROR: " . $row["id"] . " " . $row["description"];
+      throw $ex;
     }
 
-    return ["progress" => $i, "total"=> count($description)-1];
+    return ["progress" => $progress];
 
   }
 
