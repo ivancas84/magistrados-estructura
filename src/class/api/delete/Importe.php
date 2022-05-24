@@ -18,28 +18,27 @@ class ImporteDeleteApi  {
     $render->setSize(false);
     $render->setCondition([
       ["periodo.ym", "=", $data["periodo"]],
-      ["afi_per-organo", "=", $data["organo"]]
+      ["afi-organo", "=", $data["organo"]]
     ]);
     $ids = $this->container->getDb()->ids("importe_afiliacion", $render);    
-    if(!empty($ids)) $sql .= $this->container->getSqlo("importe_afiliacion")->deleteAll($ids);
+    if(!empty($ids)) $sql .= $this->container->getSqlo("importe_afiliacion")->delete($ids);
     
     $render = new Render();
     $render->setSize(false);
     $render->setCondition([
       ["periodo.ym", "=", $data["periodo"]],
-      ["organo", "=", $data["organo"]]
     ]);
     $idsV = $this->container->getDb()->ids("viatico", $render);    
-    if(!empty($idsV)) $sql .= $this->container->getSqlo("viatico")->deleteAll($idsV);
+    if(!empty($idsV)) $sql .= $this->container->getSqlo("viatico")->delete($idsV);
 
     $render = new Render();
     $render->setSize(false);
     $render->setCondition([
       ["periodo.ym", "=", $data["periodo"]],
-      ["te_per-organo", "=", $data["organo"]]
+      ["te-organo", "=", $data["organo"]]
     ]);
     $idsT = $this->container->getDb()->ids("importe_tramite_excepcional", $render);
-    if(!empty($idsT)) $sql .= $this->container->getSqlo("importe_tramite_excepcional")->deleteAll($idsT);
+    if(!empty($idsT)) $sql .= $this->container->getSqlo("importe_tramite_excepcional")->delete($idsT);
 
 
     if(empty($ids) && empty($idsT) && empty($idsV)) throw new Exception("No existen elementos para el periodo seleccionado", 404);
