@@ -15,8 +15,8 @@ class ImporteInfoApi extends BaseApi {
   public function main() {
     $this->data = php_input();
 
-    $fam = intval($this->consultarConfiguracionValor("FAM")["valor"]);
-    $cuotaAsociativa = intval($this->consultarConfiguracionValor("Cuota Asociativa")["valor"]);
+    $fam = floatval($this->consultarConfiguracionValor("FAM")["valor"]);
+    $cuotaAsociativa = floatval($this->consultarConfiguracionValor("Cuota Asociativa")["valor"]);
     
 
     $importeAfiliaciones = array_combine_key(
@@ -47,6 +47,7 @@ class ImporteInfoApi extends BaseApi {
       $dj["valor_cuota_asociativa"] = $cuotaAsociativa;
       
     }
+
 
     return array_values($departamentosJudiciales);
   }
