@@ -465,7 +465,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
       ["modificado.is_set", "=", false],
       ["estado", "=", "Aprobado"],
       ["motivo", "=", "Alta"],
-      ["evaluado.is_set","=",true],
+      // ["evaluado.is_set","=",true],
       ["organo", "=", $this->organo]
     ]);
 
@@ -680,21 +680,25 @@ class ArchivoSueldosUploadApi extends UploadApi {
     /**
      * Para los registros existentes en el archivo y en la base de datos
      * Se realiza una verificacion (y si corresponde actualizacion) del departamento judicial informado
-     **/    
+     **/
     $idDepartamentoJudicialArchivo = $this->idDepartamentoJudicial(
       $this->archivo[$tipo][$identifierRegistro]["codigo_departamento"]
     );
     
-    if($idDepartamentoJudicialArchivo !== $idDepartamentoJudicialInformado){
+
+    if($idDepartamentoJudicialArchivo != $idDepartamentoJudicialInformado){
       $v = $this->container->getValue($tipo);
       $v->_set("id", $idRegistro);
       $v->_set("departamento_judicial_informado", $idDepartamentoJudicialArchivo);
       $v->_call("reset")->_call("check");
-      $sql .= $this->container->getSqlo($tipo)->update($v->_toArray("sql"));
+      $sql = $this->container->getSqlo($tipo)->update($v->_toArray("sql"));
       $log = set_log_db(["user"=>$this->user, "description"=>$sql]);
 
-      if($v->logs->isError()) throw new Exception("Error al actualizar departamento judicial id " . $identifierRegistro. ": " . $v->logs->toString());
-      array_push($this->respuesta["errors"], "Se ha actualizado el Departamento Judicial Informado del registro " . $identifierRegistro);
+      if($idDepartamentoJudicialInformado){
+        if($v->logs->isError()) throw new Exception("Error al actualizar departamento judicial id " . $identifierRegistro. ": " . $v->logs->toString());
+        array_push($this->respuesta["errors"], "El departamento judicial es distinto " . $identifierRegistro);
+      }
+
     }
   }
 
