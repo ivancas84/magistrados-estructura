@@ -5,6 +5,7 @@ require_once("class/api/Base.php");
 class AfiliacionPersistApi extends BaseApi {
 
   public function main(){    
+    if($this->container->getController("existen_registros_enviados")->main()) throw new Exception("Existe un registro con estado enviado, no se puede cargar el nuevo registro");
     $data = file_get_contents("php://input");
     if(!$data) throw new Exception("Error al obtener datos de input");    
     if(empty($data = json_decode($data, true))) throw new Exception("Conjunto de datos vacío");
