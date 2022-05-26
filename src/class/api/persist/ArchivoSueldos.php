@@ -27,7 +27,7 @@ class ArchivoSueldosPersistApi  {
     try {
       $db2 = new Db(DATA_HOST);
       $db2->container = $this->container;
-      $db2->multi_query_transaction($row["description"]);
+      $db2->multi_query($row["description"]);
     } catch(Exception $ex){
       echo "ERROR: " . $row["id"] . " " . $row["description"];
       throw $ex;

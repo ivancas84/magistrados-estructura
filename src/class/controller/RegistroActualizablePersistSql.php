@@ -42,7 +42,6 @@ class RegistroActualizablePersistSql {
 
   public function actualizar(){    
     $registros = $this->noModificada_();
-    $this->checkEstadoEnviado($registros);
     return $this->updateNoModificada_($registros);
   }
 
@@ -63,11 +62,6 @@ class RegistroActualizablePersistSql {
     return $this->container->getDb()->all($this->entityName,$render);
   }
 
-  public function checkEstadoEnviado($registros){
-    foreach($registros as $registro){
-      if($registro["estado"] == "Enviado") throw new Exception("Existe un registro con estado enviado, no se puede cargar el nuevo registro");
-    }
-  }
 
   public function updateNoModificada_($registros){
     $sql = "";
