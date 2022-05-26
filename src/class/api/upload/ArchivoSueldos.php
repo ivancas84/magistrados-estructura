@@ -439,11 +439,22 @@ class ArchivoSueldosUploadApi extends UploadApi {
   public function procesarRegistrosRestantes($tipo) {
     $this->respuesta[$tipo]["altas_automaticas"] = [];
     if(empty($this->archivo[$tipo])) return;
+
     
     foreach($this->archivo[$tipo] as $identifierRegistro => $registro) {
       $idPersona = $this->setIdPersona($registro, $tipo, $identifierRegistro);
-      $idDepartamentoJudicial = $this->idDepartamentoJudicial($registro["codigo_departamento"]);
-      
+      $idDepartamentoJudicialInformado = $this->idDepartamentoJudicial($registro["codigo_departamento"]);
+
+      if($this->organo == 1) { //administracion de justicia
+        $idDepartamentoJudicial = ($registro["codigo_afiliacion"] == "162") ? '10' : $idDepartamentoJudicialInformado;
+      } else { //ministerio publico
+        switch($registro["codigo_afiliacion"]){
+          case "1621": $idDepartamentoJudicial = '10'; break;
+          case "1622": $idDepartamentoJudicial = '5fabcd2907942'; break;
+          default: $idDepartamentoJudicial = $idDepartamentoJudicialInformado;
+        }
+      }
+
       $id = $this->insertRegistro(
         $tipo, 
         $idPersona, 
@@ -451,7 +462,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
         $registro["codigo_afiliacion"],
         $this->organo, 
         $idDepartamentoJudicial, 
-        $idDepartamentoJudicial, 
+        $idDepartamentoJudicialInformado, 
         $registro["monto"]
       );
       $this->insertImporteRegistro($tipo, $id, $registro["monto"]);

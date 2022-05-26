@@ -18,7 +18,7 @@ class Importe162InfoApi extends BaseApi {
     $this->data = php_input();
 
     // $fam = intval($this->consultarConfiguracionValor("FAM")["valor"]);
-    $cuotaAsociativa = floatval($this->consultarConfiguracionValor("Cuota Asociativa")["valor"]);
+    //$cuotaAsociativa = floatval($this->consultarConfiguracionValor("Cuota Asociativa")["valor"]);
 
     $importeAfiliaciones = array_combine_key2(
       $this->consultarImporteAfiliaciones(), 
@@ -40,8 +40,6 @@ class Importe162InfoApi extends BaseApi {
     foreach($importeAfiliaciones as $id => $dj) {
       $dj["importe"] = (array_key_exists($id, $importeAfiliaciones)) ? floatval($importeAfiliaciones[$id]["valor_sum"]) : 0;
       $dj["afiliaciones"] = (array_key_exists($id, $importeAfiliaciones)) ? intval($importeAfiliaciones[$id]["count"]) : 0;
-      $dj["cuota_asociativa"] = round($dj["importe"] * $cuotaAsociativa, 2);
-      $dj["valor_cuota_asociativa"] = $cuotaAsociativa;
       if($dj["afiliaciones"]) array_push($response, $dj);
     }
 
