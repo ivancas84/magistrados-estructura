@@ -17,7 +17,6 @@ class ImporteInfoApi extends BaseApi {
 
     $fam = floatval($this->consultarConfiguracionValor("FAM")["valor"]);
     $cuotaAsociativa = floatval($this->consultarConfiguracionValor("Cuota Asociativa")["valor"]);
-    
 
     $importeAfiliaciones = array_combine_key(
       $this->consultarImporteAfiliaciones(), 
@@ -48,7 +47,7 @@ class ImporteInfoApi extends BaseApi {
       
     }
 
-
+    if((array_key_exists("departamento_judicial", $this->data)) && !empty($this->data["departamento_judicial"])) return $departamentosJudiciales[$this->data["departamento_judicial"]];
     return array_values($departamentosJudiciales);
   }
 
@@ -94,8 +93,6 @@ class ImporteInfoApi extends BaseApi {
     if(array_key_exists("departamento_judicial",$this->data) && !empty($this->data["departamento_judicial"])) $render->addCondition(["departamento_judicial","=",$this->data["departamento_judicial"]]);    
 
     return $this->container->getDb()->all("viatico", $render);
-
-
   }
   
 
