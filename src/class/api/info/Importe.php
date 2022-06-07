@@ -1,4 +1,6 @@
 <?php
+require $_SERVER["DOCUMENT_ROOT"] . "/" . PATH_ROOT . '/vendor/autoload.php';
+use Luecano\NumeroALetras\NumeroALetras;
 require_once("class/api/Base.php");
 require_once("class/model/Render.php");
 require_once("function/php_input.php");
@@ -33,6 +35,8 @@ class ImporteInfoApi extends BaseApi {
       "id"
     );
 
+    $formatter = new NumeroALetras();
+
     foreach($departamentosJudiciales as $id => &$dj){
       $dj["importe"] = (array_key_exists($id, $importeAfiliaciones)) ? floatval($importeAfiliaciones[$id]["valor_sum"]) : 0;
       $dj["afiliaciones"] = (array_key_exists($id, $importeAfiliaciones)) ? intval($importeAfiliaciones[$id]["count"]) : 0;
@@ -44,6 +48,8 @@ class ImporteInfoApi extends BaseApi {
       $dj["total"] = round($dj["total_pagar"] + $dj["viatico"], 2);
       $dj["valor_fam"] = $fam;
       $dj["valor_cuota_asociativa"] = $cuotaAsociativa;
+      $dj["total_pagar_letras"] = $formatter->toInvoice($dj["total_pagar"], 2, "PESOS"); 
+
       
     }
 
