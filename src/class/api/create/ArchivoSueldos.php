@@ -2,6 +2,8 @@
 
 require_once("class/api/Base.php");
 require_once("function/php_input.php");
+require_once("function/mb_str_pad.php");
+
 
 class ArchivoSueldosCreateApi extends BaseApi {
   /**
@@ -138,7 +140,7 @@ class ArchivoSueldosCreateApi extends BaseApi {
   }
 
   protected function openFiles(){
-    $this->file = fopen($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . PATH_FILE . DIRECTORY_SEPARATOR.$this->path.".txt", "w");
+    $this->file = fopen($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . PATH_FILE . DIRECTORY_SEPARATOR.$this->path.".dat", "w");
     $this->fileDetail = fopen($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . PATH_FILE . DIRECTORY_SEPARATOR.$this->path."_detalle.txt", "w");
 
     if(!$this->file || !$this->fileDetail) throw new Exception("Error al crear archivo");
@@ -192,7 +194,7 @@ class ArchivoSueldosCreateApi extends BaseApi {
     fwrite($this->fileDetail,  $detalle . PHP_EOL);
   }
 
-  protected function codigoAfiliacion($v){
+  protected function codigoAfiliacion($v) {
     $codigo = "010"; //3 1..3 
     $codigo .= $v["persona"]->_get("legajo"); //6 4..9 legajo
     $codigo .= "40"; //2 10..11
@@ -209,7 +211,19 @@ class ArchivoSueldosCreateApi extends BaseApi {
     return $codigo;
   }
 
-  protected function codigoTramiteExcepcionalMp($v){
+  protected function codigoTramiteExcepcionalMp($v) {
+    /**
+     * En el digito 27 se configuro el motivo, no se si esta correcto!
+     * Actualmente no se generan registros 80 para Ministerio Público
+     */
+
+    switch($v["tramite_excepcional"]->_get("motivo")){
+      case "Alta": $motivo = "0"; break;      
+      case "Modificación": $motivo = "3"; break;
+      case "Baja": $motivo = "5"; break;
+      default: throw new Exception("Motivo incorrecto");
+    }
+     
     $codigo = "010"; //3 1..3 empresa (ministerio publico 010)
     $codigo .= $v["persona"]->_get("legajo"); //6 4..9 legajo
     $codigo .= "80"; //2 10..11 registro
@@ -232,7 +246,7 @@ class ArchivoSueldosCreateApi extends BaseApi {
      */
     $codigo .= $v["tramite_excepcional"]->_get("desde", "y"); //2 23..24 año desde
     $codigo .= $v["tramite_excepcional"]->_get("desde", "m"); //2 25..26 mes desde
-    $codigo .= "0"; //1 27 digito (siempre vale 0)
+    $codigo .= $motivo;  //1 27 motivo (no estoy seguro si aca va el motivo)
     $codigo .= $v["tramite_excepcional"]->_get("hasta", "y"); //2 28..29 año hasta
     $codigo .= $v["tramite_excepcional"]->_get("hasta", "m"); //2 30..31 mes hasta
     $codigo .= "00"; //2 32..33 ceros 2
@@ -248,13 +262,21 @@ class ArchivoSueldosCreateApi extends BaseApi {
     $codigo .= "   "; //3 53..55 ceros 4
     $codigo .= str_pad($v["sucursal"]->_get("descripcion"),16); //16 56..71 descripcion 
     $codigo .= "000"; //3 72..74 (puede ser ceros o blancos)
-    $codigo .= str_pad($v["persona"]->_get("numero_documento"),8,"0",STR_PAD_LEFT);
-    $codigo .= str_pad(substr($v["persona"]->_get("apellidos"),0,20),20," ",STR_PAD_LEFT);
-    $codigo .= str_pad(substr($v["persona"]->_get("nombres"),0,20),20," ",STR_PAD_LEFT);
+    //$codigo .= str_pad($v["persona"]->_get("numero_documento"),8,"0",STR_PAD_LEFT);
+    //$codigo .= mb_str_pad(substr($v["persona"]->_get("apellidos"),0,20),20," ",STR_PAD_LEFT);
+    //$codigo .= mb_str_pad(substr($v["persona"]->_get("nombres"),0,20),20," ",STR_PAD_LEFT);
     return $codigo;
   }
 
-  protected function codigoTramiteExcepcionalAj($v){
+  protected function codigoTramiteExcepcionalAj($v) {
+
+    switch($v["tramite_excepcional"]->_get("motivo")){
+      case "Alta": $motivo = "0"; break;      
+      case "Modificación": $motivo = "3"; break;
+      case "Baja": $motivo = "5"; break;
+      default: throw new Exception("Motivo incorrecto");
+    }
+
     $codigo = "010"; //3 1..3 empresa (ministerio publico 010)
     $codigo .= $v["persona"]->_get("legajo"); //6 4..9 legajo
     $codigo .= "80"; //2 10..11 registro
@@ -268,7 +290,7 @@ class ArchivoSueldosCreateApi extends BaseApi {
      * para el mismo concepto, subconcepto, fecha de proceso y entidad
      * ej 01, 02, etc
      */
-    $codigo .= "0"; //1 23 completar con 0
+    $codigo .= $motivo;  //1 23 motivo
     $codigo .= substr($v["tramite_excepcional"]->_get("desde", "y"),-1); //24 1 año desde
     $codigo .= $v["tramite_excepcional"]->_get("desde", "m"); //2 25..26 mes desde
     $codigo .= "0"; //1 27 completar con 0
@@ -282,15 +304,18 @@ class ArchivoSueldosCreateApi extends BaseApi {
       10,0,STR_PAD_LEFT
     ); //10 34..43 monto a descontar
     $codigo .= "            "; //12 44..55 blancos
-    $codigo .= str_pad($v["sucursal"]->_get("descripcion"),15); //16 56..71 descripcion 
+    $codigo .= mb_str_pad($v["sucursal"]->_get("descripcion"),15); //16 56..71 descripcion 
     return $codigo;
   }
 
-  protected function detalle($v, $tipo){
-    $c = $v["persona"]->_get("legajo", "Xx Yy") . " " 
-    . $v["persona"]->_get("apellidos", "X") . ", ".$v["persona"]->_get("nombres", "Xx Yy") 
-. " - " . $v["departamento_judicial"]->_get("codigo") . " " . $v["departamento_judicial"]->_get("nombre") . " - " . $v[$tipo]->_get("motivo");
-    if($tipo == "afiliacion") $c .= " - " . $v["afiliacion"]->_get("codigo");
+  protected function detalle($v, $tipo) {
+    $c = $v["persona"]->_get("legajo", "Xx Yy") . " ";
+    $c .= mb_str_pad(substr($v["persona"]->_get("apellidos", "X") . ", ".$v["persona"]->_get("nombres", "Xx Yy"), 0, 28), 28, " ") . " "; 
+    $c .= str_pad(substr($v["departamento_judicial"]->_get("codigo"), 0, 4), 4, " ") . " "; 
+    $c .= mb_str_pad(substr($v["departamento_judicial"]->_get("nombre"), 0, 15), 15, " ") . " "; 
+    $c .= str_pad(substr($v[$tipo]->_get("motivo"), 0, 13), 13, " ") . " ";   
+    $c .= str_pad(substr($v[$tipo]->_get("codigo"), 0, 4), 4, " ") . " ";     
+    if($tipo == "tramite_excepcional") $c .= str_pad(substr($v[$tipo]->_get("monto"), 0, 10), 10, " ");
     return $c;
   }
   
