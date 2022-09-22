@@ -49,6 +49,7 @@ class ImporteInfoApi extends BaseApi {
       $dj["valor_fam"] = $fam;
       $dj["valor_cuota_asociativa"] = $cuotaAsociativa;
       $dj["total_pagar_letras"] = $formatter->toInvoice($dj["total_pagar"], 2, "PESOS"); 
+      $dj["total_letras"] = $formatter->toInvoice($dj["total"], 2, "PESOS"); 
 
       
     }
