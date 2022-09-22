@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+textarea {
+  width: 1000px;
+  height: 150px;
+}
+</style>
+</head>
+<body>
+
+
+<h2>Importar MDB</h2>
+
+<form action="mdb_procesar" method="POST">
+  <br>Encabezados:<br>
+  <textarea name="headers"><?=$headers?>
+  </textarea>
+  <br>Source:<br>
+  <textarea name="source"></textarea>
+  <br>  
+  <input type="submit" value="Submit">
+</form> 
+
+</body>
+</html>
