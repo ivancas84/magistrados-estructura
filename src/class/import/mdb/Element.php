@@ -43,17 +43,17 @@ class MdbImportElement extends ImportElement {
   }
 
   public function update($name){
-      if($name == "persona"){  
-        $entityName = $this->import->getEntityName($name);
-        $row = $this->entities[$name]->_toArray("sql");
-        unset($row["apellidos"]);
-        $this->sql .= $this->container->getSqlo($entityName)->update($row);
-        $this->logs->addLog($name,"info","Registro existente, se actualizara campos");
-        return $this->entities[$name]->_get("id");
-      } 
+    if($name == "persona"){  
+      $entityName = $this->import->getEntityName($name);
+      $row = $this->entities[$name]->_toArray("sql");
+      unset($row["apellidos"]);
+      $this->sql .= $this->container->getSqlo($entityName)->update($row);
+      $this->logs->addLog($name,"info","Registro existente, se actualizara campos");
+      return $this->entities[$name]->_get("id");
+    } 
 
-      return parent::update($name);
-  }
+    return parent::update($name);
+  } 
 
  
 
