@@ -207,11 +207,11 @@ class ArchivoSueldosUploadApi extends UploadApi {
   public function attrControl_(){
     //definir variables de los archivos en base al organo
     if($this->organo == "1"){ //administracion de justicia
-      $this->longitudFila = 84; //aplicando trim
+      $this->longitudFila = 85; //aplicando trim posicion inicial = 0
       $this->longitudNumero = 3;
-      $this->longitudValor = 12;
+      $this->longitudValor = 13;
     } else { //procuracion
-      $this->longitudFila = 87; //aplicando trim
+      $this->longitudFila = 87; //aplicando trim posicion inicial = 0
       $this->longitudNumero = 5;
       $this->longitudValor = 13;
     }
@@ -254,7 +254,9 @@ class ArchivoSueldosUploadApi extends UploadApi {
 
     if(!empty($reg["nombres"]) && !ctype_upper(str_replace(" ", "", $reg["nombres"]))) {
       foreach (str_split($reg["nombres"]) as $index => $char) {
-        if(!ctype_upper($char) && $char != " ") $reg["nombres"][$index] = substr_replace($reg["apellidos"],"Ñ",$index,1);
+        if(!ctype_upper($char) && $char != " ") {
+          $reg["nombres"] = substr_replace($reg["nombres"]," ",$index,1);
+        }
       }
     }
 
