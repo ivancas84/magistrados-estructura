@@ -45,9 +45,10 @@ class ArchivoSueldosUploadApi extends UploadApi {
   
   public $sql = "";
 
-  public $longitudFila; //longitud de la fila del archivo
+  public $longitudFilaMaxima; //longitud de la fila del archivo
+  public $longitudFilaMinima; //longitud de la fila del archivo
   public $longitudNumero; //longitud del numero del archivo
-  public $longitudValor; //longitud del valor del archivo
+  public $longitudMonto; //longitud del valor del archivo
   public $user;
   /**
    * El atributo user, se utiliza para identificar el conjunto de logs a ac-
@@ -126,9 +127,10 @@ class ArchivoSueldosUploadApi extends UploadApi {
 
     for($i = 0; $i < count($lines); $i++){
       $lines[$i] = trim($lines[$i]);
+      if(mb_strlen($lines[$i]) < $this->longitudFilaMinima) continue;//ignorar si es inferior a minimo
       if(!$this->errorLongitudLineaSiSuperaMaximo($lines, $i)) continue;
       $reg = $this->registro($lines[$i]);
-      if(!$this->errorCodigoDepartamentoSiNoExiste($reg)) continue;
+      if(!$this->errorCodigoDepartamentoSiNoExiste($reg,$i)) continue;
       
       $l = $reg["legajo"].UNDEFINED.$reg["codigo_afiliacion"];
       switch($reg["codigo_afiliacion"]){
@@ -183,10 +185,11 @@ class ArchivoSueldosUploadApi extends UploadApi {
 
   protected function errorLongitudLineaSiSuperaMaximo($lines, $i){
     $text = html_entity_decode($lines[$i], ENT_QUOTES, "ISO-8859-1");                 
-    $length = mb_strlen($text);
+    $length = mb_strlen(trim($text));
 
-    if($length != $this->longitudFila){ //if adicional para mayor eficiencia        
-      if($length > $this->longitudFila)  //longitud menor se ignora, longitud mayor se guarda error
+
+    if($length < $this->longitudFilaMinima){ //if adicional para mayor eficiencia
+      if($length > $this->longitudFilaMaxima)  //longitud menor se ignora, longitud mayor se guarda error
         array_push($this->respuesta["errors"], "La longitud de la fila " . ($i + 1) . " supera el máximo permitido");
       // else
       //  array_push($this->respuesta["errors"], "La longitud de la fila " . ($i + 1) . " es inferior al mínimo permitido: " . $length);
@@ -196,9 +199,9 @@ class ArchivoSueldosUploadApi extends UploadApi {
     return true;
   }
 
-  protected function errorCodigoDepartamentoSiNoExiste($reg){
+  protected function errorCodigoDepartamentoSiNoExiste($reg,$i){
     if(!array_key_exists($reg["codigo_departamento"],$this->departamentoJudicial_)) {
-      array_push($this->respuesta["errors"], "SIN PROCESAR: Legajo " . $reg["legajo"] . " no existe departamento judicial");
+      array_push($this->respuesta["errors"], "SIN PROCESAR $i: Legajo " . $reg["legajo"] . " no existe departamento judicial");
       return false;
     }
     return true;
@@ -207,13 +210,55 @@ class ArchivoSueldosUploadApi extends UploadApi {
   public function attrControl_(){
     //definir variables de los archivos en base al organo
     if($this->organo == "1"){ //administracion de justicia
-      $this->longitudFila = 85; //aplicando trim posicion inicial = 0
-      $this->longitudNumero = 3;
-      $this->longitudValor = 13;
-    } else { //procuracion
-      $this->longitudFila = 87; //aplicando trim posicion inicial = 0
-      $this->longitudNumero = 5;
-      $this->longitudValor = 13;
+      $this->longitudFilaMaxima = 85; //aplicando trim posicion inicial = 0
+      $this->longitudFilaMinima = 85; //aplicando trim posicion inicial = 0
+     
+      $this->inicioCodigoDepartamento = 0;
+      $this->longitudCodigoDepartamento = 2;
+
+      $this->inicioCodigoAfiliacion = 3;
+      $this->longitudCodigoAfiliacion = 4;
+
+      $this->inicioDescripcionAfiliacion = 8;
+      $this->longitudDescripcionAfiliacion = 12;
+
+      $this->inicioLegajo = 37;
+      $this->longitudLegajo = 6;
+
+      $this->inicioMonto = 69;
+      $this->longitudMonto = 16;
+
+      $this->inicioNombre = 44;
+      $this->longitudNombre = 25;
+
+      $this->inicioNumero = 81; //actualmente el numero no es utilizado
+      $this->longitudNumero = 3; //actualmente el numero no es utilizado
+     
+    } else { //procuracion / ministerio publico
+      $this->longitudFilaMaxima = 118; //aplicando trim posicion inicial = 0
+      $this->longitudFilaMinima = 107; //aplicando trim posicion inicial = 0
+     
+      $this->inicioCodigoDepartamento = 0;
+      $this->longitudCodigoDepartamento = 2;
+
+      $this->inicioCodigoAfiliacion = 4;
+      $this->longitudCodigoAfiliacion = 4;
+
+      $this->inicioDescripcionAfiliacion = 9;
+      $this->longitudDescripcionAfiliacion = 12;
+
+      $this->inicioLegajo = 38;
+      $this->longitudLegajo = 6;
+     
+      $this->inicioNombre = 45;
+      $this->longitudNombre = 40;
+
+      $this->inicioMonto = 91;
+      $this->longitudMonto = 16;
+
+      $this->inicioNumero = 107; //actualmente el numero no es utilizado
+      $this->longitudNumero = 11; //actualmente el numero no es utilizado
+
     }
   }
 
@@ -230,16 +275,16 @@ class ArchivoSueldosUploadApi extends UploadApi {
      * considerando las variables segun el organo
      */
     $reg = [
-      "codigo_departamento" => substr($line,0,2),
-      "codigo_afiliacion" => trim(substr($line,3,4)),
-      "descripcion_afiliacion" => trim(substr($line,8,12)),
-      "legajo" => substr($line,37,6),
-      "monto" => trim(substr($line,69,$this->longitudValor)),
+      "codigo_departamento" => str_pad(trim(substr($line,0,2)), 2,"0",STR_PAD_LEFT),
+      "codigo_afiliacion" => trim(substr($line,$this->inicioCodigoAfiliacion,4)),
+      "descripcion_afiliacion" => trim(substr($line,$this->inicioDescripcionAfiliacion,12)),
+      "legajo" => substr($line,$this->inicioLegajo,6),
+      "monto" => trim(substr($line,69,$this->longitudMonto)),
       "numero"  => substr($line,81,$this->longitudNumero),
     ];
     $nombre = explode(",", 
                   trim(
-                    substr($line,44,25)
+                    substr($line,$this->inicioNombre,$this->longitudNombre)
                   )
               );
     $reg["apellidos"] = $nombre[0];
@@ -259,6 +304,8 @@ class ArchivoSueldosUploadApi extends UploadApi {
         }
       }
     }
+
+
 
     return $reg;
   }
