@@ -279,8 +279,8 @@ class ArchivoSueldosUploadApi extends UploadApi {
       "codigo_afiliacion" => trim(substr($line,$this->inicioCodigoAfiliacion,4)),
       "descripcion_afiliacion" => trim(substr($line,$this->inicioDescripcionAfiliacion,12)),
       "legajo" => substr($line,$this->inicioLegajo,6),
-      "monto" => trim(substr($line,69,$this->longitudMonto)),
-      "numero"  => substr($line,81,$this->longitudNumero),
+      "monto" => trim(substr($line,$this->inicioMonto,$this->longitudMonto)),
+      "numero"  => substr($line,$this->inicioNumero,$this->longitudNumero),
     ];
     $nombre = explode(",", 
                   trim(
@@ -288,6 +288,7 @@ class ArchivoSueldosUploadApi extends UploadApi {
                   )
               );
     $reg["apellidos"] = $nombre[0];
+
     if(key_exists(1, $nombre) && !empty(trim($nombre[1]))) $reg["nombres"] = $nombre[1];    
 
     if(!empty($reg["apellidos"]) && !ctype_upper(str_replace(" ", "", $reg["apellidos"]))) {
@@ -304,7 +305,6 @@ class ArchivoSueldosUploadApi extends UploadApi {
         }
       }
     }
-
 
 
     return $reg;
