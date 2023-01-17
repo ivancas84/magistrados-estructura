@@ -235,29 +235,29 @@ class ArchivoSueldosUploadApi extends UploadApi {
       $this->longitudNumero = 3; //actualmente el numero no es utilizado
      
     } else { //procuracion / ministerio publico
-      $this->longitudFilaMaxima = 118; //aplicando trim posicion inicial = 0
-      $this->longitudFilaMinima = 107; //aplicando trim posicion inicial = 0
+      $this->longitudFilaMaxima = 92; //aplicando trim posicion inicial = 0
+      $this->longitudFilaMinima = 82; //aplicando trim posicion inicial = 0
      
       $this->inicioCodigoDepartamento = 0;
       $this->longitudCodigoDepartamento = 2;
 
-      $this->inicioCodigoAfiliacion = 4;
+      $this->inicioCodigoAfiliacion = 3;
       $this->longitudCodigoAfiliacion = 4;
 
-      $this->inicioDescripcionAfiliacion = 9;
+      $this->inicioDescripcionAfiliacion = 8;
       $this->longitudDescripcionAfiliacion = 12;
 
-      $this->inicioLegajo = 38;
+      $this->inicioLegajo = 37;
       $this->longitudLegajo = 6;
      
-      $this->inicioNombre = 45;
-      $this->longitudNombre = 40;
+      $this->inicioNombre = 44;
+      $this->longitudNombre = 30;
 
-      $this->inicioMonto = 91;
-      $this->longitudMonto = 16;
+      $this->inicioMonto = 74;
+      $this->longitudMonto = 8;
 
-      $this->inicioNumero = 107; //actualmente el numero no es utilizado
-      $this->longitudNumero = 11; //actualmente el numero no es utilizado
+      $this->inicioNumero = 82; //actualmente el numero no es utilizado
+      $this->longitudNumero = 9; //actualmente el numero no es utilizado
 
     }
   }
@@ -305,7 +305,6 @@ class ArchivoSueldosUploadApi extends UploadApi {
         }
       }
     }
-
 
     return $reg;
   }
